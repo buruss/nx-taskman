@@ -1,0 +1,62 @@
+yarn 설치
+
+nx 명령툴 설치
+    npm install -g @nrwl/cli
+
+상위 폴더에서 아래 명령 실행
+    yarn create nx-workspace nx-taskman
+
+프로젝트 루트로 이동
+    cd nx-taskman
+
+nest 모듈 설치
+    yarn add --dev @nrwl/nest
+
+frontend용 nest 프로젝트 추가
+    nx g @nrwl/nest:app www-api
+    In which directory should the node application be generated? 질문에는 그냥 엔터
+    apps 폴더 아래 www-api 폴더 생성됨
+
+admin용 nest 프로젝트 추가
+    nx g @nrwl/nest:app admin-api
+
+react 모듈 추가
+    yarn add --dev @nrwl/react
+
+frontend용 react 프로젝트 추가
+    nx g @nrwl/react:app www
+
+admin용 react 프로젝트 추가
+    nx g @nrwl/react:app admin
+
+공용 라이브러리 추가
+    nx g @nrwl/workspace:lib assets
+    nx g @nrwl/workspace:lib styles
+    nx g @nrwl/workspace:lib common
+    nx g @nrwl/react:lib ui
+
+production 모드 컴파일 실패.
+    nx build, nx serve, nx run project:build, nx run project:serve 
+    갖가지를 테스트해봤지만 envorionment.prod.ts를 workspace.json의 fileReplacements 설정대로 대체하여 컴파일하지 못함
+
+Failed to load module. If you have prettier or plugins referenced in package.json, ensure you have run `npm install` Attempted to load prettier from package.json.
+    Settings > Extensions > Prettier > Prettier Path: C:\Users\burus\AppData\Roaming\npm\node_modules\prettier
+
+www-api 프로젝트 실행
+    Error: Cannot find module 'C:\Users\burus\Documents\nx-taskman\node_modules\@nrwl\cli\bin\nx.js'
+    yarn 대신 npm으로 패키지를 설치한 적이 있어서 yarn.lock 무결성이 깨진 경우임.
+    아무 패키지나 yarn으로 설치 후 언인스톨하여 yarn.lock 파일을 재생성하여 해결함.
+    예) npm i @nrwl/cli 실행 후 yarn remove @nrwl/cli 실행
+
+    nx serve www-api 명령 실행 시 EntityMetadataNotFound 오류 발생
+    webpack에 의해 main.js 파일 하나만 생성되니까 typeormconfig의 entities에서
+    *.entities.{js,ts} 파일을 찾지 못해서 발생하는 문제
+    그래서, ctrl+shift+B를 눌러서 tsc: build - apps/www-api/tsconfig.app.json 명령으로 컴파일함.
+    그런데 이제는 "SyntaxError: Unexpected token {" 오류가 발생함.
+    www-api/tsconfig.json 의 compilerOptions 아래 "module": "commonjs", 설정 추가한 후
+    dist 경로 삭제하고 다시 컴파일.
+    launch.json의 program 설정에 main.ts 경로 넣고 F5로 실행.
+    결국 nx serve www-api 방식은 webpack으로 한 개의 js만 생성하므로 
+    typeorm에서 *.entity.js 파일을 찾지 못하여 오류가 발생하니
+    tsc로 commonjs 모듈 방식으로 컴파일하여 해결함.
+    

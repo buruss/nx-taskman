@@ -1,0 +1,46 @@
+// getAllTasks
+GET http://localhost:3000/api/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTc0NjA0NjQ1LCJleHAiOjE1NzQ2MDgyNDV9.x1CS_JfCPXLU9mf90rndHplHyyvHZSTDAZsR8LPI8Cw
+###
+
+// get filtered tasks user 1
+GET http://localhost:3000/tasks?search=descri
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiY2QiLCJpYXQiOjE1NjgzNDg3NDEsImV4cCI6MTU2ODM1MjM0MX0.uDlAKO7GS4pF_eiBAYo7CQulCGFvyHDj5WdfmRgfYsU
+###
+
+// get filtered tasks user 2
+GET http://localhost:3000/tasks?search=descri
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWF0IjoxNTY4MzQ4Nzg4LCJleHAiOjE1NjgzNTIzODh9.AxON0yzHmFxp_HpORbvvgcTKKoj-tWGqRO0Pzcw-Wj4
+###
+
+// create task
+POST http://localhost:3000/tasks
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
+
+{
+    "title": "title5",
+    "description": "description5"
+}
+###
+
+// get task by id
+GET http://localhost:3000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
+
+###
+
+// delete task by id
+DELETE http://localhost:3000/tasks/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
+###
+
+// update tasks status
+PATCH http://localhost:3000/tasks/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
+Content-Type: application/json
+
+{
+    "status": "DONE"
+}
+###

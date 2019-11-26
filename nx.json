@@ -1,0 +1,42 @@
+{
+  "npmScope": "nx-taskman",
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "common": {
+      "tags": []
+    },
+    "assets": {
+      "tags": []
+    },
+    "styles": {
+      "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "www-api": {
+      "tags": []
+    },
+    "www": {
+      "tags": []
+    },
+    "www-e2e": {
+      "tags": []
+    },
+    "admin-api": {
+      "tags": []
+    },
+    "admin": {
+      "tags": []
+    },
+    "admin-e2e": {
+      "tags": []
+    }
+  }
+}
