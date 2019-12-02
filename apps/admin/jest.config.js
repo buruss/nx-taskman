@@ -2,8 +2,8 @@ module.exports = {
   name: 'admin',
   preset: '../../jest.config.js',
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest'
+    '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
-  coverageDirectory: '../../coverage/apps/admin'
+  coverageDirectory: '../../coverage/apps/admin',
 };

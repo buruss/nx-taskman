@@ -8,19 +8,13 @@
     "nx.json": "*"
   },
   "projects": {
-    "common": {
-      "tags": []
-    },
-    "assets": {
-      "tags": []
-    },
-    "styles": {
-      "tags": []
-    },
-    "ui": {
+    "logics": {
       "tags": []
     },
     "www-api": {
+      "tags": []
+    },
+    "admin-api": {
       "tags": []
     },
     "www": {
@@ -29,13 +23,13 @@
     "www-e2e": {
       "tags": []
     },
-    "admin-api": {
-      "tags": []
-    },
     "admin": {
       "tags": []
     },
     "admin-e2e": {
+      "tags": []
+    },
+    "components": {
       "tags": []
     }
   }

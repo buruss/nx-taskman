@@ -1,9 +1,9 @@
 {
   "version": 1,
   "projects": {
-    "common": {
-      "root": "libs/common",
-      "sourceRoot": "libs/common/src",
+    "logics": {
+      "root": "libs/logics",
+      "sourceRoot": "libs/logics/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -11,107 +11,29 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "config": "libs/common/.eslintrc",
+            "config": "libs/logics/.eslintrc",
             "tsConfig": [
-              "libs/common/tsconfig.lib.json",
-              "libs/common/tsconfig.spec.json"
+              "libs/logics/tsconfig.lib.json",
+              "libs/logics/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/common/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/logics/**"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/common/jest.config.js",
-            "tsConfig": "libs/common/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "assets": {
-      "root": "libs/assets",
-      "sourceRoot": "libs/assets/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:lint",
-          "options": {
-            "linter": "eslint",
-            "config": "libs/assets/.eslintrc",
-            "tsConfig": [
-              "libs/assets/tsconfig.lib.json",
-              "libs/assets/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/assets/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/assets/jest.config.js",
-            "tsConfig": "libs/assets/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "styles": {
-      "root": "libs/styles",
-      "sourceRoot": "libs/styles/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:lint",
-          "options": {
-            "linter": "eslint",
-            "config": "libs/styles/.eslintrc",
-            "tsConfig": [
-              "libs/styles/tsconfig.lib.json",
-              "libs/styles/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/styles/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/styles/jest.config.js",
-            "tsConfig": "libs/styles/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "ui": {
-      "root": "libs/ui",
-      "sourceRoot": "libs/ui/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:lint",
-          "options": {
-            "linter": "eslint",
-            "config": "libs/ui/.eslintrc",
-            "tsConfig": [
-              "libs/ui/tsconfig.lib.json",
-              "libs/ui/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/ui/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/ui/jest.config.js",
-            "tsConfig": "libs/ui/tsconfig.spec.json"
+            "jestConfig": "libs/logics/jest.config.js",
+            "tsConfig": "libs/logics/tsconfig.spec.json"
           }
         }
       }
     },
     "www-api": {
-      "root": "apps/www-api",
-      "sourceRoot": "apps/www-api/src",
+      "root": "apps/www",
+      "sourceRoot": "apps/www/src",
       "projectType": "application",
       "prefix": "www-api",
       "schematics": {},
@@ -119,10 +41,12 @@
         "build": {
           "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/www-api",
-            "main": "apps/www-api/src/main.ts",
-            "tsConfig": "apps/www-api/tsconfig.app.json",
-            "assets": ["apps/www-api/src/assets"]
+            "outputPath": "dist/apps/www",
+            "main": "apps/www/api/main.ts",
+            "tsConfig": "apps/www/tsconfig.server.json",
+            "assets": [
+              "apps/www/api/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -131,8 +55,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/www-api/src/environments/environment.ts",
-                  "with": "apps/www-api/src/environments/environment.prod.ts"
+                  "replace": "apps/www/api/environments/environment.ts",
+                  "with": "apps/www/api/environments/environment.prod.ts"
                 }
               ]
             }
@@ -151,76 +75,120 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "config": "apps/www-api/.eslintrc",
+            "config": "apps/www/.eslintrc",
             "tsConfig": [
-              "apps/www-api/tsconfig.app.json",
-              "apps/www-api/tsconfig.spec.json"
+              "apps/www/tsconfig.server.json",
+              "apps/www/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/www-api/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/www/**"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/www-api/jest.config.js",
-            "tsConfig": "apps/www-api/tsconfig.spec.json"
+            "jestConfig": "apps/www/jest.config.js",
+            "tsConfig": "apps/www/tsconfig.spec.json"
           }
         }
       }
     },
-    "www": {
-      "root": "apps/www",
-      "sourceRoot": "apps/www/src",
+    "admin-api": {
+      "root": "apps/admin-api",
+      "sourceRoot": "apps/admin-api/src",
       "projectType": "application",
+      "prefix": "admin-api",
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/www",
-            "index": "apps/www/src/index.html",
-            "main": "apps/www/src/main.tsx",
-            "polyfills": "apps/www/src/polyfills.ts",
-            "tsConfig": "apps/www/tsconfig.app.json",
-            "assets": ["apps/www/src/favicon.ico", "apps/www/src/assets"],
-            "styles": ["apps/www/src/styles.scss"],
-            "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/babel"
+            "outputPath": "dist/apps/admin-api",
+            "main": "apps/admin-api/src/main.ts",
+            "tsConfig": "apps/admin-api/tsconfig.app.json",
+            "assets": [
+              "apps/admin-api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/www/src/environments/environment.ts",
-                  "with": "apps/www/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "replace": "apps/admin-api/src/environments/environment.ts",
+                  "with": "apps/admin-api/src/environments/environment.prod.ts"
                 }
               ]
             }
           }
         },
         "serve": {
-          "builder": "@nrwl/web:dev-server",
+          "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "www:build"
+            "buildTarget": "admin-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "apps/admin-api/.eslintrc",
+            "tsConfig": [
+              "apps/admin-api/tsconfig.app.json",
+              "apps/admin-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/admin-api/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/admin-api/jest.config.js",
+            "tsConfig": "apps/admin-api/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "www": {
+      "root": "apps/www",
+      "sourceRoot": "apps/www",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "options": {
+            "root": "apps/www",
+            "outputPath": "dist/apps/www",
+            "tsConfig": [
+              "apps/www/tsconfig.json",
+              "apps/www/tsconfig.spec.json"
+            ]
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:dev-server",
+          "options": {
+            "buildTarget": "www:build",
+            "dev": true
           },
           "configurations": {
             "production": {
-              "buildTarget": "www:build:production"
+              "dev": false
             }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "www:build"
           }
         },
         "lint": {
@@ -229,10 +197,13 @@
             "linter": "eslint",
             "config": "apps/www/.eslintrc",
             "tsConfig": [
-              "apps/www/tsconfig.app.json",
+              "apps/www/tsconfig.json",
               "apps/www/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/www/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/www/**"
+            ]
           }
         },
         "test": {
@@ -267,121 +238,46 @@
           "options": {
             "linter": "eslint",
             "config": "apps/www-e2e/.eslintrc",
-            "tsConfig": ["apps/www-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/www-e2e/**"]
-          }
-        }
-      }
-    },
-    "admin-api": {
-      "root": "apps/admin-api",
-      "sourceRoot": "apps/admin-api/src",
-      "projectType": "application",
-      "prefix": "admin-api",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/admin-api",
-            "main": "apps/admin-api/src/main.ts",
-            "tsConfig": "apps/admin-api/tsconfig.app.json",
-            "assets": ["apps/admin-api/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/admin-api/src/environments/environment.ts",
-                  "with": "apps/admin-api/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "admin-api:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:lint",
-          "options": {
-            "linter": "eslint",
-            "config": "apps/admin-api/.eslintrc",
             "tsConfig": [
-              "apps/admin-api/tsconfig.app.json",
-              "apps/admin-api/tsconfig.spec.json"
+              "apps/www-e2e/tsconfig.e2e.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/admin-api/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/admin-api/jest.config.js",
-            "tsConfig": "apps/admin-api/tsconfig.spec.json"
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/www-e2e/**"
+            ]
           }
         }
       }
     },
     "admin": {
       "root": "apps/admin",
-      "sourceRoot": "apps/admin/src",
+      "sourceRoot": "apps/admin",
       "projectType": "application",
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "builder": "@nrwl/next:build",
           "options": {
-            "outputPath": "dist/apps/admin",
-            "index": "apps/admin/src/index.html",
-            "main": "apps/admin/src/main.tsx",
-            "polyfills": "apps/admin/src/polyfills.ts",
-            "tsConfig": "apps/admin/tsconfig.app.json",
-            "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
-            "styles": ["apps/admin/src/styles.scss"],
-            "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/babel"
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/admin/src/environments/environment.ts",
-                  "with": "apps/admin/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
+            "root": "apps/admin",
+            "outputPath": "dist/apps/admin"
           }
         },
         "serve": {
-          "builder": "@nrwl/web:dev-server",
+          "builder": "@nrwl/next:dev-server",
           "options": {
-            "buildTarget": "admin:build"
+            "buildTarget": "admin:build",
+            "dev": true
           },
           "configurations": {
             "production": {
-              "buildTarget": "admin:build:production"
+              "dev": false
             }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "admin:build"
           }
         },
         "lint": {
@@ -390,10 +286,13 @@
             "linter": "eslint",
             "config": "apps/admin/.eslintrc",
             "tsConfig": [
-              "apps/admin/tsconfig.app.json",
+              "apps/admin/tsconfig.json",
               "apps/admin/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/admin/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/admin/**"
+            ]
           }
         },
         "test": {
@@ -428,8 +327,43 @@
           "options": {
             "linter": "eslint",
             "config": "apps/admin-e2e/.eslintrc",
-            "tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/admin-e2e/**"]
+            "tsConfig": [
+              "apps/admin-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/admin-e2e/**"
+            ]
+          }
+        }
+      }
+    },
+    "components": {
+      "root": "libs/components",
+      "sourceRoot": "libs/components/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "libs/components/.eslintrc",
+            "tsConfig": [
+              "libs/components/tsconfig.lib.json",
+              "libs/components/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/components/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/components/jest.config.js",
+            "tsConfig": "libs/components/tsconfig.spec.json"
           }
         }
       }
@@ -465,6 +399,7 @@
     },
     "@nrwl/next": {
       "application": {
+        "style": "scss",
         "linter": "eslint"
       }
     },

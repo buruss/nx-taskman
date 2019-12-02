@@ -1,3 +1,5 @@
+node 최신 버전 설치
+
 yarn 설치
 
 nx 명령툴 설치
@@ -12,35 +14,40 @@ nx 명령툴 설치
 nest 모듈 설치
     yarn add --dev @nrwl/nest
 
-frontend용 nest 프로젝트 추가
-    nx g @nrwl/nest:app www-api
-    In which directory should the node application be generated? 질문에는 그냥 엔터
-    apps 폴더 아래 www-api 폴더 생성됨
-
-admin용 nest 프로젝트 추가
-    nx g @nrwl/nest:app admin-api
-
 react 모듈 추가
     yarn add --dev @nrwl/react
 
-frontend용 react 프로젝트 추가
-    nx g @nrwl/react:app www
+next 모듈 추가
+    yarn add --dev @nrwl/next node-sass
+    yarn add next next-server
 
-admin용 react 프로젝트 추가
-    nx g @nrwl/react:app admin
+공용 라이브러리 프로젝트 추가
+    nx g @nrwl/workspace:lib logics
+    nx g @nrwl/react:lib components
 
-공용 라이브러리 추가
-    nx g @nrwl/workspace:lib assets
-    nx g @nrwl/workspace:lib styles
-    nx g @nrwl/workspace:lib common
-    nx g @nrwl/react:lib ui
+react 컴포넌트를 libs/components 프로젝트 안에 추가
+  nx g @nrwl/react:component bigHead --project=components
+  
+www 사이트 frontend용 next 프로젝트 추가
+    nx g @nrwl/next:app www
 
-production 모드 컴파일 실패.
+www 사이트 backend용 nest 프로젝트 추가
+    nx g @nrwl/nest:app www-api
+    In which directory should the node application be generated? 질문에는 그냥 엔터
+
+admin 사이트 frontend용 next 프로젝트 추가
+    nx g @nrwl/next:app admin
+
+admin 사이트 backend용 nest 프로젝트 추가
+    nx g @nrwl/nest:app admin-api
+
+컴파일 오류
+    Failed to load module. If you have prettier or plugins referenced in package.json, ensure you have run `npm install` Attempted to load prettier from package.json.
+    Settings > Extensions > Prettier > Prettier Path: C:\Users\burus\AppData\Roaming\npm\node_modules\prettier
+
+nest 프로젝트 컴파일 실패.
     nx build, nx serve, nx run project:build, nx run project:serve 
     갖가지를 테스트해봤지만 envorionment.prod.ts를 workspace.json의 fileReplacements 설정대로 대체하여 컴파일하지 못함
-
-Failed to load module. If you have prettier or plugins referenced in package.json, ensure you have run `npm install` Attempted to load prettier from package.json.
-    Settings > Extensions > Prettier > Prettier Path: C:\Users\burus\AppData\Roaming\npm\node_modules\prettier
 
 www-api 프로젝트 실행
     Error: Cannot find module 'C:\Users\burus\Documents\nx-taskman\node_modules\@nrwl\cli\bin\nx.js'
@@ -51,12 +58,27 @@ www-api 프로젝트 실행
     nx serve www-api 명령 실행 시 EntityMetadataNotFound 오류 발생
     webpack에 의해 main.js 파일 하나만 생성되니까 typeormconfig의 entities에서
     *.entities.{js,ts} 파일을 찾지 못해서 발생하는 문제
-    그래서, ctrl+shift+B를 눌러서 tsc: build - apps/www-api/tsconfig.app.json 명령으로 컴파일함.
+    그래서, ctrl+shift+B를 눌러서 tsc: build - apps/www/tsconfig.app.json 명령으로 컴파일함.
     그런데 이제는 "SyntaxError: Unexpected token {" 오류가 발생함.
-    www-api/tsconfig.json 의 compilerOptions 아래 "module": "commonjs", 설정 추가한 후
+    www/tsconfig.json 의 compilerOptions 아래 "module": "commonjs", 설정 추가한 후
     dist 경로 삭제하고 다시 컴파일.
     launch.json의 program 설정에 main.ts 경로 넣고 F5로 실행.
     결국 nx serve www-api 방식은 webpack으로 한 개의 js만 생성하므로 
-    typeorm에서 *.entity.js 파일을 찾지 못하여 오류가 발생하니
+    typeorm에서 *.entity.js 파일을 찾지 못하여 오류가 발생하니 사용하지 못함.
     tsc로 commonjs 모듈 방식으로 컴파일하여 해결함.
-    
+
+tsconfig.json의 paths 경로를 next.js pages 안에서 접근하기
+  next.config.js 에서 tsconfig-paths-webpack-plugin 플러그인을 추가
+  config.module.rules[0].include 배열에 paths의 경로들을 추가
+
+www 개발 모드 실행
+  yarn start:dev:www
+  package.json 에 start:dev:www 스크립트 추가해 놓음
+
+next.js의 public 활용 안 됨
+  next.js v9에서 public을 / 로 매핑시키는 바람에 app.module.ts에서 한 번에 정적 파일의 루트로 설정하려면
+  public/ 아래의 각 파일 폴더 별로 라우팅 설정이 필요해서 사용 안 함.
+  대신 static 폴더를 만들어서 static/* 경로에 대해서 한 번 호출로 처리함.
+
+nest.js 폴더 구조 결정
+  

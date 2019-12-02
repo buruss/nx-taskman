@@ -1,0 +1,41 @@
+// sign up user1
+POST http://localhost:3000/api/auth/signup
+content-type: application/json
+
+{
+    "username": "user1",
+    "password": "abCD1234!@"
+}
+###
+
+// sign up user2
+POST http://localhost:3000/api/auth/signup
+content-type: application/json
+
+{
+    "username": "user2",
+    "password": "abCD1234!@"
+}
+###
+
+
+// sign in user1
+POST http://localhost:3000/api/auth/signin
+content-type: application/json
+
+{
+    "username": "user1",
+    "password": "abCD1234!@"
+}
+###
+
+
+// sign in user2
+POST http://localhost:3000/api/auth/signin
+content-type: application/json
+
+{
+    "username": "user2",
+    "password": "abCD1234!@"
+}
+###
