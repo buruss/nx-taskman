@@ -5,7 +5,7 @@ import { UserRepository } from './user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import env from '../environments/environment';
+import env from '../../environments/environment';
 
 const jwtConfig = env.jwt;
 
@@ -22,7 +22,7 @@ const jwtConfig = env.jwt;
   ],
   providers: [
     AuthService,
-    JwtStrategy
+    JwtStrategy,
   ],
   exports: [
     JwtStrategy,

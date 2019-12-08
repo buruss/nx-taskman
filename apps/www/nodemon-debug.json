@@ -13,6 +13,6 @@
   ],
   "signal": "SIGTERM",
   "execMap": {
-    "ts": "ts-node --P apps/www/tsconfig.server.json"
+    "ts": "ts-node-dev --P apps/www/tsconfig.server.json -r tsconfig-paths/register --inspect --"
   }
 }

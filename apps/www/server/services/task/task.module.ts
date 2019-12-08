@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './tasks.service';
+import { TaskService } from './task.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskRepository } from './task.repository';
 import { AuthModule } from '../auth/auth.module';
@@ -9,7 +9,7 @@ import { AuthModule } from '../auth/auth.module';
     TypeOrmModule.forFeature([TaskRepository]),
     AuthModule,
   ],
-  providers: [TasksService],
-  exports: [TasksService],
+  providers: [TaskService],
+  exports: [TaskService],
 })
-export class TasksModule { }
+export class TaskModule { }

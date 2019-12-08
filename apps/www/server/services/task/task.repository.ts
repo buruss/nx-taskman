@@ -1,9 +1,9 @@
 import { Repository, EntityRepository } from "typeorm";
 import { Task } from "./task.entity";
-import { CreateTaskDto } from "../../lib/dto/create-task.dto";
-import { TaskStatus } from "../../lib/task-status.enum";
+import { CreateTaskInputDto } from "../../controllers/dto/create-task-input.dto";
+import { TaskStatus } from "../../../lib/task-status.enum";
 import { Logger, InternalServerErrorException } from "@nestjs/common";
-import { GetTasksFilterDto } from "../../lib/dto/get-tasks-filter.dto";
+import { GetTasksArgsDto } from "../../controllers/dto/get-tasks-args.dto";
 import { User } from "../auth/user.entity";
 
 @EntityRepository(Task)
@@ -11,10 +11,10 @@ export class TaskRepository extends Repository<Task> {
   private logger = new Logger('TaskRepository');
 
   async getTasks(
-    filterDto: GetTasksFilterDto,
+    filterDto: GetTasksArgsDto,
     user: User
   ): Promise<Task[]> {
-    const { status, search } = filterDto;
+    const { st: status, search } = filterDto;
     const query = this.createQueryBuilder('task');
 
     query.where('task.userId = :userId', { userId: user.id });
@@ -38,13 +38,11 @@ export class TaskRepository extends Repository<Task> {
   }
 
   async createTask(
-    createTaskDto: CreateTaskDto,
+    createTaskDto: CreateTaskInputDto,
     user: User
   ): Promise<Task> {
-    const task = new Task();
-    const { title, description } = createTaskDto;
-    task.title = title;
-    task.description = description;
+    const task = createTaskDto.toEntity();
+
     task.status = TaskStatus.OPEN;
     task.user = user;
 

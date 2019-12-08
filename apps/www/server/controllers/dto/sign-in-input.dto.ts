@@ -1,13 +1,17 @@
 import { IsString, MinLength, MaxLength, Matches } from "class-validator";
+import { Field, InputType } from 'type-graphql';
 
-export class AuthCredentialsDto {
+@InputType()
+export class SignInInputDto {
   @IsString() @MinLength(4) @MaxLength(20)
-  username: string;
+  @Field()
+  uname: string;
 
   @IsString() @MinLength(8) @MaxLength(20)
   @Matches(
     /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
     { message: 'password is too weak.' }
   )
-  password: string;
+  @Field()
+  pwd: string;
 }

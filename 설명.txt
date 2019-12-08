@@ -80,5 +80,14 @@ next.js의 public 활용 안 됨
   public/ 아래의 각 파일 폴더 별로 라우팅 설정이 필요해서 사용 안 함.
   대신 static 폴더를 만들어서 static/* 경로에 대해서 한 번 호출로 처리함.
 
-nest.js 폴더 구조 결정
-  
+nodemon-debug.json 설명
+  execMap: 실행하는 파일 확장자에 따라 실행시킬 프로그램을 결정할 수 있음.
+  여기서는 ts는 ts-node-dev를 사용하도록 설정함
+  ts-node-dev는 ts-node 에 watch 기능이 추가되어 hot reloading이 지원됨
+  -P: 사용할 tsconfig.json 경로를 지정
+  -r tsconfig-paths/register: 이 옵션이 없으면 tsconfig.json의 paths 섹션을 ts-node에서 인식하지 못해서 @로 시작하는 단축 경로 접근 시 오류가 발생함
+  맨 마지막 --: --로 시작하는 옵션들이 사이에 껴 있을 때 실행할 파일 인자가 무시되는 경우가 있어서 --로 끝내면 그 뒤에 오는 ts 파일을 실행 파일로 인식하게 해 줌
+
+"Cannot return null for non-nullable field Query.Me" 오류
+  @Query Decorator를 type-graphql 에서 import할 경우 발생.
+  @nestjs/graphql 에서 import해야 함.
