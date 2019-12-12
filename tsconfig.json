@@ -7,18 +7,31 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true, // import * as winston from 'winston' 대신 import winston from 'winston' 형태를 지원
     "importHelpers": true,
     "target": "es2017",
     "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-taskman/logics": ["libs/logics/src/index.ts"],
-      "@nx-taskman/components": ["libs/components/src/index.ts"]
+      "@nx-taskman/logics": [
+        "libs/logics/src/index.ts"
+      ],
+      "@nx-taskman/components": [
+        "libs/components/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

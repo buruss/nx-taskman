@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import env from './environments/environment';
 import { NextModule } from '@nestpress/next';
 import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
+import { getConfig } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  console.log(env);
 
   // const globalPrefix = 'api';
   // app.setGlobalPrefix(globalPrefix);
@@ -32,7 +31,7 @@ async function bootstrap() {
    */
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  const port = process.env.PORT || env.server.port;
+  const port = getConfig().server.port;
   const projectRoot = path.join(__dirname, '..');
   app.get(NextModule).prepare({ dev, dir: projectRoot }).then(() => {
     app.listen(port, () => {
