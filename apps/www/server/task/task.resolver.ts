@@ -62,12 +62,13 @@ export class TaskResolver {
   }
 
   // Task Entity안에 @Field(() => User) user 선언이 필요함
+  // 아래 dataloader를 사용하면 이 속성이 호출될 때마다 캐시에 저장하여
+  // 만일 동일한 userid를 요청할 경우 캐시에서 빠르게 반환
   @ResolveProperty()
   user(
     @Parent() parent: Task,
     @Loader(UserDataLoader.name) userDataLoader: DataLoader<User['id'], User>,
   ): Promise<User> {
-    // return user;
     return userDataLoader.load(parent.userId)
   }
 }
