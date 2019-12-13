@@ -1,23 +1,51 @@
 import * as React from 'react';
+//@로 시작하는 단축 경로 테스트
 import { SharedComponent } from '@nx-taskman/components';
-import { sharedFunc } from '@nx-taskman/logics';
+import ME from '../graphql/me.query';
+import { useQuery } from '@apollo/react-hooks';
+import Link from 'next/link';
+import SignOutButton from '../views/components/sign_out_button';
+import { Button } from 'antd';
 
-interface PageProps {
-  data: Array<{ id: number; title: string; }>;
+interface IProps {
+  data: any;
 }
 
-const Page = (props: PageProps) => {
-  return <div>
-    <img src='/static/new.png' />
-    <SharedComponent />
-    {
-      props.data ? props.data.map((item) => <h1 key={item.id}>{sharedFunc()} {item.id}: {item.title}</h1>) : <h1> data is empty!</h1>
-    }
-  </div>
+const Home = (props: IProps) => {
+  const { data, loading, error } = useQuery(ME);
+
+
+  if (typeof window === 'undefined') {
+    console.log('초기 props = ', props);
+  }
+
+  return (
+    <div>
+      {/* static 경로로 asset 접근 테스트 */}
+      <h1><img src='/static/new.png' />welcome!</h1>
+      <SharedComponent />
+
+      {loading && <p>로딩 중...</p>}
+      {error && <div>
+        <Link href="signin">
+          <a>로그인하기</a>
+        </Link>
+        <br />
+        <Link href="signup">
+          <a>회원가입</a>
+        </Link>
+      </div>}
+      {data && <div>
+        <span>
+          {
+            // props.data ? props.data.map((item) => <h1 key={item.id}>{sharedFunc()} {item.id}: {item.title}</h1>) : <h1> data is empty!</h1>
+            JSON.stringify(data)
+          }
+        </span>
+        <SignOutButton />
+      </div>}
+    </div>
+  );
 };
 
-Page.getInitialProps = async ({ req, query }) => {
-  return query;
-};
-
-export default Page;
+export default Home;

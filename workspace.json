@@ -32,8 +32,8 @@
       }
     },
     "www-api": {
-      "root": "apps/www",
-      "sourceRoot": "apps/www/src",
+      "root": "apps/www-api",
+      "sourceRoot": "apps/www-api/src",
       "projectType": "application",
       "prefix": "www-api",
       "schematics": {},
@@ -41,24 +41,18 @@
         "build": {
           "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/www",
-            "main": "apps/www/api/main.ts",
-            "tsConfig": "apps/www/tsconfig.server.json",
+            "outputPath": "dist/apps/www-api",
+            "main": "apps/www-api/src/main.ts",
+            "tsConfig": "apps/www-api/tsconfig.app.json",
             "assets": [
-              "apps/www/api/assets"
+              "apps/www-api/src/assets"
             ]
           },
           "configurations": {
             "production": {
               "optimization": true,
               "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/www/api/environments/environment.ts",
-                  "with": "apps/www/api/environments/environment.prod.ts"
-                }
-              ]
+              "inspect": false
             }
           }
         },
@@ -75,22 +69,22 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "config": "apps/www/.eslintrc",
+            "config": "apps/www-api/.eslintrc",
             "tsConfig": [
-              "apps/www/tsconfig.server.json",
-              "apps/www/tsconfig.spec.json"
+              "apps/www-api/tsconfig.app.json",
+              "apps/www-api/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**",
-              "!apps/www/**"
+              "!apps/www-api/**"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/www/jest.config.js",
-            "tsConfig": "apps/www/tsconfig.spec.json"
+            "jestConfig": "apps/www-api/jest.config.js",
+            "tsConfig": "apps/www-api/tsconfig.spec.json"
           }
         }
       }
@@ -166,11 +160,7 @@
           "builder": "@nrwl/next:build",
           "options": {
             "root": "apps/www",
-            "outputPath": "dist/apps/www",
-            "tsConfig": [
-              "apps/www/tsconfig.json",
-              "apps/www/tsconfig.spec.json"
-            ]
+            "outputPath": "dist/apps/www"
           }
         },
         "serve": {

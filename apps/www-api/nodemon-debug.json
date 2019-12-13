@@ -1,0 +1,18 @@
+{
+  "env": {
+    "TZ": "UTC",
+    "NODE_ENV": "development",
+    "LOG_LEVEL": "debug"
+  },
+  "watch": [
+    "src"
+  ],
+  "ext": "ts",
+  "ignore": [
+    "src/**/*.spec.ts"
+  ],
+  "signal": "SIGTERM",
+  "execMap": {
+    "ts": "ts-node-dev --P apps/www/tsconfig.app.json -r tsconfig-paths/register --inspect --"
+  }
+}
