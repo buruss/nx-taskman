@@ -34,14 +34,18 @@ const authLink = setContext((_, { headers }) => {
 export default withApollo(
   // You can get headers and ctx (context) from the callback params
   // e.g. ({ headers, ctx, initialState })
-  ({ initialState }) =>
-    new ApolloClient({
+  ({ headers, ctx, initialState }) => {
+    // if (ctx?.req?.data) {
+    //   console.log('ctx.req = ', ctx.req);
+    // }
+    return new ApolloClient({
       ssrMode: true,
       connectToDevTools: true,
       link: authLink.concat(link),
       cache: new InMemoryCache()
         //  rehydrate the cache using the initial data passed from the server:
         .restore(initialState || {})
-    })
+    });
+  }
   , { getDataFromTree: "ssr" }
 );

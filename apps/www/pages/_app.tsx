@@ -1,7 +1,8 @@
 import React from 'react';
-import App from 'next/app';
+import App, { Container } from 'next/app';
+import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
-import withData from '../lib/apollo_client';
+import { withApollo } from '../lib/next_example';
 
 interface IProps {
   apollo: any;
@@ -12,11 +13,23 @@ class MyApp extends App<IProps> {
     const { Component, pageProps, apollo } = this.props;
     return (
       <ApolloProvider client={apollo}>
-        <Component {...pageProps} />
+        <main>
+          <Head>
+            <title>Wieldy- Admin Dashboard</title>
+          </Head>
+          <header>
+            상단 메뉴
+          </header>
+          <section>
+            <Component {...pageProps} />
+          </section>
+          <footer>
+            하단 푸터
+          </footer>
+        </main>
       </ApolloProvider>
     );
   }
 }
 
-// Wraps all components in the tree with the data provider
-export default withData(MyApp);
+export default withApollo(MyApp);

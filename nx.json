@@ -11,6 +11,9 @@
     "logics": {
       "tags": []
     },
+    "components": {
+      "tags": []
+    },
     "www-api": {
       "tags": []
     },
@@ -27,9 +30,6 @@
       "tags": []
     },
     "admin-e2e": {
-      "tags": []
-    },
-    "components": {
       "tags": []
     }
   }

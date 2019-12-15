@@ -12,6 +12,8 @@ import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { Loader } from 'nestjs-dataloader';
 import { UserDataLoader } from '../user/user.loader';
 import DataLoader from 'dataloader';
+import { Field, Arg } from 'type-graphql';
+import { UpdateTaskStatusArgsDto } from './update-task-status-args.dto';
 
 @Resolver(() => Task)
 @UseGuards(GqlAuthGuard)
@@ -54,11 +56,15 @@ export class TaskResolver {
 
   @Mutation(() => Task)
   updateTaskStatus(
-    @Args('tid', ParseIntPipe) id: number,
-    @Args('st', TaskStatusValidationPipe) status: TaskStatus,
+    // enum 타입의 인자를 받기 위해서는 ArgType 또는 InputType을 반드시 선언해야 함
+    // @Arg() 로 type을 명시해도 "You need to provide explicit type" 오류가 계속 발생해서
+    @Args() updateTaskStatusArgs: UpdateTaskStatusArgsDto,
+    // @Args('tid', ParseIntPipe) tid: number,
+    // @Arg('st', type => TaskStatus) @Args('st', TaskStatusValidationPipe) st: TaskStatus,
     @GqlUser() user: User,
   ): Promise<Task> {
-    return this.taskService.updateTaskStatus(id, status, user);
+    const {tid, st} =updateTaskStatusArgs;
+    return this.taskService.updateTaskStatus(tid, st, user);
   }
 
   // Task Entity안에 @Field(() => User) user 선언이 필요함

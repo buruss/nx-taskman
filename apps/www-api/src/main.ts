@@ -32,7 +32,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const port = getConfig().server.port;
-  const projectRoot = path.resolve(__dirname, '../../www-ui');
+  const projectRoot = path.resolve(__dirname, '../../../apps/www');
+  console.log('projectRoot=',projectRoot);
   app.get(NextModule).prepare({ dev, dir: projectRoot }).then(() => {
     app.listen(port, () => {
       console.log('Listening at http://localhost:' + port + '/'); // + globalPrefix);

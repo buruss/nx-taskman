@@ -5,7 +5,7 @@ import { SignUpInputDto } from './sign-up-input.dto';
 import { User } from '../user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
-import { AuthTokenDto } from 'apps/www/src/auth/auth-token.dto';
+import { AuthTokenDto } from './auth-token.dto';
 
 @Controller('api/auth')
 // 아래 Intercepter는 User Entity를 반환하면 매핑된 필드들만 Response로 내려보내도록 해줌

@@ -7,11 +7,11 @@ const withSass = require('@zeit/next-sass')
 const lessToJS = require('less-vars-to-js')
 const fs = require('fs')
 
-console.log('theme path = ', path.resolve(__dirname, './static/assets/antd-custom.less'));
+console.log('theme path = ', path.resolve(__dirname, './static/antd-custom.less'));
 
 // Where your antd-custom.less file lives
 const themeVariables = lessToJS(
-  fs.readFileSync(path.resolve(__dirname, './static/assets/antd-custom.less'), 'utf8')
+  fs.readFileSync(path.resolve(__dirname, './static/antd-custom.less'), 'utf8')
 )
 
 module.exports = withCss(withSass(withLess({

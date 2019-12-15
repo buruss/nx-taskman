@@ -6,7 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { WinstonModule } from 'nest-winston';
 import { NextModule, NextMiddleware } from '@nestpress/next';
 import { AppController } from './app.controller';
-import { graphqlOptions, typeOrmConfig, winstonOptions } from './config';
+import {graphqlOptions} from './config/graphql.config';
+import {typeOrmConfig} from './config/typeorm.config';
+import { winstonOptions } from './config/winston.config';
 import { UserModule } from './user/user.module';
 
 @Module(

@@ -1,11 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [
     "**/*.ts"

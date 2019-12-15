@@ -5,27 +5,18 @@ import ME from '../graphql/me.query';
 import { useQuery } from '@apollo/react-hooks';
 import Link from 'next/link';
 import SignOutButton from '../views/components/sign_out_button';
-import { Button } from 'antd';
 
-interface IProps {
-  data: any;
-}
-
-const Home = (props: IProps) => {
+const Home: React.FC = () => {
   const { data, loading, error } = useQuery(ME);
-
-
-  if (typeof window === 'undefined') {
-    console.log('초기 props = ', props);
-  }
 
   return (
     <div>
+      <head>home page</head>
       {/* static 경로로 asset 접근 테스트 */}
       <h1><img src='/static/new.png' />welcome!</h1>
       <SharedComponent />
 
-      {loading && <p>로딩 중...</p>}
+      {loading && <p>로딩 중..</p>}
       {error && <div>
         <Link href="signin">
           <a>로그인하기</a>

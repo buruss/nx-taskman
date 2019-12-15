@@ -57,7 +57,7 @@ export class ApiTaskController {
   @Patch('/:tid/st')
   updateTaskStatus(
     @Param('tid', ParseIntPipe) id: number,
-    @Body('tid', TaskStatusValidationPipe) status: TaskStatus,
+    @Body('st', TaskStatusValidationPipe) status: TaskStatus,
     @GetUser() user: User,
   ): Promise<Task> {
     return this.taskService.updateTaskStatus(id, status, user);

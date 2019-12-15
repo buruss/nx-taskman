@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } from 'type-graphql'
+import { Field, ObjectType, ID, } from 'type-graphql'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { TaskStatus } from "@nx-taskman/constants";
 import { User } from "../user/user.entity";
@@ -23,8 +23,13 @@ export class Task extends BaseEntity {
   @Expose({ name: 'desc' })
   description: string;
 
-  @Column()
-  @Field({ name: 'st', nullable: false })
+  // 명확히 enum이라고 명시하지 않으면 postgresql 오류 발생함
+  @Column({
+    type: "enum",
+    enum: TaskStatus,
+    default: TaskStatus.OPEN
+})
+  @Field(type => TaskStatus, { name: 'st', nullable: false })  // enum 인 경우 type 명시 필수
   @Expose({ name: 'st' })
   status: TaskStatus;
 

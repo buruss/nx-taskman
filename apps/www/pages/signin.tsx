@@ -5,8 +5,9 @@ import { useState } from 'react';
 import Router from 'next/router';
 import { Form, Input, Button, } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
+import IntlMessage from '../lib/IntlMessage';
 
-const SignIn = (props: FormComponentProps) => {
+const SignIn: React.FC<FormComponentProps> = (props) => {
   const [uname, setUname] = useState('');
   const [pwd, setPwd] = useState('');
 
@@ -22,7 +23,11 @@ const SignIn = (props: FormComponentProps) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signIn({ variables: { uname, pwd } });
+    props.form.validateFields((err, values) => {
+      if (!err) {
+        signIn({ variables: { uname, pwd } });
+      }
+    });
   }
 
   const formItemLayout = {

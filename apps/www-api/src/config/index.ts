@@ -6,7 +6,8 @@
  * 어느 소스에서든 getConfig() 호출 후 속성 사용하면 됨
  */
 import { IConfig } from './config.interface';
-import * as path from 'path';
+import dev from '../../../../config/development';
+import prod from '../../../../config/production';
 
 let cachedCfg: IConfig;
 
@@ -18,12 +19,13 @@ export const getConfig = (): IConfig => {
   if (cachedCfg) {
     return cachedCfg;
   }
+
+  // 동적인 모듈 로딩이 typescript compiler에서는 문제가 없는데, webpack에서는 module not found 오류가 발생해서 주석 처리함
   // 경로를 NODE_ENV에 따라 결정하고 동적으로 로딩함
-  const filePath = path.resolve('apps/config/', (process.env.NODE_ENV === 'production' ? 'production' : 'development') + '.js');
-  cachedCfg = require(filePath);
+  // const filePath = path.resolve('config/', (process.env.NODE_ENV === 'production' ? 'production' : 'development') + '.js');
+  // cachedCfg = require(filePath);
+
+  cachedCfg = process.env.NODE_ENV === 'production' ? prod : dev;
   return cachedCfg;
 };
 
-export * from './graphql.config';
-export * from './typeorm.config';
-export * from './winston.config';

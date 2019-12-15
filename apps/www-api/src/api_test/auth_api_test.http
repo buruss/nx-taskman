@@ -32,7 +32,7 @@ content-type: application/json
 
 // me
 GET http://localhost:3000/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWF0IjoxNTc1NTk2Njc4LCJleHAiOjE1NzU2MDAyNzh9.sX9tDHVQT8k1MlzTYIX8QnNALr-Ou1NNZBN_xnBCIuo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
 ###
 
 // sign in user2

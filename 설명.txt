@@ -91,3 +91,8 @@ nodemon-debug.json 설명
 "Cannot return null for non-nullable field Query.Me" 오류
   @Query Decorator를 type-graphql 에서 import할 경우 발생.
   @nestjs/graphql 에서 import해야 함.
+
+
+getDataFromTree 실패
+    next example 소스도, next-apollo npm도, next-with-apollo npm도 모두 실패함
+    

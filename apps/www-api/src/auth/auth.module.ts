@@ -8,7 +8,6 @@ import { ApiAuthController } from './auth.controller';
 import { TaskModule } from '../task/task.module';
 import { getConfig } from '../config';
 import { UserModule } from '../user/user.module';
-// import { UserService } from '../user/user.service';
 
 const jwtConfig = getConfig().jwt;
 

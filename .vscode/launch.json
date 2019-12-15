@@ -7,8 +7,18 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Attach",
+      "name": "Attach 9229",
       "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "stopOnEntry": false
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach 7777",
+      "port": 7777,
       "skipFiles": [
         "<node_internals>/**"
       ],
