@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Router from 'next/router';
 import { Form, Input, Button, } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import IntlMessage from '../lib/IntlMessage';
+import IntlMessage from '../util/IntlMessages';
 
 const SignIn: React.FC<FormComponentProps> = (props) => {
   const [uname, setUname] = useState('');

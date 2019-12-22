@@ -2,7 +2,7 @@ import React from 'react';
 import App, { Container } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { withApollo } from '../lib/next_example';
+import { withApollo } from '../util/next_example';
 
 interface IProps {
   apollo: any;

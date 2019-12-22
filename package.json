@@ -61,6 +61,9 @@
     "nest-winston": "^1.1.2",
     "nestjs-dataloader": "^1.0.10",
     "next": "^9.1.4",
+    "next-compose-plugins": "^2.2.0",
+    "next-fonts": "^0.19.0",
+    "next-optimized-images": "^2.5.4",
     "next-server": "^9.0.5",
     "null-loader": "^3.0.0",
     "passport": "^0.4.0",
@@ -75,6 +78,7 @@
     "rxjs": "^6.5.3",
     "type-graphql": "^0.17.5",
     "typeorm": "^0.2.20",
+    "webpack-bundle-analyzer": "^3.6.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.2.1"
   },

@@ -13,7 +13,7 @@ const Home: React.FC = () => {
     <div>
       <head>home page</head>
       {/* static 경로로 asset 접근 테스트 */}
-      <h1><img src='/static/new.png' />welcome!</h1>
+      <h1><img src='/new.png' />welcome!</h1>
       <SharedComponent />
 
       {loading && <p>로딩 중..</p>}

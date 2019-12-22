@@ -1,7 +1,7 @@
 import React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
-import withData from '../lib/next_apollo';
+import withData from '../util/next_apollo';
 
 interface IProps {
 }
