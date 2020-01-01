@@ -1,35 +1,30 @@
 import React from 'react';
-import App, { Container } from 'next/app';
+import App from 'next/app';
 import Head from 'next/head';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { withApollo } from '../util/next_example';
+import "../styles/style.css"
+import {Provider} from 'react-redux';
+import withRedux from 'next-redux-wrapper';
+import "../firebaseConfig/index";
+import initStore from '../redux/store';
 
-interface IProps {
-  apollo: any;
+interface Props {
+  Component, pageProps,store
 }
 
-class MyApp extends App<IProps> {
+class MyApp extends App<Props> {
   render() {
-    const { Component, pageProps, apollo } = this.props;
+    const { Component, pageProps, store } = this.props;
     return (
-      <ApolloProvider client={apollo}>
-        <main>
-          <Head>
-            <title>Wieldy- Admin Dashboard</title>
-          </Head>
-          <header>
-            상단 메뉴
-          </header>
-          <section>
-            <Component {...pageProps} />
-          </section>
-          <footer>
-            하단 푸터
-          </footer>
-        </main>
-      </ApolloProvider>
+      <>
+        <Head>
+          <title>Wieldy- Admin Dashboard</title>
+        </Head>
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </>
     );
   }
 }
 
-export default withApollo(MyApp);
+export default withRedux(initStore)(MyApp);

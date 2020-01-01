@@ -16,7 +16,8 @@
     "variable-name": [
       true,
       "allow-leading-underscore"
-    ]
+    ],
+    "interface-name" : [true, "never-prefix"]
   },
   "rulesDirectory": []
 }

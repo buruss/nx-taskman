@@ -10,7 +10,6 @@ import { UserService } from '../user/user.service';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private userService: UserService,
-    // private config: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -19,9 +18,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   // 액세스토큰을 디코딩하여 얻은 payload (username)를 이용하여 user 객체를 찾아 반환
+  // 그러면 passport가 req 객체에 user 속성으로 붙여줌
   async validate(payload: JwtPayload): Promise<User> {
     const { username } = payload;
-    const user = await this.userService.findOne(username); //, { loadEagerRelations: false });
+    const user = await this.userService.findOne(username);
 
     if (!user) {
       throw new UnauthorizedException();

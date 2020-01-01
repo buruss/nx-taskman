@@ -89,5 +89,6 @@ nodemon-debug.json 설명
 
 
 getDataFromTree 실패
+    "Error while running `getDataFromTree` ApolloError: GraphQL error"
     next example 소스도, next-apollo npm도, next-with-apollo npm도 모두 실패함
     

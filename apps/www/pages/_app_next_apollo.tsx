@@ -3,10 +3,11 @@ import App from 'next/app';
 import Head from 'next/head';
 import withData from '../util/next_apollo';
 
-interface IProps {
+interface Props {
+  Component, pageProps
 }
 
-class MyApp extends App<IProps> {
+class MyApp extends App<Props> {
   render() {
     const { Component, pageProps } = this.props;
     return (

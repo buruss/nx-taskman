@@ -28,11 +28,11 @@ module.exports = withCss(withSass(withLess({
     // @nx-taskman/components 경로를 next에 인식시키기
     // next-babel-loader rule의 include 경로에 루트 tsconfig.json의 paths 섹션의 값들을 넣어준다.
     // rules 안에 rule이 여러개 있는데, 0 번째가 next-babel-loader 인 듯함. 
-    // Todo: next-babel-loader rule의 순번을 찾아 0 대신 사용
-    const ruleIdx = 0;
-    const includes = config.module.rules[ruleIdx].include;
-    includes.push(path.resolve(options.dir, '../../libs/components'));
-    includes.push(path.resolve(options.dir, '../../libs/logics'));
+    const rule = config.module.rules.find(item => item.use.loader === 'next-babel-loader');
+    if (rule) {
+      rule.include.push(path.resolve(options.dir, '../../libs/components'));
+      rule.include.push(path.resolve(options.dir, '../../libs/logics'));
+    }
 
 
     // ant design scss 인식시키기
