@@ -11,7 +11,7 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "lib": ["esnext.intl", "es2017.intl", "es2018.intl"]
+    "lib": ["esnext.intl", "es2017.intl", "es2018.intl", "dom"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.d.ts"]
 }

@@ -6,11 +6,5 @@ export default gql`query {
     uid
     uname
     emaddr
-    tasks {
-      tid
-      tit
-      desc
-      st
-    }
   }
 }`;

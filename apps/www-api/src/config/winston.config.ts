@@ -2,7 +2,7 @@ import winston from 'winston';
 import * as path from 'path';
 
 // require 구문은 typescript 컴파일 오류 발생시킴.
-const DailyRotateFile = require('winston-daily-rotate-file');
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 export const winstonOptions: winston.LoggerOptions = { // winston 로깅 설정
   level: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'silly' : 'debug',

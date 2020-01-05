@@ -32,7 +32,7 @@ content-type: application/json
 
 // me
 GET http://localhost:3000/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc4MjAyNjMyLCJleHAiOjE1NzgyMDYyMzJ9._XY9lb1fh0Sp4udizueVVTTMFYjeuDXiUw1vWCK6i8U
 ###
 
 // sign in user2

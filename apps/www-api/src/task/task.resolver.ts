@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver, ResolveProperty, Parent } from '@nestj
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { GetTasksArgsDto } from './get-tasks-args.dto';
-import { GqlUser } from '../auth/get-user.decorator';
+import { GqlUser } from '../auth/auth.decorator';
 import { User } from '../user/user.entity';
 import { Task } from './task.entity';
 import { CreateTaskInputDto } from './create-task-input.dto';

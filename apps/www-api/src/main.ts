@@ -4,6 +4,7 @@ import { NextModule } from '@nestpress/next';
 import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import { getConfig } from './config';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,11 +15,7 @@ async function bootstrap() {
 
   // 개발환경에서는 cors 활성화
   const dev = process.env.NODE_ENV !== 'production';
-  if (dev) {
-    app.enableCors();
-  } else {
-    app.enableCors()
-  }
+  app.enableCors()
 
   /**
    * Request 에 담긴 데이터를 입력체크해줄 뿐 아니라 Class형으로 형변환까지 해주도록함. 자주 쓰므로 Global로 사용함
@@ -30,10 +27,13 @@ async function bootstrap() {
    * @param signUpInputDto 
    */
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  
+  // 쿠키 기반 토큰 인증을 위해서 필요함. jwt.strategy.ts 참고
+  app.use(cookieParser());
 
   const port = getConfig().server.port;
   const projectRoot = path.resolve(__dirname, '../../../apps/www');
-  console.log('projectRoot=',projectRoot);
+  console.log('next project root=', projectRoot);
   app.get(NextModule).prepare({ dev, dir: projectRoot }).then(() => {
     app.listen(port, () => {
       console.log('Listening at http://localhost:' + port + '/'); // + globalPrefix);

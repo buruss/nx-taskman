@@ -5,6 +5,15 @@ import { JwtPayload } from './jwt-payload.interface';
 import { User } from '../user/user.entity';
 import { getConfig } from '../config';
 import { UserService } from '../user/user.service';
+import { Request } from 'express';
+
+const cookieExtractor = (req: Request): string | null => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies.token;
+  }
+  return token;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,7 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // 처음에는 bearer token을 사용했는데,
+      // next.js에서 사용하기에는 쿠키 방식이 편리한 듯 해서 쿠키 방식으로 변경함
+      jwtFromRequest: cookieExtractor, //ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: getConfig().jwt.secret,
     });
   }

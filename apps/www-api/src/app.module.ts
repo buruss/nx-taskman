@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { WinstonModule } from 'nest-winston';
 import { NextModule, NextMiddleware } from '@nestpress/next';
-import { AppController } from './app.controller';
 import { graphqlOptions } from './config/graphql.config';
 import { typeOrmConfig } from './config/typeorm.config';
 import { winstonOptions } from './config/winston.config';
@@ -22,26 +21,22 @@ import { UserModule } from './user/user.module';
       AuthModule,
       UserModule,
     ],
-    controllers: [
-      AppController,
-    ]
   }
 )
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+      
     consumer
       .apply(NextMiddleware)
-      .forRoutes({
-        path: '_next*',
-        method: RequestMethod.GET,
-      });
+      // rest api 경로와 graphql api 경로를 제외한 모든 경로를 next.js로 넘김
+      .exclude(
+        {path: '/api/*', method: RequestMethod.ALL},
+        {path: '/graphql', method: RequestMethod.ALL},
+      )
+      .forRoutes(
+        {path: '/*', method: RequestMethod.GET}, 
+      );
 
-    consumer
-      .apply(NextMiddleware)
-      .forRoutes({
-        path: '/*', // www 프로젝트의 public 폴더로 연결됨. (next 기본 설정. 변경 불가)
-        method: RequestMethod.GET,
-      });
   }
 }
 

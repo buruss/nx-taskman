@@ -1,22 +1,22 @@
 // getTasks
-GET http://localhost:3000/api/tasks?st=DONE
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
+GET http://localhost:3000/api/tasks?st=OPEN
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTc4MjAxODMwLCJleHAiOjE1NzgyMDU0MzB9.0lRhtOLZGiTMBxbr3ALTICw6OMECHInpPxChK5i8xDc
 ###
 
 // get filtered tasks user 1
 GET http://localhost:3000/api/tasks?search=%EC%9E%91%EC%97%85
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
 ###
 
 // get filtered tasks user 2
 GET http://localhost:3000/api/tasks?search=descri
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
 ###
 
 // create task
 POST http://localhost:3000/api/tasks
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXI1IiwiaWF0IjoxNTc1NjE1MDQ3LCJleHAiOjE1NzU2MTg2NDd9.0ktmBWdA37-q2eYn3Vg8rGWRKqOA034xzLqvbmYP8Bg
 
 {
     "tit": "새 작업 8",
@@ -26,18 +26,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZ
 
 // get task by id
 GET http://localhost:3000/api/tasks/10
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
 
 ###
 
 // delete task by id
 DELETE http://localhost:3000/api/tasks/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNTY4NTM0MTUyLCJleHAiOjE1Njg1Mzc3NTJ9.Frkj_5EZrVeLLSiDvKkGI2FDAei3q7RfPgXTESSyITc
 ###
 
 // update tasks status
 PATCH http://localhost:3000/api/tasks/10/st
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iuq5gOu5meyCvOyYuSIsImlhdCI6MTU3NjMwNzM2MiwiZXhwIjoxNTc2MzEwOTYyfQ.m6R2fBUlrmbGQtLkSVWEa-XvNfDqlNu7rLrUiSHFWxI
 Content-Type: application/json
 
 {

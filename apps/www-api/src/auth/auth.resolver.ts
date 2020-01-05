@@ -1,13 +1,14 @@
-import { Args, Mutation, Resolver, Query, } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, Context, GraphQLExecutionContext, } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignUpInputDto } from './sign-up-input.dto';
 import { SignInInputDto } from './sign-in-input.dto';
 import { User } from '../user/user.entity';
 import { UseGuards, } from '@nestjs/common';
 import { GqlAuthGuard } from './graphql-auth.guard';
-import { GqlUser } from './get-user.decorator';
+import { GqlUser, ResGql } from './auth.decorator';
 import { AuthTokenDto } from './auth-token.dto';
 import { TaskService } from '../task/task.service';
+import { Response } from 'express';
 
 @Resolver(User)
 export class AuthResolver {
@@ -29,10 +30,14 @@ export class AuthResolver {
   }
 
   @Mutation(() => AuthTokenDto)
-  signIn(
+  async signIn(
     @Args('input') signInInputDto: SignInInputDto,
+    @ResGql() res: Response,
   ): Promise<AuthTokenDto> {
-    return this.authService.signIn(signInInputDto);
+    const token = await this.authService.signIn(signInInputDto);
+    // 쿠키에 토큰 설정
+    res.cookie('token', token.accessToken, { httpOnly: true, maxAge: (1000 * 60 * 60 * 24) * 31, });
+    return token;
   }
 
   @Mutation(() => String)
