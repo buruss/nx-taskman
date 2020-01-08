@@ -50,13 +50,24 @@ const authLink = setContext((_, ctx) => {
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
  */
-function createApolloClient(initialState: NormalizedCacheObject = {}, cookie?: string): ApolloClient<NormalizedCacheObject> {
+function createApolloClient(initialState: NormalizedCacheObject = {}, cookie = ''): ApolloClient<NormalizedCacheObject> {
+  // 서버 사이드 렌더링 시 getDataFromTree 안에서도 쿠키를 전송하도록 하려면 아래처럼 headers에 쿠키 추가해야 함
+  const enchancedFetch = (input: RequestInfo, init?: RequestInit) => {
+    return fetch(input, {
+        ...init,
+        headers: {
+            ...init.headers,
+            "Cookie": cookie
+        }
+    }).then(response => response)
+  };
   // const headers = cookie ? {cookie}: undefined;
   const link = createPersistedQueryLink().concat(authLink.concat(new HttpLink({
       uri: 'http://localhost:3000/graphql', // Server URL (must be absolute)
       credentials: 'same-origin', // 쿠키 전송을 위해 필요함
       // headers,
-      fetch,
+      fetch: enchancedFetch,
+      // fetch
   })));
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient<AppApolloCache>({
@@ -73,7 +84,7 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, cookie?: s
  * Creates or reuses apollo client in the browser.
  * @param  {Object} initialState
  */
-function initApolloClient(initialState?: AppApolloCache, cookie?: string) {
+function initApolloClient(initialState?: AppApolloCache, cookie = '') {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
@@ -131,7 +142,7 @@ export function withApollo<PageProps extends object, InitialProps = PageProps>(
 
       // Initialize ApolloClient, add it to the ctx object so
       // we can use it in `PageComponent.getInitialProp`.
-      const apolloClient = (ctx.apolloClient = initApolloClient());
+      const apolloClient = (ctx.apolloClient = initApolloClient({}, req?.headers?.cookie));
 
       // Run wrapped getInitialProps methods
       let pageProps = {} as InitialProps;
@@ -150,6 +161,7 @@ export function withApollo<PageProps extends object, InitialProps = PageProps>(
         // Only if ssr is enabled
         if (ssr) {
           try {
+            console.log('get data from tree. cookie -= ', req.headers.cookie);
             // Run all GraphQL queries
             const { getDataFromTree } = await import('@apollo/react-ssr');
             await getDataFromTree(
