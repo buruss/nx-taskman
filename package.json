@@ -23,7 +23,7 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "start:dev:www": "nodemon --config apps/www/nodemon-debug.json apps/www/server/main.ts"
+    "start:dev:www": "nodemon apps/www/server/main.ts"
   },
   "private": true,
   "dependencies": {

@@ -25,23 +25,14 @@ import { withApollo } from '../../util/next_example_page';
 //     }
 //   };
 
-const withAuth = (WrappedComponent, options: {redirectOnAuth?: string; redirectOnFail?: string;} = {redirectOnFail: '/signin'}) => withApollo(props => {
-  const {redirectOnAuth, redirectOnFail} = options;
+const withAuth = (WrappedComponent) => withApollo(props => {
 
   const { data, loading, error } = useQuery(ME, {
     onCompleted(data) {
       console.log('useQuery(ME) data = ', data);
-      console.log('redirectOnAuth', redirectOnAuth);
-      if (redirectOnAuth) {
-        Router.push(redirectOnAuth);
-      }
     },
     onError(error) {
       console.log('useQuery(ME) error = ', error);
-      console.log('redirectOnFail', redirectOnFail);
-      if (redirectOnFail) {
-        Router.push(redirectOnFail);
-      }
     },
   });
 

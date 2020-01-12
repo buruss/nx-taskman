@@ -9,6 +9,7 @@ import { graphqlOptions } from './config/graphql.config';
 import { typeOrmConfig } from './config/typeorm.config';
 import { winstonOptions } from './config/winston.config';
 import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 
 @Module(
   {
@@ -21,6 +22,9 @@ import { UserModule } from './user/user.module';
       AuthModule,
       UserModule,
     ],
+    controllers: [
+      AppController
+    ],
   }
 )
 export class AppModule implements NestModule {
@@ -30,11 +34,13 @@ export class AppModule implements NestModule {
       .apply(NextMiddleware)
       // rest api 경로와 graphql api 경로를 제외한 모든 경로를 next.js로 넘김
       .exclude(
-        {path: '/api/*', method: RequestMethod.ALL},
-        {path: '/graphql', method: RequestMethod.ALL},
+        // {path: 'api/*', method: RequestMethod.GET},
+        {path: 'graphql', method: RequestMethod.GET},
       )
       .forRoutes(
-        {path: '/*', method: RequestMethod.GET}, 
+        {path: '_next*', method: RequestMethod.GET}, 
+        // {path: 'sign*', method: RequestMethod.GET}, 
+        // {path: 'main*', method: RequestMethod.GET}, 
       );
 
   }
