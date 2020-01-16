@@ -112,10 +112,10 @@ class AboveHeader extends Component<Props> {
                 />
               </div>
               <Link href="/" >
-                <img alt="" src={'/images/w-logo.png'}/>
+                <img alt="" src={'/static/images/w-logo.png'}/>
               </Link>
               <Link href="/" >
-                <img alt="" src={'/images/logo.png'}/>
+                <img alt="" src={'/static/images/logo.png'}/>
               </Link>
               <div className="gx-header-search gx-d-none gx-d-lg-flex">
                 <SearchBox styleName="gx-lt-icon-search-bar-lg"

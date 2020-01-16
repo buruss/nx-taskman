@@ -90,9 +90,9 @@ class InsideHeader extends Component<Props> {
                 />
               </div>
               <Link href="/">
-                <img alt="" src={"/images/w-logo.png"}/></Link>
+                <img alt="" src={"/static/images/w-logo.png"}/></Link>
               <Link href="/">
-                <img alt="" src={"/images/logo.png"}/></Link>
+                <img alt="" src={"/static/images/logo.png"}/></Link>
 
               <div className="gx-header-horizontal-nav gx-header-horizontal-nav-curve gx-d-none gx-d-lg-block">
                 <HorizontalNav/>

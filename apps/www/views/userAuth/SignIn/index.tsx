@@ -52,7 +52,7 @@ const SignIn: React.FC<FormComponentProps> = props => {
               </p>
             </div>
             <div className="gx-app-logo">
-              <img alt="example" src="/images/logo.png" />
+              <img alt="example" src="/static/images/logo.png" />
             </div>
           </div>
           <div className="gx-app-login-content gx-loader-pos-rel">

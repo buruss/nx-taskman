@@ -43,7 +43,7 @@ const SignUp = props => {
             <p><IntlMessages id="app.userAuth.getAccount" /></p>
           </div>
           <div className="gx-app-logo">
-            <img alt="example" src='/images/logo.png' />
+            <img alt="example" src='/static/images/logo.png' />
           </div>
         </div>
 

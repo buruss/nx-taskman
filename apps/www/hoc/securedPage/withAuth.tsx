@@ -33,6 +33,7 @@ const withAuth = (WrappedComponent) => withApollo(props => {
     },
     onError(error) {
       console.log('useQuery(ME) error = ', error);
+      Router.push('/signin');
     },
   });
 

@@ -73,62 +73,62 @@ class Customizer extends Component<Props, State> {
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_FIXED)}
               className={`gx-pointer ${navStyle === NAV_STYLE_FIXED && 'active'}`}>
-        <img src='/images/layouts/fixed.png' alt='fixed'/>
+        <img src='/static/images/layouts/fixed.png' alt='fixed'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_MINI_SIDEBAR)}
               className={`gx-pointer ${navStyle === NAV_STYLE_MINI_SIDEBAR && 'active'}`}>
-        <img src='/images/layouts/mini sidebar.png' alt='mini sidebar'/>
+        <img src='/static/images/layouts/mini sidebar.png' alt='mini sidebar'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DRAWER)}
               className={`gx-pointer ${navStyle === NAV_STYLE_DRAWER && 'active'}`}>
-        <img src='/images/layouts/drawer nav.png' alt='drawer nav'/>
+        <img src='/static/images/layouts/drawer nav.png' alt='drawer nav'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_NO_HEADER_MINI_SIDEBAR)}
               className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && 'active'}`}>
-        <img src='/images/layouts/no header mini sidebar.png' alt='no hader mini sidebar'/>
+        <img src='/static/images/layouts/no header mini sidebar.png' alt='no hader mini sidebar'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR)}
               className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR && 'active'}`}>
-        <img src='/images/layouts/vertical no header.png' alt='vertical no header'/>
+        <img src='/static/images/layouts/vertical no header.png' alt='vertical no header'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DEFAULT_HORIZONTAL)}
               className={`gx-pointer ${navStyle === NAV_STYLE_DEFAULT_HORIZONTAL && 'active'}`}>
-        <img src='/images/layouts/default horizontal.png' alt='default horizontal'/>
+        <img src='/static/images/layouts/default horizontal.png' alt='default horizontal'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DARK_HORIZONTAL)}
               className={`gx-pointer ${navStyle === NAV_STYLE_DARK_HORIZONTAL && 'active'}`}>
-        <img src='/images/layouts/dark horizontal.png' alt='dark horizontal'/>
+        <img src='/static/images/layouts/dark horizontal.png' alt='dark horizontal'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_INSIDE_HEADER_HORIZONTAL)}
               className={`gx-pointer ${navStyle === NAV_STYLE_INSIDE_HEADER_HORIZONTAL && 'active'}`}>
-        <img src='/images/layouts/inside header horizontal.png' alt='inside header horizontal'/>
+        <img src='/static/images/layouts/inside header horizontal.png' alt='inside header horizontal'/>
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_BELOW_HEADER)}
               className={`gx-pointer ${navStyle === NAV_STYLE_BELOW_HEADER && 'active'}`}>
-        <img src='/images/layouts/below header.png' alt='below header'/>
+        <img src='/static/images/layouts/below header.png' alt='below header'/>
         </span>
       </li>
 
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_ABOVE_HEADER)}
               className={`gx-pointer ${navStyle === NAV_STYLE_ABOVE_HEADER && 'active'}`}>
-        <img src='/images/layouts/top to header.png' alt='top to header'/>
+        <img src='/static/images/layouts/top to header.png' alt='top to header'/>
         </span>
       </li>
     </ul>

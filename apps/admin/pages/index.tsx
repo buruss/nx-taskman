@@ -15,7 +15,7 @@ export const Index = () => {
         <img
           alt=""
           width="75"
-          src="https://nx.dev/assets/images/nx-logo-white.svg"
+          src="https://nx.dev/assets/static/images/nx-logo-white.svg"
         />
         <h1>Welcome to admin!!</h1>
       </header>

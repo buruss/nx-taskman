@@ -22,7 +22,7 @@ class UserInfo extends Component<Props> {
     return (
       <Popover overlayClassName="gx-popover-horizantal" placement="bottomRight" content={userMenuOptions}
                trigger="click">
-        <Avatar src={"/images/avatar/domnic-harris.png"}
+        <Avatar src={"/static/images/avatar/domnic-harris.png"}
                 className="gx-avatar gx-pointer" alt=""/>
       </Popover>
     )

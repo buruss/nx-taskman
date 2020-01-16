@@ -39,8 +39,9 @@ export class AppModule implements NestModule {
       )
       .forRoutes(
         {path: '_next*', method: RequestMethod.GET}, 
-        // {path: 'sign*', method: RequestMethod.GET}, 
-        // {path: 'main*', method: RequestMethod.GET}, 
+        {path: 'static*', method: RequestMethod.GET}, 
+        {path: 'sign*', method: RequestMethod.GET}, 
+        {path: 'main*', method: RequestMethod.GET}, 
       );
 
   }
