@@ -36,7 +36,7 @@ export class AuthService {
     const accessToken = this.jwtService.sign(payload);
     this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`);
 
-    return { accessToken };
+    return { token: accessToken };
   }
 
   findByIds(ids: number[]): Promise<User[]> {

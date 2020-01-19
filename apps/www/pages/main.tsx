@@ -3,7 +3,7 @@ import Head from 'next/head';
 import SecuredPage from '../hoc/securedPage';
 import asyncComponent from "../util/asyncComponent";
 
-const DashBoard = asyncComponent(() => import('../views/dashboard'));
+const DashBoard = asyncComponent(() => import('../routes/dashboard'));
 
 export default SecuredPage(() => (
   <>

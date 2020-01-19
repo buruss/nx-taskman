@@ -1,7 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { NextModule } from '@nestpress/next';
-import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import { getConfig } from './config';
 import * as cookieParser from 'cookie-parser';
@@ -32,12 +30,8 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const port = getConfig().server.port;
-  const projectRoot = path.resolve(__dirname, '../../../apps/www');
-  console.log('next project root=', projectRoot);
-  app.get(NextModule).prepare({ dev, dir: projectRoot }).then(() => {
-    app.listen(port, () => {
-      console.log('Listening at http://localhost:' + port + '/'); // + globalPrefix);
-    });
+  app.listen(port, () => {
+    console.log('Listening at http://localhost:' + port + '/'); // + globalPrefix);
   });
 }
 

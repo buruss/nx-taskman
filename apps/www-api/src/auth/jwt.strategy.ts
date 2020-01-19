@@ -21,9 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private userService: UserService,
   ) {
     super({
-      // 처음에는 bearer token을 사용했는데,
+      // 처음에는 아래와 같이 bearer token을 사용했는데,
+      //ExtractJwt.fromAuthHeaderAsBearerToken(),
       // next.js에서 사용하기에는 쿠키 방식이 편리한 듯 해서 쿠키 방식으로 변경함
-      jwtFromRequest: cookieExtractor, //ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: cookieExtractor, 
       secretOrKey: getConfig().jwt.secret,
     });
   }

@@ -1,5 +1,5 @@
 import {FETCH_START, FETCH_SUCCESS, GET_All_CONTACT_SUCCESS} from "../../constants/ActionTypes";
-import {database} from "../../firebase/firebase";
+import {database} from "../../firebaseConfig";
 
 export const onGetAllContact = () => {
   return (dispatch) => {

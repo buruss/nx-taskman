@@ -3,7 +3,7 @@ import {Area, AreaChart, ResponsiveContainer, Tooltip} from "recharts";
 import {Col, Row} from "antd";
 
 import Widget from "../Widget";
-import {trafficData} from "../../static/data/metricsData"
+import {trafficData} from "../../public/data/metricsData"
 
 const TotalEncomeCard = () => {
   return (

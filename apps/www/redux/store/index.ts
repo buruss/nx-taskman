@@ -1,12 +1,12 @@
 import {applyMiddleware, createStore} from 'redux';
-import createSagaMiddleware, {END} from 'redux-saga';
+// import createSagaMiddleware, {END} from 'redux-saga';
 import thunk from 'redux-thunk';
 
 import reducers from '../reducers';
 
-import rootSaga from '../sagas';
+// import rootSaga from '../sagas';
 
-const sagaMiddleware: any = createSagaMiddleware();
+// const sagaMiddleware: any = createSagaMiddleware();
 
 const bindMiddleware = middleware => {
   if (process.env.NODE_ENV !== 'production') {
@@ -21,39 +21,39 @@ function configureStore(initialState = {}) {
   const store: any = createStore(
     reducers,
     initialState,
-    bindMiddleware([thunk, sagaMiddleware])
+    bindMiddleware([thunk]) //, sagaMiddleware])
   );
 
-  store.runSaga = () => {
-    // Avoid running twice
-    if (store.saga) return;
-    store.saga = sagaMiddleware.run(rootSaga);
-  };
+  // store.runSaga = () => {
+  //   // Avoid running twice
+  //   if (store.saga) return;
+  //   store.saga = sagaMiddleware.run(rootSaga);
+  // };
 
-  store.stopSaga = async () => {
-    // Avoid running twice
-    if (!store.saga) return;
-    store.dispatch(END);
-    await store.saga.done;
-    // eslint-disable-next-line require-atomic-updates
-    store.saga = null;
-  };
+  // store.stopSaga = async () => {
+  //   // Avoid running twice
+  //   if (!store.saga) return;
+  //   store.dispatch(END);
+  //   await store.saga.done;
+  //   // eslint-disable-next-line require-atomic-updates
+  //   store.saga = null;
+  // };
 
-  store.execSagaTasks = async (isServer, tasks) => {
-    // run saga
-    store.runSaga();
-    // dispatch saga tasks
-    tasks(store.dispatch);
-    // Stop running and wait for the tasks to be done
-    await store.stopSaga();
-    // Re-run on client side
-    if (!isServer) {
-      store.runSaga();
-    }
-  };
+  // store.execSagaTasks = async (isServer, tasks) => {
+  //   // run saga
+  //   store.runSaga();
+  //   // dispatch saga tasks
+  //   tasks(store.dispatch);
+  //   // Stop running and wait for the tasks to be done
+  //   await store.stopSaga();
+  //   // Re-run on client side
+  //   if (!isServer) {
+  //     store.runSaga();
+  //   }
+  // };
 
-  // Initial run
-  store.runSaga();
+  // // Initial run
+  // store.runSaga();
 
   return store;
 }

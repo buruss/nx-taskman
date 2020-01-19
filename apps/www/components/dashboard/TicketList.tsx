@@ -1,7 +1,7 @@
 import React from "react";
 
 import Widget from "../Widget";
-import {ticketList} from "../../views/dashboard/data";
+import {ticketList} from "../../routes/dashboard/data";
 import TicketItem from "./TicketItem";
 
 class TicketList extends React.Component {

@@ -8,6 +8,7 @@ import fetch from 'isomorphic-unfetch';
 import { setContext } from 'apollo-link-context';
 import { createPersistedQueryLink } from "apollo-link-persisted-queries";
 import { NextPage } from 'next';
+import nextCookie from 'next-cookies';
 
 export type AppApolloCache = any;
 
@@ -24,13 +25,12 @@ interface ApolloProps extends ApolloInitialProps {
 
 /**
  * 요청에 "Authorization: Bearer 토큰" 형태의 헤더를 추가
- * 쿠키 방식으로 바꾸면서 localStorage에 저장되지 않으므로
- * 아래 함수는 사실상 무의미하지만 참고용으로 남겨놓음
+ * 쿠키 방식으로 바꾸면서 사실살 필요없을 수도 있지만 JWT 공부용으로 남겨놓음
  */
 const authLink = setContext((_, ctx) => {
   const { headers } = ctx;
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+  const {token} = nextCookie(ctx);
 
   if (token) {
     // return the headers to the context so httpLink can read them
@@ -61,13 +61,10 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, cookie = '
         }
     }).then(response => response)
   };
-  // const headers = cookie ? {cookie}: undefined;
   const link = createPersistedQueryLink().concat(authLink.concat(new HttpLink({
-      uri: 'http://localhost:3000/graphql', // Server URL (must be absolute)
+      uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
       credentials: 'same-origin', // 쿠키 전송을 위해 필요함
-      // headers,
       fetch: enchancedFetch,
-      // fetch
   })));
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient<AppApolloCache>({

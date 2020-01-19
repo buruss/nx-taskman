@@ -1,6 +1,6 @@
 import React from "react";
 
-import Widget from "../Widget/index
+import Widget from "../Widget";
 
 const EcommerceStatus = ({icon, title, subTitle, color, colorTitle, colorSubTitle}) => {
   return (

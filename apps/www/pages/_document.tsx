@@ -10,7 +10,7 @@ export default class MyDocument extends Document {
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
           <meta httpEquiv="X-UA-Compatible" content="IE=Edge" />
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link rel="stylesheet" href="/static/styles/loader.css"/>
+          <link rel="stylesheet" href="/loader.css"/>
         </Head>
         <body>
           <Main />

@@ -42,6 +42,7 @@ const webpackConfig = {
     //     }
     //   }
     // });
+    
     return config;
   },
 };
@@ -51,7 +52,11 @@ if (typeof require !== 'undefined') {
   require.extensions['.css'] = file => {};
 }
 
+/** 아래 withCSS를 추가하면 아래와 같은 오류가 뜨면서 실패하여 임시로 주석 처리함
+ * [ error ] ./styles/style.min.css
+ * Error: Didn't get a result from child compiler
+ */
 module.exports = withPlugins(
-  [withOptimizedImages, withFonts, withCSS],
+  [withOptimizedImages, withFonts, ], //withCSS
   webpackConfig
 );

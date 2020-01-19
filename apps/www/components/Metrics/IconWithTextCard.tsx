@@ -1,6 +1,6 @@
 import React from "react";
 
-import Widget from "../Widget/index
+import Widget from "../Widget";
 import {connect} from "react-redux";
 import {THEME_TYPE_DARK} from "../../constants/ThemeSetting";
 

@@ -1,5 +1,12 @@
 import * as React from 'react';
-import withAuth from '../hoc/securedPage/withAuth';
-import Main from './main';
+import Router from 'next/router';
 
-export default withAuth(Main);
+/**
+ * 항상 main 으로 이동
+ */
+export default () => {
+  React.useEffect(() => {
+    Router.push('/main');
+  }, []);
+  return null;
+};

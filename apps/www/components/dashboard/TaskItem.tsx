@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar, Checkbox, Tag, Tooltip} from "antd";
 
-import {taskTags} from "../../views/dashboard/data";
+import {taskTags} from "../../routes/dashboard/data";
 
 const getTags = (tags) => {
   return taskTags.map((tag, index) => {

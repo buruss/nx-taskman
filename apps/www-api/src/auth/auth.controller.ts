@@ -36,7 +36,7 @@ export class ApiAuthController {
   ): Promise<AuthTokenDto> {
     const token = await this.authService.signIn(signInInputDto);
     // 쿠키에 토큰 설정
-    res.cookie('token', token.accessToken, { httpOnly: true, maxAge: (1000 * 60 * 60 * 24) * 31, });
+    res.cookie('token', token.token, { httpOnly: true, maxAge: (1000 * 60 * 60 * 24) * 31, });
     res.send(token);
     return token;
   }

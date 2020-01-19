@@ -1,7 +1,8 @@
 import React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
-import "../static/styles/style.css"
+import "../public/vendors/style";
+import "../styles/style.min.css"
 import {Provider} from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 import "../firebaseConfig/index";

@@ -1,6 +1,6 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects";
 import {fetchStickySuccess} from '../actions/Notes';
-import {database} from '../../firebaseConfig/index';
+import {database} from '../../firebaseConfig';
 import {GET_STICKY, NOTES_UPDATE} from '../../constants/ActionTypes';
 import {fetchError} from "../actions/Common";
 

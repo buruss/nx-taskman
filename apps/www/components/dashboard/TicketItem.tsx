@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar} from "antd";
 
-import {taskStatus} from "../../views/dashboard/data"
+import {taskStatus} from "../../routes/dashboard/data"
 
 const getStatus = (status) => {
   const statusData = taskStatus.filter((taskStatus, index) => status === taskStatus.id)[0];

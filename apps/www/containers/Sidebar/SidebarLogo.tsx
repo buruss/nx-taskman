@@ -45,10 +45,10 @@ class SidebarLogo extends Component<Props> {
 
         <Link href="/">
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && width >= TAB_SIZE ?
-            <img alt="" src={"/static/images/w-logo.png"}/> :
+            <img alt="" src={"/images/w-logo.png"}/> :
             themeType === THEME_TYPE_LITE ?
-              <img alt="" src={"/static/images/logo-white.png"}/> :
-              <img alt="" src={"/static/images/logo.png"}/>}
+              <img alt="" src={"/images/logo-white.png"}/> :
+              <img alt="" src={"/images/logo.png"}/>}
 
         </Link>
 
