@@ -57,6 +57,6 @@ if (typeof require !== 'undefined') {
  * Error: Didn't get a result from child compiler
  */
 module.exports = withPlugins(
-  [withOptimizedImages, withFonts, ], //withCSS
+  [withOptimizedImages, withFonts, withCSS], //
   webpackConfig
 );

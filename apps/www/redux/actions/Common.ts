@@ -26,14 +26,6 @@ export const showMessage = (message) => {
   }
 };
 
-export const hideMessage = () => {
-  return {
-    type: HIDE_MESSAGE
-  }
-};
-
-
-
 
 
 

@@ -24,7 +24,7 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "dev:www-api": "nodemon apps/www-api/src/main.ts",
-    "less": "lessc --js apps/www/styles/wieldy.less apps/www/styles/style.min.css --compress -x"
+    "less": "lessc --js apps/www/styles/wieldy.less apps/www/styles/style.css"
   },
   "private": true,
   "dependencies": {
