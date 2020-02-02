@@ -1,8 +1,9 @@
 import { Field, ObjectType, ID, } from 'type-graphql'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { TaskStatus } from "@nx-taskman/constants";
 import { User } from "../user/user.entity";
 import { Exclude, Expose } from 'class-transformer';
+import { TaskDetail } from './task-detail.entity';
 
 @Exclude()
 @Entity()
@@ -28,7 +29,7 @@ export class Task extends BaseEntity {
     type: "enum",
     enum: TaskStatus,
     default: TaskStatus.OPEN
-})
+  })
   @Field(type => TaskStatus, { name: 'st', nullable: false })  // enum 인 경우 type 명시 필수
   @Expose({ name: 'st' })
   status: TaskStatus;
@@ -45,6 +46,12 @@ export class Task extends BaseEntity {
   // user는 존재하지 않는 필드임.
   // TaskResolver에서 @ResolveProperty() user() 메서드를 사용하려면 필요함
   @Field(() => User)
-  @ManyToOne(type => User, user => user.tasks, { eager: false })
+  @ManyToOne(type => User, user => user.tasks, { eager: false, onDelete: 'CASCADE' })
   user: User;
+
+  // 존재하지 않는 필드임.
+  // AuthResolver에서 @ResolveProperty() taskDetails() 메서드를 사용하려면 필요함
+  @Field(() => [TaskDetail], {nullable: true})
+  @OneToMany(type => TaskDetail, taskDetail => taskDetail.task, { eager: true, cascade: true })
+  taskDetails: TaskDetail[];
 }

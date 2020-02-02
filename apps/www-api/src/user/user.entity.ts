@@ -36,7 +36,7 @@ export class User extends BaseEntity {
   // tasks는 존재하지 않는 필드임.
   // AuthResolver에서 @ResolveProperty() tasks() 메서드를 사용하려면 필요함
   @Field(() => [Task], {nullable: true})
-  @OneToMany(type => Task, task => task.user, { eager: true })
+  @OneToMany(type => Task, task => task.user, { eager: true, cascade: true })
   tasks: Task[];
 
   @CreateDateColumn()

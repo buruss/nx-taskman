@@ -1,11 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
-import SecuredPage from '../hoc/securedPage';
+import securedPage from '../hoc/securedPage';
 import asyncComponent from "../util/asyncComponent";
 
 const DashBoard = asyncComponent(() => import('../routes/dashboard'));
 
-export default SecuredPage(() => (
+export default securedPage(() => (
   <>
     <Head>
       <title>Dashborad</title>

@@ -1,10 +1,12 @@
-import { Repository, EntityRepository } from "typeorm";
+import { Repository, EntityRepository, getRepository } from "typeorm";
 import { Task } from "./task.entity";
 import { CreateTaskInputDto } from "./create-task-input.dto";
 import { TaskStatus } from "@nx-taskman/constants";
 import { Logger, InternalServerErrorException } from "@nestjs/common";
 import { GetTasksArgsDto } from "./get-tasks-args.dto";
 import { User } from "../user/user.entity";
+import { AddTaskDetailInputDto } from './add-task-detail-input.dto';
+import { TaskDetail } from './task-detail.entity';
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
@@ -57,4 +59,31 @@ export class TaskRepository extends Repository<Task> {
     return task;
   }
 
+  async addTaskDetail(
+    addTaskDetailInputDto: AddTaskDetailInputDto,
+  ): Promise<TaskDetail> {
+    const taskDetail = addTaskDetailInputDto.toEntity();
+    try {
+      await taskDetail.save();
+    } catch (error) {
+      this.logger.error(`Failed to add a task detail for task "${taskDetail.detailType}"`, error.stack);
+      throw new InternalServerErrorException();
+    }
+    return taskDetail;
+  }
+
+  
+  async getTaskDetails(
+    tid: number,
+  ): Promise<TaskDetail[]> {
+    const repo = getRepository(TaskDetail);
+    
+    try {
+      const taskDetails = await repo.find({where: {taskId: tid}})
+      return taskDetails;
+    } catch (error) {
+      this.logger.error(`Failed to get task details for task "${tid}"`, error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
 }

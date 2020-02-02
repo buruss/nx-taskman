@@ -14,6 +14,8 @@ import { UserDataLoader } from '../user/user.loader';
 import DataLoader from 'dataloader';
 import { Field, Arg } from 'type-graphql';
 import { UpdateTaskStatusArgsDto } from './update-task-status-args.dto';
+import { TaskDetail } from './task-detail.entity';
+import { AddTaskDetailInputDto } from './add-task-detail-input.dto';
 
 @Resolver(() => Task)
 @UseGuards(GqlAuthGuard)
@@ -77,4 +79,19 @@ export class TaskResolver {
   ): Promise<User> {
     return userDataLoader.load(parent.userId)
   }
+
+  @Mutation(() => TaskDetail)
+  addTaskDetail(
+    @Args('input') addTaskDetailInputDto: AddTaskDetailInputDto,
+  ): Promise<TaskDetail> {
+    return this.taskService.addTaskDetail(addTaskDetailInputDto);
+  }
+
+  @Query(() => [TaskDetail])
+  getTaskDetails(
+    @Args('tid', ParseIntPipe) tid: number,
+  ): Promise<TaskDetail[]> {
+    return this.taskService.getTaskDetails(tid);
+  }
+
 }

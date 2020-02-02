@@ -9,6 +9,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { useMutation } from '@apollo/react-hooks';
 import { withApollo } from '../../../util/next_example_page';
 import { login } from '../../../hoc/securedPage/withAuthSync';
+import { SharedComponent } from '@nx-taskman/components';
 
 const SignIn: React.FC<FormComponentProps> = props => {
   
@@ -16,9 +17,8 @@ const SignIn: React.FC<FormComponentProps> = props => {
     onCompleted(data) {
       console.log('로그인 성공. token = ', data.signIn.token);
       // 토큰을 쿠키에 저장
-      login(data.signIn.token);
       // 홈으로 이동
-      Router.push('/main');
+      login(data.signIn.token);
     },
   });
 
@@ -35,6 +35,8 @@ const SignIn: React.FC<FormComponentProps> = props => {
 
   return (
     <div className="gx-app-login-wrap">
+      <SharedComponent />
+      
       <div className="gx-app-login-container">
         <div className="gx-app-login-main-content">
           <div className="gx-app-logo-content">

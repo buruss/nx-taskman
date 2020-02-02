@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { getConfig } from '../config';
 import { User } from '../user/user.entity';
 import { Task } from '../task/task.entity';
+import { TaskDetail } from '../task/task-detail.entity';
 
 const config = getConfig().db;
 
@@ -14,6 +15,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: config.database,
   // entities: [__dirname + '/../**/*.entity.{js,ts}'], // , __dirname + '/../../../apps/www/**/*.entity.{js,ts}'],
   entities: [
+    TaskDetail,
     User,
     Task,
   ],
