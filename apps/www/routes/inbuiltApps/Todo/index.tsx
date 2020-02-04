@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Button, Checkbox, Drawer, Dropdown, Menu, message} from "antd";
+import React, { Component } from "react";
+import { Button, Checkbox, Drawer, Dropdown, Menu, message } from "antd";
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import toDos from "./data/todo";
@@ -44,7 +44,7 @@ interface State {
 
 class ToDo extends Component<{}, State> {
 
-  onSortEnd = ({oldIndex, newIndex}) => {
+  onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState({
       toDos: (this.state.toDos, oldIndex, newIndex),
     });
@@ -120,9 +120,9 @@ class ToDo extends Component<{}, State> {
     const toDos = this.state.allToDos.map((todo) => {
       if (todo.starred) {
         selectedToDos++;
-        return {...todo, selected: true};
+        return { ...todo, selected: true };
       }
-      return {...todo, selected: false}
+      return { ...todo, selected: false }
     });
     this.setState({
       selectedToDos: selectedToDos,
@@ -136,9 +136,9 @@ class ToDo extends Component<{}, State> {
     const toDos = this.state.allToDos.map((todo) => {
       if (!todo.starred) {
         selectedToDos++;
-        return {...todo, selected: true};
+        return { ...todo, selected: true };
       }
-      return {...todo, selected: false}
+      return { ...todo, selected: false }
     });
     this.setState({
       selectedToDos: selectedToDos,
@@ -153,9 +153,9 @@ class ToDo extends Component<{}, State> {
     const toDos = this.state.allToDos.map((todo) => {
       if (todo.important) {
         selectedToDos++;
-        return {...todo, selected: true};
+        return { ...todo, selected: true };
       }
-      return {...todo, selected: false}
+      return { ...todo, selected: false }
     });
     this.setState({
       selectedToDos: selectedToDos,
@@ -170,9 +170,9 @@ class ToDo extends Component<{}, State> {
     const toDos = this.state.allToDos.map((todo) => {
       if (!todo.important) {
         selectedToDos++;
-        return {...todo, selected: true};
+        return { ...todo, selected: true };
       }
-      return {...todo, selected: false}
+      return { ...todo, selected: false }
     });
     this.setState({
       selectedToDos: selectedToDos,
@@ -187,16 +187,16 @@ class ToDo extends Component<{}, State> {
     const label = e.key;
     this.handleRequestClose();
     const toDos = this.state.allToDos.map(todo => {
-        if (todo.selected) {
-          if (todo.labels.includes(label.id)) {
-            return {...todo, labels: this.removeLabel(todo, label.id)};
-          } else {
-            return {...todo, labels: this.addLabel(todo, label.id)};
-          }
+      if (todo.selected) {
+        if (todo.labels.includes(label.id)) {
+          return { ...todo, labels: this.removeLabel(todo, label.id) };
         } else {
-          return todo;
+          return { ...todo, labels: this.addLabel(todo, label.id) };
         }
+      } else {
+        return todo;
       }
+    }
     );
     this.setState({
       alertMessage: 'Label Updated Successfully',
@@ -206,7 +206,7 @@ class ToDo extends Component<{}, State> {
     });
   };
   handleRequestClose = () => {
-    this.setState({showMessage: false, addTodo: false, labelMenuState: false, optionMenuState: false,});
+    this.setState({ showMessage: false, addTodo: false, labelMenuState: false, optionMenuState: false, });
   };
   onLabelUpdate = (data, label) => {
     if (data.labels.includes(label.id)) {
@@ -216,12 +216,12 @@ class ToDo extends Component<{}, State> {
     }
     this.handleRequestClose();
     const toDos = this.state.allToDos.map(todo => {
-        if (todo.id === data.id) {
-          return data;
-        } else {
-          return todo;
-        }
+      if (todo.id === data.id) {
+        return data;
+      } else {
+        return todo;
       }
+    }
     );
 
     this.setState({
@@ -270,18 +270,18 @@ class ToDo extends Component<{}, State> {
   onDeleteToDo = (data) => {
     let selectedToDos = 0;
     const toDos = this.state.allToDos.map(todo => {
-        if (todo.selected) {
-          selectedToDos++
-        }
-        if (data.id === todo.id) {
-          if (todo.selected) {
-            selectedToDos--
-          }
-          return {...todo, deleted: true};
-        } else {
-          return todo;
-        }
+      if (todo.selected) {
+        selectedToDos++
       }
+      if (data.id === todo.id) {
+        if (todo.selected) {
+          selectedToDos--
+        }
+        return { ...todo, deleted: true };
+      } else {
+        return todo;
+      }
+    }
     );
     this.setState({
       alertMessage: 'ToDo Deleted Successfully',
@@ -319,12 +319,12 @@ class ToDo extends Component<{}, State> {
           toDos: filterMails
         });
         setTimeout(() => {
-          this.setState({loader: false});
+          this.setState({ loader: false });
         }, 1500);
       }
       }>
         <span className={filter.id === this.state.selectedSectionId ? 'gx-link active' : 'gx-link'}>
-          <i className={`icon icon-${filter.icon}`}/>
+          <i className={`icon icon-${filter.icon}`} />
           <span>{filter.title}</span>
         </span>
       </li>
@@ -340,12 +340,12 @@ class ToDo extends Component<{}, State> {
           toDos: filterMails
         });
         setTimeout(() => {
-          this.setState({loader: false});
+          this.setState({ loader: false });
         }, 1500);
       }
       }>
         <span className="gx-link">
-          <i className={`icon icon-circle gx-text-${label.color}`}/>
+          <i className={`icon icon-circle gx-text-${label.color}`} />
           <span>{label.title}</span>
         </span>
       </li>
@@ -355,8 +355,8 @@ class ToDo extends Component<{}, State> {
     return <div className="gx-module-side">
       <div className="gx-module-side-header">
         <div className="gx-module-logo">
-          <i className="icon icon-check-circle-o gx-mr-4"/>
-          <IntlMessages id="sidebar.todoApp"/>
+          <i className="icon icon-check-circle-o gx-mr-4" />
+          <IntlMessages id="sidebar.todoApp" />
         </div>
 
       </div>
@@ -364,9 +364,9 @@ class ToDo extends Component<{}, State> {
         <CustomScrollbars className="gx-module-side-scroll">
           <div className="gx-module-add-task">
             <Button type="primary" className="gx-btn-block"
-                    onClick={() => {
-                      this.setState({addTodo: true})
-                    }}> <IntlMessages id="todo.addTask"/> </Button>
+              onClick={() => {
+                this.setState({ addTodo: true })
+              }}> <IntlMessages id="todo.addTask" /> </Button>
           </div>
           <ul className="gx-module-nav">
 
@@ -378,19 +378,19 @@ class ToDo extends Component<{}, State> {
             }
             }>
               <span className="gx-link active">
-                <i className="icon icon-all-contacts gx-pt-1"/>
-                <span><IntlMessages id="todo.all"/></span>
+                <i className="icon icon-all-contacts gx-pt-1" />
+                <span><IntlMessages id="todo.all" /></span>
               </span>
             </li>
 
             <li className="gx-module-nav-label">
-              <IntlMessages id="todo.filters"/>
+              <IntlMessages id="todo.filters" />
             </li>
 
             {this.getNavFilters()}
 
             <li className="gx-module-nav-label">
-              <IntlMessages id="todo.labels"/>
+              <IntlMessages id="todo.labels" />
             </li>
             {this.getNavLabels()}
           </ul>
@@ -400,7 +400,7 @@ class ToDo extends Component<{}, State> {
   };
   searchTodo = (searchText) => {
     if (searchText === '') {
-      this.setState({toDos: this.state.allToDos.filter((todo) => !todo.deleted)});
+      this.setState({ toDos: this.state.allToDos.filter((todo) => !todo.deleted) });
     } else {
       const searchToDos = this.state.allToDos.filter((todo) =>
         !todo.deleted && todo.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
@@ -409,22 +409,22 @@ class ToDo extends Component<{}, State> {
       });
     }
   };
-  showToDos = ({currentTodo, toDos, conversation, user}) => {
+  showToDos = ({ currentTodo, toDos, conversation, user }) => {
     return currentTodo === null ?
-      <ToDoList toDos={toDos} 
-                onMarkAsStart={this.onMarkAsStart.bind(this)}
-                onTodoSelect={this.onTodoSelect.bind(this)}
-                onTodoChecked={this.onTodoChecked.bind(this)} />
+      <ToDoList toDos={toDos}
+        onMarkAsStart={this.onMarkAsStart.bind(this)}
+        onTodoSelect={this.onTodoSelect.bind(this)}
+        onTodoChecked={this.onTodoChecked.bind(this)} />
       :
       <ToDoDetail todo={currentTodo} user={user}
-                  conversation={conversation}
-                  onLabelUpdate={this.onLabelUpdate.bind(this)}
-                  onToDoUpdate={this.onToDoUpdate.bind(this)}
-                  onDeleteToDo={this.onDeleteToDo.bind(this)}/>
+        conversation={conversation}
+        onLabelUpdate={this.onLabelUpdate.bind(this)}
+        onToDoUpdate={this.onToDoUpdate.bind(this)}
+        onDeleteToDo={this.onDeleteToDo.bind(this)} />
   };
   optionMenu = () => {
     return (<Menu id="option-menu" onClick={this.onOptionMenuItemSelect.bind(this)}
-                  style={{maxHeight: ITEM_HEIGHT * 5.5}}>
+      style={{ maxHeight: ITEM_HEIGHT * 5.5 }}>
       {options.map(option =>
         <Menu.Item key={option.title}
         >
@@ -437,7 +437,7 @@ class ToDo extends Component<{}, State> {
   labelMenu = () => {
     return (
       <Menu id="label-menu" onClick={this.onLabelMenuItemSelect.bind(this)}
-            style={{maxHeight: ITEM_HEIGHT * 4.5}}>
+        style={{ maxHeight: ITEM_HEIGHT * 4.5 }}>
         {labels.map(label =>
           <Menu.Item key={label.id}>
             {label.title}
@@ -481,18 +481,18 @@ class ToDo extends Component<{}, State> {
     data.selected = !data.selected;
     let selectedToDos = 0;
     const toDos = this.state.toDos.map(todo => {
+      if (todo.selected) {
+        selectedToDos++;
+      }
+      if (todo.id === data.id) {
         if (todo.selected) {
           selectedToDos++;
         }
-        if (todo.id === data.id) {
-          if (todo.selected) {
-            selectedToDos++;
-          }
-          return data;
-        } else {
-          return todo;
-        }
+        return data;
+      } else {
+        return todo;
       }
+    }
     );
     this.setState({
       selectedToDos: selectedToDos,
@@ -531,7 +531,7 @@ class ToDo extends Component<{}, State> {
       conversation: conversationList
     });
     setTimeout(() => {
-      this.setState({loader: false});
+      this.setState({ loader: false });
     }, 1500);
   }
 
@@ -559,7 +559,7 @@ class ToDo extends Component<{}, State> {
   }
 
   render() {
-    const {selectedToDos, loader, drawerState, toDos, alertMessage, showMessage} = this.state;
+    const { selectedToDos, loader, drawerState, toDos, alertMessage, showMessage } = this.state;
 
     return (
       <div className="gx-main-content">
@@ -581,12 +581,12 @@ class ToDo extends Component<{}, State> {
             <div className="gx-module-box-header">
 
               <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
-                  <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
-                     onClick={this.onToggleDrawer.bind(this)}/>
+                <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
+                  onClick={this.onToggleDrawer.bind(this)} />
               </span>
               <AppModuleHeader placeholder="Search To Do" data-user={this.state.user}
-                               onChange={this.updateSearch.bind(this)}
-                               value={this.state.searchTodo}/>
+                onChange={this.updateSearch.bind(this)}
+                value={this.state.searchTodo} />
             </div>
             <div className="gx-module-box-content">
               {this.state.currentTodo === null ?
@@ -594,35 +594,35 @@ class ToDo extends Component<{}, State> {
                   {this.state.toDos.length > 0 ?
                     <>
                       <Checkbox className="gx-icon-btn"
-                                indeterminate={selectedToDos > 0 && selectedToDos < toDos.length}
-                                checked={selectedToDos > 0}
-                                onChange={this.onAllTodoSelect.bind(this)}
-                                value="SelectMail"/>
+                        indeterminate={selectedToDos > 0 && selectedToDos < toDos.length}
+                        checked={selectedToDos > 0}
+                        onChange={this.onAllTodoSelect.bind(this)}
+                        value="SelectMail" />
                       <Dropdown overlay={this.optionMenu()} placement="bottomRight" trigger={['click']}>
                         <div>
                           <span className="gx-px-2"> {this.state.optionName}</span>
-                          <i className="icon icon-charvlet-down"/>
+                          <i className="icon icon-charvlet-down" />
                         </div>
                       </Dropdown>
                     </> : null}
 
                   {(selectedToDos > 0) &&
 
-                  <Dropdown overlay={this.labelMenu()} placement="bottomRight" trigger={['click']}>
-                    <i className="gx-icon-btn icon icon-tag"/>
-                  </Dropdown>
+                    <Dropdown overlay={this.labelMenu()} placement="bottomRight" trigger={['click']}>
+                      <i className="gx-icon-btn icon icon-tag" />
+                    </Dropdown>
                   }
                 </div>
                 :
                 <div className="gx-module-box-topbar">
                   <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
-                    this.setState({currentTodo: null})
-                  }}/>
+                    this.setState({ currentTodo: null })
+                  }} />
                 </div>
               }
               {loader ?
                 <div className="gx-loader-view">
-                  <CircularProgress/>
+                  <CircularProgress />
                 </div> :
                 this.showToDos(this.state)
               }
