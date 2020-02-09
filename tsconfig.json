@@ -30,6 +30,9 @@
       ],
       "@nx-taskman/constants": [
         "libs/constants/index.ts"
+      ],
+      "@nx-taskman/interfaces": [
+        "libs/interfaces/index.ts"
       ]
     }
   },

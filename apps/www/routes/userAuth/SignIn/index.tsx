@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import Link from 'next/link';
-import SIGN_IN from '../../../graphql/sign_in.mutation';
+import SIGN_IN from '../../../graphql/sign-in.mutation';
 import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
 import Router from 'next/router';
@@ -64,7 +64,7 @@ const SignIn: React.FC<FormComponentProps> = props => {
               className="gx-signin-form gx-form-row0"
             >
               <Form.Item>
-                {getFieldDecorator('uname', {
+                {getFieldDecorator('name', {
                   rules: [
                     {
                       required: true,

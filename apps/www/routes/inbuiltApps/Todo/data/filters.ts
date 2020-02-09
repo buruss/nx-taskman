@@ -1,4 +1,11 @@
-export default [
+export interface TodoFilter {
+  id: number;
+  handle: string;
+  title: string;
+  icon: string;
+}
+
+const filters: TodoFilter[] = [
 
   {
     'id': 0,
@@ -37,3 +44,5 @@ export default [
     'icon': 'trash'
   }
 ];
+
+export default filters;

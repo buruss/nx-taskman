@@ -1,6 +1,7 @@
 import { Module, } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TaskModule } from './task/task.module';
+import { TodoModule } from './todo/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { WinstonModule } from 'nest-winston';
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
       GraphQLModule.forRoot(graphqlOptions),
       WinstonModule.forRoot(winstonOptions),
       TaskModule,
+      TodoModule,
       AuthModule,
       UserModule,
     ],

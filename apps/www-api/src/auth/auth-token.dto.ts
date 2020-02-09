@@ -3,7 +3,7 @@ import { Field, ObjectType } from 'type-graphql';
 @ObjectType()
 export class AuthTokenDto {
 
-  @Field({ nullable: false })
+  @Field()
   token: string;
 
 }

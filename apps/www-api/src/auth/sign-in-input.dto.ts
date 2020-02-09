@@ -5,7 +5,7 @@ import { Field, InputType } from 'type-graphql';
 export class SignInInputDto {
   @IsString() @MinLength(2) @MaxLength(20)
   @Field()
-  uname: string;
+  name: string;
 
   @IsString() @MinLength(8) @MaxLength(20)
   @Matches(

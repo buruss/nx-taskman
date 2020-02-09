@@ -8,7 +8,8 @@ const SIGN_IN_REDIRECT_URL = '/signin';
 const DEFAULT_URL_AFTER_SIGNIN = '/main';
 
 export const login = ( token ) => {
-  cookie.set('token', token, { expires: 1 });
+  // , { domain: ".whos.now.sh", secure: true, httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year }
+  cookie.set('token', token, { expires: 365 });
   Router.push(DEFAULT_URL_AFTER_SIGNIN)
 }
 

@@ -22,7 +22,7 @@ export class UserService {
   }
 
   findOne(username: string): Promise<User> {
-    return this.userRepository.findOne({ username }, { loadEagerRelations: false });
+    return this.userRepository.findOne({ username: username }, { loadEagerRelations: false });
   }
 
   findByIds(ids: number[]): Promise<User[]> {

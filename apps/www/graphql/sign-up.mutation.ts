@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 
 export default gql`
-mutation signUp($uname: String!, $pwd: String!, $emaddr: String!) {
+mutation signUp($name: String!, $pwd: String!, $emaddr: String!) {
   signUp(input: {
-    uname: $uname
+    name: $name
     pwd: $pwd
     emaddr: $emaddr
   }) {
     uid
-    uname
+    name
     emaddr
   }
 }`;

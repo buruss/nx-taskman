@@ -14,8 +14,8 @@ export class Task extends BaseEntity {
   @Expose({ name: 'tid' })
   id: number;
 
-  @Column()
-  @Field({ name: 'tit', nullable: false })
+  @Column({length: 100})
+  @Field({ name: 'tit' })
   @Expose({ name: 'tit' })
   title: string;
 
@@ -30,28 +30,28 @@ export class Task extends BaseEntity {
     enum: TaskStatus,
     default: TaskStatus.OPEN
   })
-  @Field(type => TaskStatus, { name: 'st', nullable: false })  // enum 인 경우 type 명시 필수
+  @Field(type => TaskStatus, { name: 'st' })  // enum 인 경우 type 명시 필수
   @Expose({ name: 'st' })
   status: TaskStatus;
 
   @Column()
   userId: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
   // user는 존재하지 않는 필드임.
   // TaskResolver에서 @ResolveProperty() user() 메서드를 사용하려면 필요함
-  @Field(() => User)
-  @ManyToOne(type => User, user => user.tasks, { eager: false, onDelete: 'CASCADE' })
+  @Field(type => User)
+  @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE' })
   user: User;
 
   // 존재하지 않는 필드임.
   // AuthResolver에서 @ResolveProperty() taskDetails() 메서드를 사용하려면 필요함
-  @Field(() => [TaskDetail], {nullable: true})
+  @Field(type => [TaskDetail], {nullable: true})
   @OneToMany(type => TaskDetail, taskDetail => taskDetail.task, { eager: true, cascade: true })
   taskDetails: TaskDetail[];
 }

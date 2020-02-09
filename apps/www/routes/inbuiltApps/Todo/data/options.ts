@@ -1,4 +1,8 @@
-export default [
+export interface TodoOption {
+  title: string;
+}
+
+const options: TodoOption[] = [
   {
     'title': 'All',
   },
@@ -18,3 +22,5 @@ export default [
     'title': 'Unimportant',
   }
 ];
+
+export default options;

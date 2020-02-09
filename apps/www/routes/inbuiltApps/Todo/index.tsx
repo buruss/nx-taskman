@@ -1,18 +1,21 @@
-import React, { Component } from "react";
-import { Button, Checkbox, Drawer, Dropdown, Menu, message } from "antd";
+import React, { useState } from 'react';
+import { Button, Checkbox, Drawer, Dropdown, Menu, message } from 'antd';
 
-import CustomScrollbars from "../../../util/CustomScrollbars";
-import toDos from "./data/todo";
-import filters from "./data/filters";
-import labels from "./data/labels";
-import options from "./data/options";
-import todoConversation from "./data/todoConversation";
-import ToDoList from "../../../components/todo/ToDoList";
-import ToDoDetail from "../../../components/todo/ToDoDetail";
-import AppModuleHeader from "../../../components/AppModuleHeader";
-import IntlMessages from "../../../util/IntlMessages";
-import CircularProgress from "../../../components/CircularProgress";
+import CustomScrollbars from '../../../util/CustomScrollbars';
+import filters from './data/filters';
+import options from './data/options';
+import todoConversation from './data/todoConversation';
+import ToDoList from '../../../components/todo/ToDoList';
+import ToDoDetail from '../../../components/todo/ToDoDetail';
+import AppModuleHeader from '../../../components/AppModuleHeader';
+import IntlMessages from '../../../util/IntlMessages';
+import CircularProgress from '../../../components/CircularProgress';
 import './index.css';
+import { useQuery } from '@apollo/react-hooks';
+import GET_TODO_INITIAL_DATA from '../../../graphql/get-todo-initial-data.query';
+import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
+import {Pagination} from 'nestjs-typeorm-paginate';
+import { withApollo } from '../../../util/next_example_page';
 
 const ITEM_HEIGHT = 34;
 
@@ -24,7 +27,7 @@ interface State {
   drawerState: boolean;
   optionName: string;
   anchorEl;
-  allToDos;
+  allTodos: ITodoItem[];
   currentTodo;
   user: {
     name: string;
@@ -34,605 +37,695 @@ interface State {
   selectedToDos: number;
   labelMenuState: boolean;
   optionMenuState: boolean;
-  toDos;
+  todos: ITodoItem[];
   filter: number;
   todoConversation;
   conversation;
   addTodo?: boolean;
   selectedSectionId?;
+  labels: ITodoLabel[];
 }
 
-class ToDo extends Component<{}, State> {
+const defaultState: State = {
+  searchTodo: '',
+  alertMessage: '',
+  loader: false,
+  showMessage: false,
+  drawerState: false,
+  optionName: 'None',
+  anchorEl: null,
+  allTodos: [],
+  currentTodo: null,
+  user: {
+    name: 'Robert Johnson',
+    email: 'robert.johnson@example.com',
+    avatar: 'https://via.placeholder.com/150x150',
+  },
+  selectedToDos: 0,
+  labelMenuState: false,
+  optionMenuState: false,
+  todos: [],
+  filter: -1,
+  todoConversation,
+  conversation: null,
+  labels: [],
+};
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState({
-      toDos: (this.state.toDos, oldIndex, newIndex),
-    });
-  };
-  onLabelSelect = event => {
-    this.setState({
-      anchorEl: event.currentTarget,
-      labelMenuState: !this.state.labelMenuState
-    })
-  };
-  onOptionMenuSelect = event => {
-    this.setState({
-      anchorEl: event.currentTarget,
-      optionMenuState: !this.state.optionMenuState
-    })
-  };
-  onOptionMenuItemSelect = (e) => {
+const ToDo: React.FC = () => {
+
+  const [state, setState] = useState(defaultState);
+  
+  // todo 목록 1페이지 가져오기
+  const { data, loading, error } = useQuery<{paginatedTodoItems: Pagination<ITodoItem>; todoLabels: ITodoLabel[];}>(GET_TODO_INITIAL_DATA, {
+    onCompleted(data) {
+      console.log('useQuery(GET_TODO_INITIAL_DATA) data = ', data);
+      const {paginatedTodoItems, todoLabels} = data;
+      setState({
+        ...state,
+        todos: paginatedTodoItems.items,
+        labels: todoLabels
+      });
+    },
+    onError(error) {
+      console.log('useQuery(GET_TODO_INITIAL_DATA) error = ', error);
+    },
+  });
+  
+
+  const onOptionMenuItemSelect = e => {
+    handleRequestClose();
     switch (e.key) {
       case 'All':
-        this.handleRequestClose();
-        this.getAllTodo();
+        getAllTodo();
         break;
+
       case 'None':
-        this.handleRequestClose();
-        this.getUnselectedAllTodo();
+        getUnselectedAllTodo();
         break;
+
       case 'Starred':
-        this.handleRequestClose();
-        this.getStarredToDo();
+        getStarredToDo();
         break;
+
       case 'Unstarred':
-        this.handleRequestClose();
-        this.getUnStarredTodo();
+        getUnStarredTodo();
         break;
+
       case 'Important':
-        this.handleRequestClose();
-        this.getImportantToDo();
+        getImportantToDo();
         break;
+
       case 'Unimportant':
-        this.handleRequestClose();
-        this.getUnimportantToDo();
+        getUnimportantToDo();
         break;
+
       default:
         return '';
     }
   };
-  getAllTodo = () => {
-    const toDos = this.state.allToDos.map((todo) => todo ? {
-      ...todo,
-      selected: true
-    } : todo);
-    this.setState({
-      selectedToDos: toDos.length,
-      allToDos: toDos,
+
+  const getAllTodo = () => {
+    const todos = state.allTodos.map(todo =>
+      todo ? { ...todo, selected: true } : todo,
+    );
+    setState({
+      ...state,
+      selectedToDos: todos.length,
+      allTodos: todos,
       optionName: 'All',
-      toDos: toDos
+      todos: todos,
     });
   };
-  getUnselectedAllTodo = () => {
-    const toDos = this.state.allToDos.map((todo) => todo ? {
-      ...todo,
-      selected: false
-    } : todo);
-    this.setState({
+
+  const getUnselectedAllTodo = () => {
+    const todos = state.allTodos.map(todo =>
+      todo ? { ...todo, selected: false } : todo,
+    );
+    setState({
+      ...state,
       selectedToDos: 0,
-      allToDos: toDos,
+      allTodos: todos,
       optionName: 'None',
-      toDos: toDos
+      todos: todos,
     });
   };
-  getStarredToDo = () => {
+
+  const getStarredToDo = () => {
     let selectedToDos = 0;
-    const toDos = this.state.allToDos.map((todo) => {
+    const todos = state.allTodos.map(todo => {
       if (todo.starred) {
         selectedToDos++;
         return { ...todo, selected: true };
       }
-      return { ...todo, selected: false }
+      return { ...todo, selected: false };
     });
-    this.setState({
+    setState({
+      ...state,
       selectedToDos: selectedToDos,
-      allToDos: toDos,
-      toDos: toDos.filter(todo => !todo.deleted)
+      allTodos: todos,
+      todos: todos.filter(todo => !todo.deleted),
     });
-    return toDos;
+    return todos;
   };
-  getUnStarredTodo = () => {
+
+  const getUnStarredTodo = () => {
     let selectedToDos = 0;
-    const toDos = this.state.allToDos.map((todo) => {
+    const todos = state.allTodos.map(todo => {
       if (!todo.starred) {
         selectedToDos++;
         return { ...todo, selected: true };
       }
-      return { ...todo, selected: false }
+      return { ...todo, selected: false };
     });
-    this.setState({
+    setState({
+      ...state,
       selectedToDos: selectedToDos,
-      allToDos: toDos,
+      allTodos: todos,
       optionName: 'Unstarred',
-      toDos: toDos.filter(todo => !todo.deleted)
+      todos: todos.filter(todo => !todo.deleted),
     });
-    return toDos;
+    return todos;
   };
-  getImportantToDo = () => {
+
+  const getImportantToDo = () => {
     let selectedToDos = 0;
-    const toDos = this.state.allToDos.map((todo) => {
+    const todos = state.allTodos.map(todo => {
       if (todo.important) {
         selectedToDos++;
         return { ...todo, selected: true };
       }
-      return { ...todo, selected: false }
+      return { ...todo, selected: false };
     });
-    this.setState({
+    setState({
+      ...state,
       selectedToDos: selectedToDos,
-      allToDos: toDos,
+      allTodos: todos,
       optionName: 'Important',
-      toDos: toDos.filter(todo => !todo.deleted)
+      todos: todos.filter(todo => !todo.deleted),
     });
-    return toDos;
+    return todos;
   };
-  getUnimportantToDo = () => {
+
+  const getUnimportantToDo = () => {
     let selectedToDos = 0;
-    const toDos = this.state.allToDos.map((todo) => {
+    const todos = state.allTodos.map(todo => {
       if (!todo.important) {
         selectedToDos++;
         return { ...todo, selected: true };
       }
-      return { ...todo, selected: false }
+      return { ...todo, selected: false };
     });
-    this.setState({
+    setState({
+      ...state,
       selectedToDos: selectedToDos,
-      allToDos: toDos,
+      allTodos: todos,
       optionName: 'Unimportant',
-      toDos: toDos.filter(todo => !todo.deleted)
+      todos: todos.filter(todo => !todo.deleted),
     });
-
-    return toDos;
+    return todos;
   };
-  onLabelMenuItemSelect = (e) => {
+
+  const onLabelMenuItemSelect = e => {
     const label = e.key;
-    this.handleRequestClose();
-    const toDos = this.state.allToDos.map(todo => {
+    handleRequestClose();
+    const todos = state.allTodos.map(todo => {
       if (todo.selected) {
         if (todo.labels.includes(label.id)) {
-          return { ...todo, labels: this.removeLabel(todo, label.id) };
+          return { ...todo, labels: removeLabel(todo, label.id) };
         } else {
-          return { ...todo, labels: this.addLabel(todo, label.id) };
+          return { ...todo, labels: addLabel(todo, label.id) };
         }
       } else {
         return todo;
       }
-    }
-    );
-    this.setState({
+    });
+    setState({
+      ...state,
       alertMessage: 'Label Updated Successfully',
       showMessage: true,
-      allToDos: toDos,
-      toDos: toDos
+      allTodos: todos,
+      todos: todos,
     });
   };
-  handleRequestClose = () => {
-    this.setState({ showMessage: false, addTodo: false, labelMenuState: false, optionMenuState: false, });
+
+  const handleRequestClose = () => {
+    setState({
+      ...state,
+      showMessage: false,
+      addTodo: false,
+      labelMenuState: false,
+      optionMenuState: false,
+    });
   };
-  onLabelUpdate = (data, label) => {
+
+  const onLabelUpdate = (data, label) => {
     if (data.labels.includes(label.id)) {
-      data.labels = this.removeLabel(data, label.id);
+      data.labels = removeLabel(data, label.id);
     } else {
-      data.labels = this.addLabel(data, label.id);
+      data.labels = addLabel(data, label.id);
     }
-    this.handleRequestClose();
-    const toDos = this.state.allToDos.map(todo => {
+
+    handleRequestClose();
+    const todos = state.allTodos.map(todo => {
       if (todo.id === data.id) {
         return data;
       } else {
         return todo;
       }
-    }
-    );
-
-    this.setState({
+    });
+    setState({
+      ...state,
       alertMessage: 'Label Updated Successfully',
       showMessage: true,
       currentTodo: data,
-      allToDos: toDos,
-      toDos: toDos,
-    });
-  };
-  onMarkAsStart = (data) => {
-    const toDos = this.state.allToDos.map(todo => {
-      if (todo.id === data.id) {
-        return data;
-      } else {
-        return todo;
-      }
-    });
-    this.setState({
-      alertMessage: 'ToDo Updated Successfully',
-      showMessage: true,
-      allToDos: toDos,
-      toDos: toDos,
+      allTodos: todos,
+      todos: todos,
     });
   };
 
-  onToDoUpdate = (data) => {
-    this.handleRequestClose();
-    const toDos = this.state.allToDos.map(todo => {
+  const onMarkAsStart = data => {
+    const todos = state.allTodos.map(todo => {
       if (todo.id === data.id) {
         return data;
       } else {
         return todo;
       }
     });
-    this.setState({
+    setState({
+      ...state,
+      alertMessage: 'ToDo Updated Successfully',
+      showMessage: true,
+      allTodos: todos,
+      todos: todos,
+    });
+  };
+
+  const onToDoUpdate = data => {
+    handleRequestClose();
+    const todos = state.allTodos.map(todo => {
+      if (todo.id === data.id) {
+        return data;
+      } else {
+        return todo;
+      }
+    });
+    setState({
+      ...state,
       alertMessage: 'ToDo Updated Successfully',
       showMessage: true,
       currentTodo: data,
-      allToDos: toDos,
-      toDos: toDos,
+      allTodos: todos,
+      todos: todos,
     });
   };
 
-
-  onDeleteToDo = (data) => {
+  const onDeleteToDo = data => {
     let selectedToDos = 0;
-    const toDos = this.state.allToDos.map(todo => {
+    const todos = state.allTodos.map(todo => {
       if (todo.selected) {
-        selectedToDos++
+        selectedToDos++;
       }
+
       if (data.id === todo.id) {
         if (todo.selected) {
-          selectedToDos--
+          selectedToDos--;
         }
+
         return { ...todo, deleted: true };
       } else {
         return todo;
       }
-    }
-    );
-    this.setState({
+    });
+    setState({
+      ...state,
       alertMessage: 'ToDo Deleted Successfully',
       showMessage: true,
-      allToDos: toDos,
+      allTodos: todos,
       currentTodo: null,
       selectedToDos: selectedToDos,
-      toDos: toDos.filter((todo) => !todo.deleted)
+      todos: todos.filter(todo => !todo.deleted),
     });
-
   };
-  getNavFilters = () => {
-    return filters.map((filter, index) =>
-      <li key={index} onClick={() => {
-        const filterMails = this.state.allToDos.filter(todo => {
-          if (filter.id === 0 && todo.starred) {
-            return todo
-          } else if (filter.id === 1 && todo.important) {
-            return todo
-          } else if (filter.id === 2 && todo.important) {
-            return todo
-          } else if (filter.id === 3 && todo.important) {
-            return todo
-          } else if (filter.id === 4 && todo.completed) {
-            return todo
-          } else if (filter.id === 5 && todo.deleted) {
-            return todo
-          } else
-            return todo
-        });
-        this.setState({
-          loader: true,
-          currentTodo: null,
-          filter: filter.id,
-          toDos: filterMails
-        });
-        setTimeout(() => {
-          this.setState({ loader: false });
-        }, 1500);
-      }
-      }>
-        <span className={filter.id === this.state.selectedSectionId ? 'gx-link active' : 'gx-link'}>
+
+  const getNavFilters = () => {
+    return filters.map((filter, index) => (
+      <li
+        key={index}
+        onClick={() => {
+          const filterMails = state.allTodos.filter(todo => {
+            if (filter.id === 0 && todo.starred) {
+              return todo;
+            } else if (filter.id === 1 && todo.important) {
+              return todo;
+            } else if (filter.id === 2 && todo.important) {
+              return todo;
+            } else if (filter.id === 3 && todo.important) {
+              return todo;
+            } else if (filter.id === 4 && todo.completed) {
+              return todo;
+            } else if (filter.id === 5 && todo.deleted) {
+              return todo;
+            } else return todo;
+          });
+          setState({
+            ...state,
+            loader: true,
+            currentTodo: null,
+            filter: filter.id,
+            todos: filterMails,
+          });
+          setTimeout(() => { setState({ ...state, loader: false }); }, 1500);
+        }}
+      >
+        <span
+          className={
+            filter.id === state.selectedSectionId ? 'gx-link active' : 'gx-link'
+          }
+        >
           <i className={`icon icon-${filter.icon}`} />
           <span>{filter.title}</span>
         </span>
       </li>
-    )
+    ));
   };
-  getNavLabels = () => {
-    return labels.map((label, index) =>
-      <li key={index} onClick={() => {
-        const filterMails = this.state.allToDos.filter(todo => todo.labels.includes(label.id));
-        this.setState({
-          loader: true,
-          currentTodo: null,
-          toDos: filterMails
-        });
-        setTimeout(() => {
-          this.setState({ loader: false });
-        }, 1500);
-      }
-      }>
+
+  const getNavLabels = () => {
+    return state.labels.map((label, index) => (
+      <li
+        key={index}
+        onClick={() => {
+          const filterMails = state.allTodos.filter(todo =>
+            todo.labels.findIndex(eachLabel => eachLabel.id === label.id) >= 0,
+          );
+          setState({
+            ...state,
+            loader: true,
+            currentTodo: null,
+            todos: filterMails,
+          });
+          setTimeout(() => { setState({ ...state, loader: false }); }, 1500);
+        }}
+      >
         <span className="gx-link">
           <i className={`icon icon-circle gx-text-${label.color}`} />
           <span>{label.title}</span>
         </span>
       </li>
-    )
+    ));
   };
-  ToDoSideBar = () => {
-    return <div className="gx-module-side">
-      <div className="gx-module-side-header">
-        <div className="gx-module-logo">
-          <i className="icon icon-check-circle-o gx-mr-4" />
-          <IntlMessages id="sidebar.todoApp" />
-        </div>
 
-      </div>
-      <div className="gx-module-side-content">
-        <CustomScrollbars className="gx-module-side-scroll">
-          <div className="gx-module-add-task">
-            <Button type="primary" className="gx-btn-block"
-              onClick={() => {
-                this.setState({ addTodo: true })
-              }}> <IntlMessages id="todo.addTask" /> </Button>
-          </div>
-          <ul className="gx-module-nav">
-
-            <li onClick={() => {
-              this.setState({
-                currentTodo: null,
-                toDos: this.state.allToDos
-              });
-            }
-            }>
-              <span className="gx-link active">
-                <i className="icon icon-all-contacts gx-pt-1" />
-                <span><IntlMessages id="todo.all" /></span>
-              </span>
-            </li>
-
-            <li className="gx-module-nav-label">
-              <IntlMessages id="todo.filters" />
-            </li>
-
-            {this.getNavFilters()}
-
-            <li className="gx-module-nav-label">
-              <IntlMessages id="todo.labels" />
-            </li>
-            {this.getNavLabels()}
-          </ul>
-        </CustomScrollbars>
-      </div>
-    </div>
-  };
-  searchTodo = (searchText) => {
-    if (searchText === '') {
-      this.setState({ toDos: this.state.allToDos.filter((todo) => !todo.deleted) });
-    } else {
-      const searchToDos = this.state.allToDos.filter((todo) =>
-        !todo.deleted && todo.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
-      this.setState({
-        toDos: searchToDos
-      });
-    }
-  };
-  showToDos = ({ currentTodo, toDos, conversation, user }) => {
-    return currentTodo === null ?
-      <ToDoList toDos={toDos}
-        onMarkAsStart={this.onMarkAsStart.bind(this)}
-        onTodoSelect={this.onTodoSelect.bind(this)}
-        onTodoChecked={this.onTodoChecked.bind(this)} />
-      :
-      <ToDoDetail todo={currentTodo} user={user}
-        conversation={conversation}
-        onLabelUpdate={this.onLabelUpdate.bind(this)}
-        onToDoUpdate={this.onToDoUpdate.bind(this)}
-        onDeleteToDo={this.onDeleteToDo.bind(this)} />
-  };
-  optionMenu = () => {
-    return (<Menu id="option-menu" onClick={this.onOptionMenuItemSelect.bind(this)}
-      style={{ maxHeight: ITEM_HEIGHT * 5.5 }}>
-      {options.map(option =>
-        <Menu.Item key={option.title}
-        >
-          {option.title}
-        </Menu.Item>,
-      )}
-    </Menu>)
-
-  };
-  labelMenu = () => {
+  const ToDoSideBar = () => {
     return (
-      <Menu id="label-menu" onClick={this.onLabelMenuItemSelect.bind(this)}
-        style={{ maxHeight: ITEM_HEIGHT * 4.5 }}>
-        {labels.map(label =>
-          <Menu.Item key={label.id}>
-            {label.title}
-          </Menu.Item>,
-        )}
-      </Menu>)
+      <div className="gx-module-side">
+        <div className="gx-module-side-header">
+          <div className="gx-module-logo">
+            <i className="icon icon-check-circle-o gx-mr-4" />
+            <IntlMessages id="sidebar.todoApp" />
+          </div>
+        </div>
+        <div className="gx-module-side-content">
+          <CustomScrollbars className="gx-module-side-scroll">
+            <div className="gx-module-add-task">
+              <Button
+                type="primary"
+                className="gx-btn-block"
+                onClick={() => { setState({ ...state, addTodo: true }); }}
+              > <IntlMessages id="todo.addTask" /> 
+              </Button>
+            </div>
+            <ul className="gx-module-nav">
+              <li
+                onClick={() => {
+                  setState({
+                    ...state,
+                    currentTodo: null,
+                    todos: this.state.allTodos,
+                  });
+                }}
+              >
+                <span className="gx-link active">
+                  <i className="icon icon-all-contacts gx-pt-1" />
+                  <span>
+                    <IntlMessages id="todo.all" />
+                  </span>
+                </span>
+              </li>
+
+              <li className="gx-module-nav-label">
+                <IntlMessages id="todo.filters" />
+              </li>
+
+              {getNavFilters()}
+
+              <li className="gx-module-nav-label">
+                <IntlMessages id="todo.labels" />
+              </li>
+              {getNavLabels()}
+            </ul>
+          </CustomScrollbars>
+        </div>
+      </div>
+    );
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchTodo: '',
-      alertMessage: '',
-      loader: false,
-      showMessage: false,
-      drawerState: false,
-      optionName: 'None',
-      anchorEl: null,
-      allToDos: toDos,
-      currentTodo: null,
-      user: {
-        name: 'Robert Johnson',
-        email: 'robert.johnson@example.com',
-        avatar: 'https://via.placeholder.com/150x150'
-      },
-      selectedToDos: 0,
-      labelMenuState: false,
-      optionMenuState: false,
-      toDos: toDos,
-      filter: -1,
-      todoConversation,
-      conversation: null
+  const searchTodo = searchText => {
+    if (searchText === '') {
+      setState({
+        ...state,
+        todos: this.state.allTodos.filter(todo => !todo.deleted),
+      });
+    } else {
+      const searchToDos = state.allTodos.filter(
+        todo =>
+          !todo.deleted &&
+          todo.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1,
+      );
+      setState({ ...state, todos: searchToDos });
     }
-  }
+  };
 
-  getToDoConversation(id) {
-    return todoConversation.find((conversation) => conversation.id === id);
-  }
+  const showToDos = ({ currentTodo, todos, conversation, user }) => {
+    return currentTodo === null ? (
+      <ToDoList
+        todos={todos}
+        onMarkAsStart={onMarkAsStart}
+        onTodoSelect={onTodoSelect}
+        onTodoChecked={onTodoChecked}
+      />
+    ) : (
+        <ToDoDetail
+          todo={currentTodo}
+          user={user}
+          conversation={conversation}
+          onLabelUpdate={onLabelUpdate}
+          onToDoUpdate={onToDoUpdate}
+          onDeleteToDo={onDeleteToDo}
+        />
+      );
+  };
 
-  onTodoChecked(data) {
+  const optionMenu = () => {
+    return (
+      <Menu
+        id="option-menu"
+        onClick={onOptionMenuItemSelect}
+        style={{
+          maxHeight: ITEM_HEIGHT * 5.5,
+        }}
+      >
+        {options.map(option => (
+          <Menu.Item key={option.title}>{option.title}</Menu.Item>
+        ))}
+      </Menu>
+    );
+  };
+
+  const labelMenu = () => {
+    return (
+      <Menu
+        id="label-menu"
+        onClick={onLabelMenuItemSelect}
+        style={{
+          maxHeight: ITEM_HEIGHT * 4.5,
+        }}
+      >
+        {state.labels.map(label => (
+          <Menu.Item key={label.id}>{label.title}</Menu.Item>
+        ))}
+      </Menu>
+    );
+  };
+
+  const getToDoConversation = (id) => {
+    return todoConversation.find(conversation => conversation.id === id);
+  };
+
+  const onTodoChecked = (data) => {
     data.selected = !data.selected;
     let selectedToDos = 0;
-    const toDos = this.state.toDos.map(todo => {
+    const todos = state.todos.map(todo => {
       if (todo.selected) {
         selectedToDos++;
       }
+
       if (todo.id === data.id) {
         if (todo.selected) {
           selectedToDos++;
         }
+
         return data;
       } else {
         return todo;
       }
-    }
-    );
-    this.setState({
-      selectedToDos: selectedToDos,
-      toDos: toDos
     });
-  }
+    setState({...state,
+      selectedToDos: selectedToDos,
+      todos: todos
+    });
+  };
 
-  onAllTodoSelect() {
-    const selectAll = this.state.selectedToDos < this.state.toDos.length;
+  const onAllTodoSelect = () => {
+    const selectAll = state.selectedToDos < state.todos.length;
+
     if (selectAll) {
-      this.getAllTodo();
+      getAllTodo();
     } else {
-      this.getUnselectedAllTodo();
+      getUnselectedAllTodo();
     }
-  }
+  };
 
-  onTodoAdd(data) {
-    this.setState(
-      {
-        toDos: this.state.allToDos.concat(data),
-        allToDos: this.state.allToDos.concat(data)
+  const onTodoAdd = (data) => {
+    setState(
+      {...state,
+        todos: this.state.allTodos.concat(data),
+        allTodos: this.state.allTodos.concat(data)
       }
     );
-  }
+  };
 
-
-  onTodoSelect(todo) {
-    const conversationItem = this.getToDoConversation(todo.id);
+  const onTodoSelect = (todo) => {
+    const conversationItem = getToDoConversation(todo.id);
     let conversationList = [];
+
     if (conversationItem) {
       conversationList = conversationItem.conversationData;
     }
-    this.setState({
+    setState({...state,
       currentTodo: todo,
       loader: true,
       conversation: conversationList
     });
-    setTimeout(() => {
-      this.setState({ loader: false });
-    }, 1500);
-  }
+    setTimeout(() => { setState({ ...state, loader: false }); }, 1500);
+  };
 
-  removeLabel(todo, label) {
+  const removeLabel = (todo, label) => {
     todo.labels.splice(todo.labels.indexOf(label), 1);
     return todo.labels;
-  }
+  };
 
-  addLabel(todo, label) {
+  const addLabel = (todo, label) => {
     todo.labels = todo.labels.concat(label);
-    return todo.labels
-  }
+    return todo.labels;
+  };
 
-  onToggleDrawer() {
-    this.setState({
-      drawerState: !this.state.drawerState
+  const onToggleDrawer = () => {
+    setState({...state, 
+      drawerState: !state.drawerState
     });
-  }
+   };
 
-  updateSearch(evt) {
-    this.setState({
+  const updateSearch = evt => {
+    setState({...state, 
       searchTodo: evt.target.value,
     });
-    this.searchTodo(evt.target.value)
-  }
+    searchTodo(evt.target.value);
+  };
 
-  render() {
-    const { selectedToDos, loader, drawerState, toDos, alertMessage, showMessage } = this.state;
+  const {
+    selectedToDos,
+    loader,
+    drawerState,
+    todos,
+    alertMessage,
+    showMessage,
+  } = state;
 
-    return (
-      <div className="gx-main-content">
-        <div className="gx-app-module">
-          <div className="gx-d-block gx-d-lg-none">
-            <Drawer
-              placement="left"
-              closable={false}
-              visible={drawerState}
-              onClose={this.onToggleDrawer.bind(this)}>
-              {this.ToDoSideBar()}
-            </Drawer>
+  return (
+    <div className="gx-main-content">
+      <div className="gx-app-module">
+        {/* Todo 왼쪽 사이드 메뉴 드로어 */}
+        <div className="gx-d-block gx-d-lg-none">
+          <Drawer
+            placement="left"
+            closable={false}
+            visible={drawerState}
+            onClose={onToggleDrawer}
+          >
+            {ToDoSideBar()}
+          </Drawer>
+        </div>
+        {/* Todo 왼쪽 사이드 메뉴 고정형 */}
+        <div className="gx-module-sidenav gx-d-none gx-d-lg-flex">
+          {ToDoSideBar()}
+        </div>
+
+        <div className="gx-module-box">
+          <div className="gx-module-box-header">
+            <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
+              <i
+                className="icon icon-menu gx-icon-btn"
+                aria-label="Menu"
+                onClick={onToggleDrawer}
+              />
+            </span>
+            <AppModuleHeader
+              placeholder="Search To Do"
+              data-user={state.user}
+              onChange={updateSearch}
+              value={state.searchTodo}
+            />
           </div>
-          <div className="gx-module-sidenav gx-d-none gx-d-lg-flex">
-            {this.ToDoSideBar()}
-          </div>
-
-          <div className="gx-module-box">
-            <div className="gx-module-box-header">
-
-              <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
-                <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
-                  onClick={this.onToggleDrawer.bind(this)} />
-              </span>
-              <AppModuleHeader placeholder="Search To Do" data-user={this.state.user}
-                onChange={this.updateSearch.bind(this)}
-                value={this.state.searchTodo} />
-            </div>
-            <div className="gx-module-box-content">
-              {this.state.currentTodo === null ?
-                <div className="gx-module-box-topbar gx-module-box-topbar-todo">
-                  {this.state.toDos.length > 0 ?
-                    <>
-                      <Checkbox className="gx-icon-btn"
-                        indeterminate={selectedToDos > 0 && selectedToDos < toDos.length}
-                        checked={selectedToDos > 0}
-                        onChange={this.onAllTodoSelect.bind(this)}
-                        value="SelectMail" />
-                      <Dropdown overlay={this.optionMenu()} placement="bottomRight" trigger={['click']}>
-                        <div>
-                          <span className="gx-px-2"> {this.state.optionName}</span>
-                          <i className="icon icon-charvlet-down" />
-                        </div>
-                      </Dropdown>
-                    </> : null}
-
-                  {(selectedToDos > 0) &&
-
-                    <Dropdown overlay={this.labelMenu()} placement="bottomRight" trigger={['click']}>
-                      <i className="gx-icon-btn icon icon-tag" />
+          <div className="gx-module-box-content">
+            {state.currentTodo === null ? (
+              <div className="gx-module-box-topbar gx-module-box-topbar-todo">
+                {state.todos.length > 0 ? (
+                  <>
+                    <Checkbox
+                      className="gx-icon-btn"
+                      indeterminate={
+                        selectedToDos > 0 && selectedToDos < todos.length
+                      }
+                      checked={selectedToDos > 0}
+                      onChange={onAllTodoSelect}
+                      value="SelectMail"
+                    />
+                    <Dropdown
+                      overlay={optionMenu()}
+                      placement="bottomRight"
+                      trigger={['click']}
+                    >
+                      <div>
+                        <span className="gx-px-2"> {state.optionName}</span>
+                        <i className="icon icon-charvlet-down" />
+                      </div>
                     </Dropdown>
-                  }
-                </div>
-                :
+                  </>
+                ) : null}
+
+                {selectedToDos > 0 && (
+                  <Dropdown
+                    overlay={labelMenu()}
+                    placement="bottomRight"
+                    trigger={['click']}
+                  >
+                    <i className="gx-icon-btn icon icon-tag" />
+                  </Dropdown>
+                )}
+              </div>
+            ) : (
                 <div className="gx-module-box-topbar">
-                  <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
-                    this.setState({ currentTodo: null })
-                  }} />
+                  <i
+                    className="icon icon-arrow-left gx-icon-btn"
+                    onClick={() => { 
+                      setState({ ...state, currentTodo: null }) 
+                    }}
+                  />
                 </div>
-              }
-              {loader ?
-                <div className="gx-loader-view">
-                  <CircularProgress />
-                </div> :
-                this.showToDos(this.state)
-              }
-            </div>
+              )}
+            {loader ? (
+              <div className="gx-loader-view">
+                <CircularProgress />
+              </div>
+            ) : (
+                showToDos(state)
+              )}
           </div>
         </div>
-        {showMessage && message.info(<span id="message-id">{alertMessage}</span>, 3, this.handleRequestClose)}
       </div>
-    )
-  }
-}
+      {showMessage &&
+        message.info(<span id="message-id">{alertMessage}</span>, 3, handleRequestClose,)}
+    </div>
+  );
+};
 
-export default ToDo;
+export default withApollo(ToDo);

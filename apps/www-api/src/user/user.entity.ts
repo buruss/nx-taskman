@@ -3,6 +3,8 @@ import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Unique, OneToMany, 
 import { Task } from "../task/task.entity";
 import { encrypt } from '@nx-taskman/logics';
 import { Exclude, Expose } from 'class-transformer';
+import { TodoItem } from '../todo/todo-item.entity';
+import { TodoConversation } from '../todo/todo-conversation.entity';
 
 @Entity() // typeOrm 용
 @ObjectType('User') // type-graphql 에서 graph api 용 DTO 객체 생성
@@ -14,35 +16,52 @@ export class User extends BaseEntity {
   @Expose({ name: 'uid' })
   id: number;
 
-  @Column()
-  @Field({ name: 'uname', nullable: false }) // GraphQL 응답용 필드명을 바꿈. 보안성 강화
-  @Expose({ name: 'uname' }) // class-transformer로 rest api 용 DTO 객체 적용
+  @Column({length: 100})
+  @Field({ name: 'name' }) // GraphQL 응답용 필드명을 바꿈. 보안성 강화
+  @Expose({ name: 'name' }) // class-transformer로 rest api 용 DTO 객체 적용
   username: string;
 
-  @Column()
+  @Column({nullable: true, length: 500})
+  @Field({nullable: true})
+  @Expose()
+  thumb?: string;
+
+  @Column({length: 100})
   password: string;
 
-  @Column()
+  @Column({length: 50})
   salt: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 50 })
   @Field({ name: 'emaddr', nullable: true })
   @Expose({ name: 'emaddress' })
   email: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'timestamptz' })
   birthDate: Date;
 
   // tasks는 존재하지 않는 필드임.
   // AuthResolver에서 @ResolveProperty() tasks() 메서드를 사용하려면 필요함
-  @Field(() => [Task], {nullable: true})
+  @Field(type => [Task], {nullable: true})
   @OneToMany(type => Task, task => task.user, { eager: true, cascade: true })
   tasks: Task[];
 
-  @CreateDateColumn()
+  // todos는 존재하지 않는 필드임.
+  // AuthResolver에서 @ResolveProperty() todos() 메서드를 사용하려면 필요함
+  @Field(type => [TodoItem], {nullable: true})
+  @OneToMany(type => TodoItem, todo => todo.user, { cascade: true })
+  todos: TodoItem[];
+
+  // conversations는 존재하지 않는 필드임.
+  // AuthResolver에서 @ResolveProperty() conversations() 메서드를 사용하려면 필요함
+  @Field(type => [TodoConversation], {nullable: true})
+  @OneToMany(type => TodoConversation, conv => conv.user, { cascade: true })
+  conversations: TodoConversation[];
+
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
   /**

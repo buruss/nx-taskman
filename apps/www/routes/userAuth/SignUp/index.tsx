@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Checkbox, Form, Icon, Input } from "antd";
 import Link from 'next/link';
 import Router from 'next/router';
-import SIGN_UP from '../../../graphql/sign_up.mutation';
+import SIGN_UP from '../../../graphql/sign-up.mutation';
 import IntlMessages from '../../../util/IntlMessages';
 import { message } from "antd/lib";
 import CircularProgress from '../../../components/CircularProgress';
@@ -50,7 +50,7 @@ const SignUp = props => {
         <div className="gx-app-login-content">
           <Form onSubmit={handleSubmit} className="gx-signup-form gx-form-row0">
             <Form.Item>
-              {getFieldDecorator('uname', {
+              {getFieldDecorator('name', {
                 rules: [{
                   required: true,
                   message: 'Please input your username!'

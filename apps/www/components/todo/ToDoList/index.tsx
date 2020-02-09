@@ -3,11 +3,11 @@ import CustomScrollbars from '../../../util/CustomScrollbars'
 
 import ToDoItem from "./ToDoItem";
 
-const ToDoList = (({ toDos, onTodoSelect, onTodoChecked, onMarkAsStart }) => {
+const ToDoList = (({ todos, onTodoSelect, onTodoChecked, onMarkAsStart }) => {
   return (
     <div className="gx-module-list">
       <CustomScrollbars className="gx-module-content-scroll">
-        {toDos.map((todo, index) =>
+        {todos.map((todo, index) =>
           <ToDoItem key={index} todo={todo} onTodoSelect={onTodoSelect}
             onMarkAsStart={onMarkAsStart}
             onTodoChecked={onTodoChecked} />

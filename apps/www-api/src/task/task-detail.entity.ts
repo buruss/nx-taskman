@@ -12,31 +12,31 @@ export class TaskDetail extends BaseEntity {
   @Expose({ name: 'tdid' })
   id: number;
 
-  @Column()
-  @Field({ name: 'dtype', nullable: false })
+  @Column({length: 100})
+  @Field({ name: 'dtype' })
   @Expose({ name: 'dtype' })
   detailType: string;
 
-  @Column()
+  @Column({length: 500})
   @Field({ name: 'det', nullable: true })
   @Expose({ name: 'det' })
   detail: string;
 
   @Column()
-  @Field({ name: 'tid', nullable: false })
+  @Field({ name: 'tid' })
   @Expose({ name: 'tid' })
   taskId: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
   // task는 존재하지 않는 필드임.
   // @ResolveProperty() task() 메서드를 사용하려면 필요함
-  @Field(() => Task, {nullable: true})
-  @ManyToOne(type => Task, task => task.taskDetails, { eager: false, onDelete: 'CASCADE' })
+  @Field(type => Task, {nullable: true})
+  @ManyToOne(type => Task, task => task.taskDetails, { onDelete: 'CASCADE' })
   task: Task;
 
 }

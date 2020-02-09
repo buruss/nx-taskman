@@ -1,4 +1,11 @@
-export default [
+export interface TaskLabel {
+  id: number;
+  handle: string;
+  title: string;
+  color: string;
+}
+
+const labels: TaskLabel[] = [
   {
     'id': 1,
     'handle': 'frontend',
@@ -24,3 +31,5 @@ export default [
     'color': 'info'
   }
 ];
+
+export default labels;

@@ -6,6 +6,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthResolver } from './auth.resolver'
 import { ApiAuthController } from './auth.controller';
 import { TaskModule } from '../task/task.module';
+import { TodoModule } from '../todo/todo.module';
 import { getConfig } from '../config';
 import { UserModule } from '../user/user.module';
 
@@ -22,6 +23,7 @@ const jwtConfig = getConfig().jwt;
       },
     }),
     forwardRef(() => TaskModule),
+    forwardRef(() => TodoModule),
   ],
   controllers: [
     ApiAuthController,
