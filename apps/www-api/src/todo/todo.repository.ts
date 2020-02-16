@@ -21,11 +21,10 @@ export class TodoRepository extends Repository<TodoItem> {
     const { label, search } = filterDto;
     // const query = this.createQueryBuilder('todo');
 
-    // query.leftJoinAndSelect('todo.labels', 'labels', 'labels.id = :label', {label});
     // query.where('todo.userId = :userId', { userId: user.id });
 
     // if (label) {
-    //   // query.andWhere(`labels.id = :label`, { label });
+    //   query.innerJoinAndSelect('todo.labels', 'labels', 'labels.id = :label', {label});
     // }
 
     // if (search) {
@@ -36,14 +35,13 @@ export class TodoRepository extends Repository<TodoItem> {
     
     // try {
     //   const todos = await paginate<TodoItem>(query, filterDto.paging);
-    const opts: FindManyOptions = {
-      where: {
-        userId: user.id,
-        id: In(),
-       },
-    }
-    this.find(opts);
     try {
+      const opts: FindManyOptions = {
+        where: [
+          {userId: user.id},
+        ],
+      };
+      const todos = await paginate<TodoItem>(this, filterDto.paging, opts);
       return todos;
     } catch (error) {
       this.logger.error(`Failed to get todos for user "${user.username}", DTO: ${JSON.stringify(filterDto)}`, error.stack);
