@@ -19,7 +19,7 @@ const jwtConfig = getConfig().jwt;
     JwtModule.register({
       secret: process.env.JWT_SECRET || jwtConfig.secret,
       signOptions: {
-        expiresIn: jwtConfig.expiresIn, // 1 hour
+        expiresIn: jwtConfig.expiresIn, 
       },
     }),
     forwardRef(() => TaskModule),

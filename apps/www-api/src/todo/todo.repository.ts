@@ -1,4 +1,4 @@
-import { Repository, EntityRepository, getRepository } from "typeorm";
+import { Repository, EntityRepository, getRepository, FindManyOptions, In } from "typeorm";
 import { TodoItem } from "./todo-item.entity";
 import { CreateTodoInputDto } from "./create-todo-input.dto";
 import { Logger, InternalServerErrorException } from "@nestjs/common";
@@ -19,22 +19,31 @@ export class TodoRepository extends Repository<TodoItem> {
     user: User
   ): Promise<Pagination<TodoItem>> {
     const { label, search } = filterDto;
-    const query = this.createQueryBuilder('todo');
+    // const query = this.createQueryBuilder('todo');
 
-    query.where('todo.userId = :userId', { userId: user.id });
+    // query.leftJoinAndSelect('todo.labels', 'labels', 'labels.id = :label', {label});
+    // query.where('todo.userId = :userId', { userId: user.id });
 
-    if (label) {
-      query.leftJoinAndSelect('todo.labels', 'labels')
-        .andWhere(`labels.id = :label`, { label });
+    // if (label) {
+    //   // query.andWhere(`labels.id = :label`, { label });
+    // }
+
+    // if (search) {
+    //   // 괄호가 없으면 OR가 최상단 연산자로 인식되므로 꼭 괄호안에 OR 넣어야 함
+    //   query.andWhere(`(todo.title LIKE :search OR todo.notes LIKE :search)`, { search: `%${search}%` });
+    // }
+
+    
+    // try {
+    //   const todos = await paginate<TodoItem>(query, filterDto.paging);
+    const opts: FindManyOptions = {
+      where: {
+        userId: user.id,
+        id: In(),
+       },
     }
-
-    if (search) {
-      // 괄호가 없으면 OR가 최상단 연산자로 인식되므로 꼭 괄호안에 OR 넣어야 함
-      query.andWhere(`(todo.title LIKE :search OR todo.notes LIKE :search)`, { search: `%${search}%` });
-    }
-
+    this.find(opts);
     try {
-      const todos = await paginate<TodoItem>(query, filterDto.paging);
       return todos;
     } catch (error) {
       this.logger.error(`Failed to get todos for user "${user.username}", DTO: ${JSON.stringify(filterDto)}`, error.stack);

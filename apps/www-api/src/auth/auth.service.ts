@@ -33,10 +33,10 @@ export class AuthService {
 
     // 토큰에 담을 데이터 구조. 맘대로 만들어도 되지만, 비번처럼 민감한 데이터는 넣으면 안 됨.
     const payload: JwtPayload = { username };
-    const accessToken = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload);
     this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`);
 
-    return { token: accessToken };
+    return { token };
   }
 
   findByIds(ids: number[]): Promise<User[]> {

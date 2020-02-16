@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { getConfig } from './config';
 import cookieParser from 'cookie-parser';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,14 @@ async function bootstrap() {
 
   // 개발환경에서는 cors 활성화
   const dev = process.env.NODE_ENV !== 'production';
-  app.enableCors()
+  const config = getConfig().nextServer;
+
+  // 다른 도메인에서 쿠키 헤더를 전송 받으려면 cors 설정 필요
+  const cors: CorsOptions = {
+    origin: `${config.host}:${config.port}`,
+    credentials: true,
+  };
+  app.enableCors(cors);
 
   /**
    * Request 에 담긴 데이터를 입력체크해줄 뿐 아니라 Class형으로 형변환까지 해주도록함. 자주 쓰므로 Global로 사용함
@@ -29,7 +37,7 @@ async function bootstrap() {
   // 쿠키 기반 토큰 인증을 위해서 필요함. jwt.strategy.ts 참고
   app.use(cookieParser());
 
-  const port = getConfig().server.port;
+  const port = getConfig().apiServer.port;
   app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/'); // + globalPrefix);
   });

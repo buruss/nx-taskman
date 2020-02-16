@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 
 export interface IConfig {
-  server: IServerConfig;
+  apiServer: IServerConfig;
+  nextServer: IServerConfig;
   db: IDbConfig;
   jwt: IJwtConfig;
 }
 
 export interface IServerConfig {
+  host: string;
   port: number;
 }
 

@@ -1,8 +1,8 @@
 import {compose} from 'redux';
-import {withAuthSync} from './withAuthSync';
+import {withAuthAsync} from './withAuthAsync';
 import WithLayout from './withLayout';
 
 export default compose(
-  withAuthSync,
+  withAuthAsync,
   WithLayout,
 );

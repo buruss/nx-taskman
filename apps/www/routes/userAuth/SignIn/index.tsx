@@ -4,11 +4,10 @@ import Link from 'next/link';
 import SIGN_IN from '../../../graphql/sign-in.mutation';
 import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
-import Router from 'next/router';
 import { FormComponentProps } from 'antd/lib/form';
 import { useMutation } from '@apollo/react-hooks';
 import { withApollo } from '../../../util/next_example_page';
-import { login } from '../../../hoc/securedPage/withAuthSync';
+import { login } from '../../../hoc/securedPage/withAuthAsync';
 import { SharedComponent } from '@nx-taskman/components';
 
 const SignIn: React.FC<FormComponentProps> = props => {
@@ -18,7 +17,7 @@ const SignIn: React.FC<FormComponentProps> = props => {
       console.log('로그인 성공. token = ', data.signIn.token);
       // 토큰을 쿠키에 저장
       // 홈으로 이동
-      login(data.signIn.token);
+      login();
     },
   });
 

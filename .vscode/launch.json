@@ -4,6 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "node",
       "request": "attach",
@@ -27,41 +28,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "launch www",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}\\apps\\www\\src\\main.ts",
-      "env": {
-        "NODE_ENV": "development" // development or production
-      },
-      "cwd": "${workspaceFolder}",
-      "protocol": "inspector",
-      "console": "integratedTerminal", // winston log가 디버그 콘솔에 출력되려면 필요함
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "launch admin-api",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}\\apps\\admin-api\\src\\main.ts",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Next: Node",
-      "runtimeExecutable": "next",
+      "runtimeExecutable": "nx",
       "runtimeArgs": [
-        "--inspect"
+        "serve",
+        "www",
+        "--inspect",
+        "--inspect-brk=127.0.0.1:9229"
       ],
+      "sourceMapPathOverrides": {
+        "webpack:///*": "${workspaceFolder}/*"
+      },
       "port": 9229,
       "console": "integratedTerminal"
     }

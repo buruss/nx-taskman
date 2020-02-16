@@ -3,12 +3,13 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
+import { HttpLink, createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import { setContext } from 'apollo-link-context';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
 import { NextPage } from 'next';
 import nextCookie from 'next-cookies';
+import { getConfig } from '../config';
 
 export type AppApolloCache = any;
 
@@ -28,7 +29,6 @@ interface ApolloProps extends ApolloInitialProps {
  */
 const authLink = setContext((_, ctx) => {
   const { headers } = ctx;
-
   const { token } = nextCookie(ctx);
 
   if (token) {
@@ -36,8 +36,8 @@ const authLink = setContext((_, ctx) => {
     return {
       headers: {
         ...headers,
-        authorization: `Bearer ${token}`,
-        Cookie: token,
+        // authorization: `Bearer ${token}`,
+        Cookie: `token=${token}`,
       },
     };
   } else {
@@ -50,9 +50,13 @@ const authLink = setContext((_, ctx) => {
  * @param  {Object} [initialState={}]
  */
 function createApolloClient(initialState: NormalizedCacheObject = {}, cookie = null): ApolloClient<NormalizedCacheObject> {
+  const isBrowser = typeof window !== 'undefined';
+
+  console.log('isBrowser = ', isBrowser, 'cookie =', cookie);
+
   // 서버 사이드 렌더링 시 getDataFromTree 안에서도 쿠키를 전송하도록 하려면 아래처럼 headers에 쿠키 추가해야 함
   const enchancedFetch = (input: RequestInfo, init?: RequestInit) => {
-    console.log(init.headers);
+    console.log('enchancedFetch. headers = ', init.headers);
     return fetch(input, {
       ...init,
       headers: {
@@ -61,44 +65,78 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, cookie = n
       },
     }).then(response => response);
   };
-  // const link = createPersistedQueryLink().concat(
-  //   new HttpLink({
-  //     uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
-  //     credentials: 'same-origin', // 쿠키 전송을 위해 필요함
-  //     fetch: enchancedFetch,
-  //   }),
-  // );
-  // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-  return new ApolloClient<AppApolloCache>({
-    ssrMode: typeof window === 'undefined', // Disables forceFetch on the server (so queries are only run once)
-    link: new HttpLink({
-      uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
-      credentials: 'same-origin', // 쿠키 전송을 위해 필요함
-      fetchOptions: {
-        credentials:'same-origin'
-      },
+
+  const {host, port} = getConfig().apiServer;
+  const link = createPersistedQueryLink().concat(
+    new HttpLink({
+      uri: `${host}:${port}/graphql`, // Server URL (must be absolute)
+      credentials: 'include', // 쿠키 전송을 위해 필요함
       fetch: enchancedFetch,
     }),
+  );
+
+  // const link = createHttpLink({
+  //   uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
+  //   credentials: 'same-origin', // 쿠키 전송을 위해 필요함
+  //   ...(!isBrowser && { fetch }),
+  // });
+
+  // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
+  return new ApolloClient<AppApolloCache>({
+    connectToDevTools: isBrowser,
+    ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
+    link: authLink.concat(link),
     cache: new InMemoryCache().restore(initialState),
-    connectToDevTools: true,
   });
 }
+
+//   const httpLink = createHttpLink({
+// 		uri: 'http://localhost:4000/graphql',
+//     credentials: 'same-origin',
+    
+// 	})
+
+// 	const authLink = setContext((_, { headers }) => {
+// 		return {
+// 			headers: {
+// 				...headers,
+// 				Cookie: cookie ? cookie : '',
+// 			}
+// 		}
+// 	})
+
+// 	return new ApolloClient<AppApolloCache>({
+// 		connectToDevTools: process.browser,
+// 		ssrMode: typeof window === 'undefined', // Disables forceFetch on the server (so queries are only run once)
+// 		link: authLink.concat(httpLink),
+// 		cache: new InMemoryCache().restore(initialState || {})
+// 	})  
+// }
 
 /**
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  * @param  {Object} initialState
  */
-function initApolloClient(initialState?: AppApolloCache, cookie = '') {
+function initApolloClient(initialState: AppApolloCache, cookie = '') {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
+    // let fetchOptions = {}
+    
+    // If you are using a https_proxy, add fetchOptions with 'https-proxy-agent' agent instance
+    // 'https-proxy-agent' is required here because it's a sever-side only module
+    // if (process.env.https_proxy) {
+    //   fetchOptions = {
+    //     agent: new (require('https-proxy-agent'))(process.env.https_proxy)
+    //   }
+    // }
     return createApolloClient(initialState, cookie);
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = createApolloClient(initialState);
+    apolloClient = createApolloClient(initialState, cookie);
   }
 
   return apolloClient;
@@ -120,7 +158,8 @@ export function withApollo<PageProps extends object, InitialProps = PageProps>(
     ApolloProps & PageProps,
     ApolloInitialProps & InitialProps
   > = ({ apolloClient, apolloState, ...pageProps }) => {
-    const client = apolloClient || initApolloClient(apolloState);
+    const cookie = typeof window !== 'undefined' ? document?.cookie : null;
+    const client = apolloClient || initApolloClient(apolloState, cookie);
     return (
       <ApolloProvider client={client}>
         <PageComponent {...(pageProps as PageProps)} />

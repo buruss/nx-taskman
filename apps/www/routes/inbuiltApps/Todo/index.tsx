@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Drawer, Dropdown, Menu, message } from 'antd';
+import { Button, Checkbox, Drawer, Dropdown, Menu, message, Pagination } from 'antd';
 
 import CustomScrollbars from '../../../util/CustomScrollbars';
 import filters from './data/filters';
@@ -12,9 +12,8 @@ import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
 import './index.css';
 import { useQuery } from '@apollo/react-hooks';
-import GET_TODO_INITIAL_DATA from '../../../graphql/get-todo-initial-data.query';
+import GET_TODO_INITIAL_DATA, { GetTodoInitialData } from '../../../graphql/get-todo-initial-data.query';
 import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
-import {Pagination} from 'nestjs-typeorm-paginate';
 import { withApollo } from '../../../util/next_example_page';
 
 const ITEM_HEIGHT = 34;
@@ -76,10 +75,10 @@ const ToDo: React.FC = () => {
   const [state, setState] = useState(defaultState);
   
   // todo 목록 1페이지 가져오기
-  const { data, loading, error } = useQuery<{paginatedTodoItems: Pagination<ITodoItem>; todoLabels: ITodoLabel[];}>(GET_TODO_INITIAL_DATA, {
+  const { data, loading, error } = useQuery<GetTodoInitialData>(GET_TODO_INITIAL_DATA, {
     onCompleted(data) {
       console.log('useQuery(GET_TODO_INITIAL_DATA) data = ', data);
-      const {paginatedTodoItems, todoLabels} = data;
+      const {paginatedTodoItems, todoLabels} = data.getTodoInitialData;
       setState({
         ...state,
         todos: paginatedTodoItems.items,
@@ -719,6 +718,9 @@ const ToDo: React.FC = () => {
             ) : (
                 showToDos(state)
               )}
+          </div>
+          <div className="gx-module-box-footer">
+            <Pagination current={1} total={50} />
           </div>
         </div>
       </div>

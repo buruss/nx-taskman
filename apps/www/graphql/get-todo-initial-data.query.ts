@@ -1,5 +1,7 @@
 
 import gql from 'graphql-tag';
+import { Pagination } from 'nestjs-typeorm-paginate';
+import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
 
 export default gql`query {
   getTodoInitialData(input: {
@@ -30,3 +32,10 @@ export default gql`query {
     }
   } 
 }`;
+
+export interface GetTodoInitialData {
+  getTodoInitialData: {
+    paginatedTodoItems: Pagination<ITodoItem>; 
+    todoLabels: ITodoLabel[];
+  }
+}

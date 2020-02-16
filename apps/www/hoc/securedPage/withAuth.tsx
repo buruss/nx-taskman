@@ -1,5 +1,5 @@
 /**
- * 구버전. withAuthSync.tsx로 대체됨
+ * 구버전. withAuthAsync.tsx로 대체됨
  */
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';

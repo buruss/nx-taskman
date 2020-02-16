@@ -9,7 +9,7 @@ const DEFAULT_URL_AFTER_SIGNIN = '/main';
 
 export const login = ( token ) => {
   // , { domain: ".whos.now.sh", secure: true, httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year }
-  cookie.set('token', token, { expires: 365 });
+  cookie.set('token', token,  { expires: 365 });
   Router.push(DEFAULT_URL_AFTER_SIGNIN)
 }
 
@@ -58,9 +58,7 @@ export const withAuthSync = WrappedComponent => {
 
   Wrapper.getInitialProps = async ctx => {
     const token = auth(ctx);
-
     const componentProps = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
-
     return { ...componentProps, token };
   }
 

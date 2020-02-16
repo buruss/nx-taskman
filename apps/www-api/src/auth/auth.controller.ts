@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './auth.decorator';
 import { AuthTokenDto } from './auth-token.dto';
 import { Response } from 'express';
+import { getConfig } from '../config';
 
 
 @Controller('api/auth')
@@ -29,16 +30,27 @@ export class ApiAuthController {
     return this.authService.signUp(signUpInputDto);
   }
 
+  // 아직 nest.js에서 쿠키를 직접 지원하지 않기 때문에
+  // express response 객체를 이용하여 쿠키를 전송한다.
+  // 이런 경우 return 구문을 사용하여 응답을 출력할 수 없기 때문에
+  // res.send()를 사용해야 함
   @Post('/signin')
   async signIn(
     @Body() signInInputDto: SignInInputDto,
     @Res() res: Response,
-  ): Promise<AuthTokenDto> {
+  ) {
     const token = await this.authService.signIn(signInInputDto);
     // 쿠키에 토큰 설정
-    res.cookie('token', token.token, { httpOnly: true, maxAge: (1000 * 60 * 60 * 24) * 31, });
+    res.cookie('token', token.token, { httpOnly: true, maxAge: getConfig().jwt.expiresIn * 1000, });
     res.send(token);
-    return token;
+  }
+
+  @Get('/signout')
+  signOut(
+    @Res() res: Response,
+  ) {
+    res.cookie('token', '', {httpOnly: true});
+    res.send('bye');
   }
 
 }
