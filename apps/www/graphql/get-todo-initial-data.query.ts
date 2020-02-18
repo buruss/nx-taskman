@@ -33,7 +33,7 @@ export default gql`query {
   } 
 }`;
 
-export interface GetTodoInitialData {
+export interface TodoInitialData {
   getTodoInitialData: {
     paginatedTodoItems: Pagination<ITodoItem>; 
     todoLabels: ITodoLabel[];

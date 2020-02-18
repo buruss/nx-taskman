@@ -7,42 +7,53 @@ import { User } from "../user/user.entity";
 import { AddTodoConversationInputDto } from './add-todo-conversation-input.dto';
 import { TodoConversation } from './todo-conversation.entity';
 import { plainToClass } from 'class-transformer';
-import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { paginate, Pagination, } from 'nestjs-typeorm-paginate';
 import { TodoLabel } from './todo-label.entity';
 
 @EntityRepository(TodoItem)
 export class TodoRepository extends Repository<TodoItem> {
   private logger = new Logger('TodoRepository');
 
+  /**
+   * 할일 목록을 페이지 단위로 읽어서 반환
+   * @param filterDto 
+   * @param user 
+   */
   async getTodos(
     filterDto: GetTodosInputDto,
     user: User
   ): Promise<Pagination<TodoItem>> {
-    const { label, search } = filterDto;
-    // const query = this.createQueryBuilder('todo');
-
-    // query.where('todo.userId = :userId', { userId: user.id });
-
-    // if (label) {
-    //   query.innerJoinAndSelect('todo.labels', 'labels', 'labels.id = :label', {label});
-    // }
-
-    // if (search) {
-    //   // 괄호가 없으면 OR가 최상단 연산자로 인식되므로 꼭 괄호안에 OR 넣어야 함
-    //   query.andWhere(`(todo.title LIKE :search OR todo.notes LIKE :search)`, { search: `%${search}%` });
-    // }
-
+    const { paging, search } = filterDto;
+    const label = 0;
     
-    // try {
-    //   const todos = await paginate<TodoItem>(query, filterDto.paging);
+    // !!! query builder 조인 쿼리로 페이지 행수만큼 잘라서 쿼리하기가 어려움
+    // find 함수에 의해서 자동으로 TaskLabel이 쿼리되도록해야 개수를 맞춰서 반환 받을 수 있음
+    const query = this.createQueryBuilder('todo');
+    query.where('todo.userId = :userId', { userId: user.id });
+    if (label) {
+      query.innerJoinAndSelect('todo.labels', 'labels', 'labels.id = :label', {label});
+    } else {
+      query.innerJoinAndSelect('todo.labels', 'labels')
+        .skip((paging.page - 1) * paging.limit)
+        .take(paging.limit);
+    }
+
+    if (search) {
+      // 괄호가 없으면 OR가 최상단 연산자로 인식되므로 꼭 괄호안에 OR 넣어야 함
+      query.andWhere(`(todo.title LIKE :search OR todo.notes LIKE :search)`, { search: `%${search}%` });
+    }
     try {
-      const opts: FindManyOptions = {
-        where: [
-          {userId: user.id},
-        ],
-      };
-      const todos = await paginate<TodoItem>(this, filterDto.paging, opts);
-      return todos;
+      const paginatedTodos = await paginate<TodoItem>(query, filterDto.paging);
+
+    // try {
+    //   const opts: FindManyOptions = {
+    //     where: [
+    //       {userId: user.id},
+    //     ],
+
+    //   };
+    //   const todos = await paginate<TodoItem>(this, filterDto.paging, opts);
+      return paginatedTodos;
     } catch (error) {
       this.logger.error(`Failed to get todos for user "${user.username}", DTO: ${JSON.stringify(filterDto)}`, error.stack);
       throw new InternalServerErrorException();

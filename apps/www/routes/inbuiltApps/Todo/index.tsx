@@ -12,9 +12,11 @@ import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
 import './index.css';
 import { useQuery } from '@apollo/react-hooks';
-import GET_TODO_INITIAL_DATA, { GetTodoInitialData } from '../../../graphql/get-todo-initial-data.query';
+import GET_TODO_INITIAL_DATA, { TodoInitialData } from '../../../graphql/get-todo-initial-data.query';
 import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
 import { withApollo } from '../../../util/next_example_page';
+import { omit } from 'lodash';
+import { Pagination as Paging } from 'nestjs-typeorm-paginate';
 
 const ITEM_HEIGHT = 34;
 
@@ -43,6 +45,8 @@ interface State {
   addTodo?: boolean;
   selectedSectionId?;
   labels: ITodoLabel[];
+  paging: Omit<Paging<ITodoItem>, 'items'>;
+  currentPage: number;
 }
 
 const defaultState: State = {
@@ -68,6 +72,8 @@ const defaultState: State = {
   todoConversation,
   conversation: null,
   labels: [],
+  paging: null,
+  currentPage: 1,
 };
 
 const ToDo: React.FC = () => {
@@ -75,14 +81,15 @@ const ToDo: React.FC = () => {
   const [state, setState] = useState(defaultState);
   
   // todo 목록 1페이지 가져오기
-  const { data, loading, error } = useQuery<GetTodoInitialData>(GET_TODO_INITIAL_DATA, {
+  const { data, loading, error } = useQuery<TodoInitialData>(GET_TODO_INITIAL_DATA, {
     onCompleted(data) {
       console.log('useQuery(GET_TODO_INITIAL_DATA) data = ', data);
       const {paginatedTodoItems, todoLabels} = data.getTodoInitialData;
       setState({
         ...state,
         todos: paginatedTodoItems.items,
-        labels: todoLabels
+        labels: todoLabels,
+        paging: omit(paginatedTodoItems, 'items'),
       });
     },
     onError(error) {
@@ -627,6 +634,8 @@ const ToDo: React.FC = () => {
     todos,
     alertMessage,
     showMessage,
+    paging,
+    currentPage,
   } = state;
 
   return (
@@ -720,7 +729,7 @@ const ToDo: React.FC = () => {
               )}
           </div>
           <div className="gx-module-box-footer">
-            <Pagination current={1} total={50} />
+            <Pagination current={currentPage} total={paging?.totalItems || 0}/>
           </div>
         </div>
       </div>
