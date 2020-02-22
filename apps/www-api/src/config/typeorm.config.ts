@@ -6,6 +6,7 @@ import { TaskDetail } from '../task/task-detail.entity';
 import { TodoConversation } from '../todo/todo-conversation.entity';
 import { TodoItem } from '../todo/todo-item.entity';
 import { TodoLabel } from '../todo/todo-label.entity';
+// import { TodoItemLabelsTodoLabel } from '../todo/todo-item-labels-todo-label.entity';
 
 const config = getConfig().db;
 
@@ -24,6 +25,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     TodoLabel,
     TodoConversation,
     TodoItem,
+    // TodoItemLabelsTodoLabel
   ],
   synchronize: config.synchronize, // 스키마를 매번 동기화, 출시 버전에서는 제거하는 것이 바람직
 };

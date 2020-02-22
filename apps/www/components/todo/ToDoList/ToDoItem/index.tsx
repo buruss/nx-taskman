@@ -37,7 +37,7 @@ const ToDoItem = (({todo, onTodoSelect, onTodoChecked, onMarkAsStart}) => {
       }}>
         <div className="gx-module-todo-content">
           <div className={`gx-subject ${todo.completed && 'gx-text-muted gx-text-strikethrough'}`}>
-            {todo.title}
+            {todo.id}
           </div>
           <div className="gx-manage-margin">
             {labels.map((label, index) => {
