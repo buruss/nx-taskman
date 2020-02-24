@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ParseIntPipe, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UsePipes, ParseIntPipe, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { CreateTodoInputDto } from './create-todo-input.dto';
 import { GetTodosInputDto } from './get-todos-input.dto';
@@ -6,7 +6,8 @@ import { TodoItem } from './todo-item.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../user/user.entity';
 import { GetUser } from '../auth/auth.decorator';
-import { Pagination } from 'nestjs-typeorm-paginate';
+import { IPaginatedResponse } from '@nx-taskman/logics';
+// import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('api/todos')
 @UseGuards(AuthGuard())
@@ -22,7 +23,7 @@ export class ApiTodoController {
   getTodos(
     @Query() filterDto: GetTodosInputDto,
     @GetUser() user: User,
-  ): Promise<Pagination<TodoItem>> {
+  ): Promise<IPaginatedResponse<TodoItem>> {
     this.logger.verbose(`User "${user.username}" retrieving all the todos. Filter: ${JSON.stringify(filterDto)}`);
     return this.todoService.getTodos(filterDto, user);
   }

@@ -7,8 +7,9 @@ import { TodoItem } from './todo-item.entity';
 import { User } from '../user/user.entity';
 import { TodoConversation } from './todo-conversation.entity';
 import { AddTodoConversationInputDto } from './add-todo-conversation-input.dto';
-import { Pagination } from 'nestjs-typeorm-paginate';
+// import { Pagination } from 'nestjs-typeorm-paginate';
 import { TodoLabel } from './todo-label.entity';
+import { IPaginatedResponse } from '@nx-taskman/logics';
 
 @Injectable()
 export class TodoService {
@@ -22,7 +23,7 @@ export class TodoService {
   getTodos(
     filterDto: GetTodosInputDto,
     user: User,
-  ): Promise<Pagination<TodoItem>> {
+  ): Promise<IPaginatedResponse<TodoItem>> {
     return this.todoRepository.getTodos(filterDto, user);
   }
 

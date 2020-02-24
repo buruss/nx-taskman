@@ -18,6 +18,6 @@ export class GetTodosInputDto {
 
   @IsOptional()
   @Field(type => PaginationInputDto, {nullable: true})
-  @Default({limit: 10, page:1})
+  @Default({itemCount: 10, page:1})
   paging?: PaginationInputDto;  
 }
