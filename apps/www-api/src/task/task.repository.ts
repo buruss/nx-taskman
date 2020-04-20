@@ -1,11 +1,11 @@
 import { Repository, EntityRepository, getRepository } from "typeorm";
 import { Task } from "./task.entity";
-import { CreateTaskInputDto } from "./create-task-input.dto";
+import { CreateTaskInput } from "./create-task.input";
 import { TaskStatus } from "@nx-taskman/constants";
 import { Logger, InternalServerErrorException } from "@nestjs/common";
-import { GetTasksArgsDto } from "./get-tasks-args.dto";
+import { GetTasksArgs } from "./get-tasks.args";
 import { User } from "../user/user.entity";
-import { AddTaskDetailInputDto } from './add-task-detail-input.dto';
+import { AddTaskDetailInput } from './add-task-detail.input';
 import { TaskDetail } from './task-detail.entity';
 
 @EntityRepository(Task)
@@ -13,10 +13,10 @@ export class TaskRepository extends Repository<Task> {
   private logger = new Logger('TaskRepository');
 
   async getTasks(
-    filterDto: GetTasksArgsDto,
+    filterArgs: GetTasksArgs,
     user: User
   ): Promise<Task[]> {
-    const { st: status, search } = filterDto;
+    const { st: status, search } = filterArgs;
     const query = this.createQueryBuilder('task');
 
     query.where('task.userId = :userId', { userId: user.id });
@@ -34,16 +34,16 @@ export class TaskRepository extends Repository<Task> {
       const tasks = await query.getMany();
       return tasks;
     } catch (error) {
-      this.logger.error(`Failed to get tasks for user "${user.username}", DTO: ${JSON.stringify(filterDto)}`, error.stack);
+      this.logger.error(`Failed to get tasks for user "${user.username}", DTO: ${JSON.stringify(filterArgs)}`, error.stack);
       throw new InternalServerErrorException();
     }
   }
 
   async createTask(
-    createTaskDto: CreateTaskInputDto,
+    createTaskInput: CreateTaskInput,
     user: User
   ): Promise<Task> {
-    const task = createTaskDto.toEntity();
+    const task = createTaskInput.toEntity();
 
     task.status = TaskStatus.OPEN;
     task.user = user;
@@ -51,7 +51,7 @@ export class TaskRepository extends Repository<Task> {
     try {
       await task.save();
     } catch (error) {
-      this.logger.error(`Failed to create a task for user "${user.username}". DTO: ${createTaskDto}`, error.stack);
+      this.logger.error(`Failed to create a task for user "${user.username}". DTO: ${createTaskInput}`, error.stack);
       throw new InternalServerErrorException();
     }
     // 민감한 정보가 포함되어 있으므로 삭제 후 반환
@@ -60,9 +60,9 @@ export class TaskRepository extends Repository<Task> {
   }
 
   async addTaskDetail(
-    addTaskDetailInputDto: AddTaskDetailInputDto,
+    addTaskDetailInput: AddTaskDetailInput,
   ): Promise<TaskDetail> {
-    const taskDetail = addTaskDetailInputDto.toEntity();
+    const taskDetail = addTaskDetailInput.toEntity();
     try {
       await taskDetail.save();
     } catch (error) {

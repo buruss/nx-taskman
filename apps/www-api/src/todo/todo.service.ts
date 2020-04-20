@@ -1,15 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTodoInputDto } from './create-todo-input.dto';
-import { GetTodosInputDto } from './get-todos-input.dto';
+import { CreateTodoInput } from './create-todo.input';
+import { GetTodosInput } from './get-todos.input';
 import { TodoRepository } from './todo.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TodoItem } from './todo-item.entity';
+import { TodoItem, PaginatedTodoItems } from './todo-item.entity';
 import { User } from '../user/user.entity';
 import { TodoConversation } from './todo-conversation.entity';
-import { AddTodoConversationInputDto } from './add-todo-conversation-input.dto';
-// import { Pagination } from 'nestjs-typeorm-paginate';
+import { AddTodoConversationInput } from './add-todo-conversation.input';
 import { TodoLabel } from './todo-label.entity';
-import { IPaginatedResponse } from '@nx-taskman/logics';
 
 @Injectable()
 export class TodoService {
@@ -21,10 +19,10 @@ export class TodoService {
   }
 
   getTodos(
-    filterDto: GetTodosInputDto,
+    filterInput: GetTodosInput,
     user: User,
-  ): Promise<IPaginatedResponse<TodoItem>> {
-    return this.todoRepository.getTodos(filterDto, user);
+  ): Promise<PaginatedTodoItems> {
+    return this.todoRepository.getTodos(filterInput, user);
   }
 
   getTodoLabels(): Promise<TodoLabel[]> {
@@ -62,16 +60,16 @@ export class TodoService {
   }
 
   createTodo(
-    createTodoDto: CreateTodoInputDto,
+    createTodoInput: CreateTodoInput,
     user: User,
   ): Promise<TodoItem> {
-    return this.todoRepository.createTodo(createTodoDto, user);
+    return this.todoRepository.createTodo(createTodoInput, user);
   }
 
   addTodoConversation(
-    addTodoDetailInputDto: AddTodoConversationInputDto,
+    addTodoDetailInput: AddTodoConversationInput,
   ): Promise<TodoConversation> {
-    return this.todoRepository.addTodoConversation(addTodoDetailInputDto);
+    return this.todoRepository.addTodoConversation(addTodoDetailInput);
   }
 
   async deleteTodo(id: string, user: User): Promise<boolean> {

@@ -11,7 +11,9 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "lib": ["esnext.intl", "es2017.intl", "es2018.intl", "dom"]
+    "lib": ["esnext.intl", "es2017.intl", "es2018.intl", "dom"],
+    "typeRoots": ["node_modules/@types", "@types"]
   },
+  "files": ["@types/graphql.d.ts"],
   "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.d.ts"]
 }

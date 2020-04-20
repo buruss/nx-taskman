@@ -29,8 +29,7 @@ async function bootstrap() {
    * ValidationPipe({ transform: true }) Decorator를 사용하면 됨.
    * 먼저 @UseInterceptors(ClassSerializerInterceptor)를 사용해 봤는데, 
    * Response하려는 Class롤 DTO로 변환해주지만, Request의 DTO를 Class로 변환해주지는 못함
-   * @UsePipes(plainToClass(SignUpInputDto)) Decorator 도 써봤지만 안 됨
-   * @param signUpInputDto 
+   * @UsePipes(plainToClass(SignUpInput)) Decorator 도 써봤지만 안 됨
    */
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   

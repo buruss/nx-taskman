@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import {
   Button,
   Dropdown,
-  Icon,
   Layout,
   Menu,
   message,
   Popover,
   Select,
 } from 'antd';
+import { CaretDownFilled } from '@ant-design/icons';
+
 import { connect } from 'react-redux';
 import CustomScrollbars from '../../../util/CustomScrollbars';
 
@@ -178,7 +179,7 @@ class AboveHeader extends Component<Props> {
                       <div className="gx-d-flex">
                         <Dropdown overlay={menu}>
                           <Button>
-                            Category <Icon type="down" />
+                            Category <CaretDownFilled />
                           </Button>
                         </Dropdown>
                         <SearchBox

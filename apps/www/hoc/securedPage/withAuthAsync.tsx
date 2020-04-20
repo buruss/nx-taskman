@@ -4,10 +4,9 @@ import Router from 'next/router';
 // import nextCookie from 'next-cookies';
 import { withApollo } from '../../util/next_example_page';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
-import ME from '../../graphql/me.query';
-import SIGN_OUT from '../../graphql/sign-out.query';
+import ME from '../../graphql/me.graphql';
+import SIGN_OUT from '../../graphql/sign-out.graphql';
 import CircularProgress from '../../components/CircularProgress';
-import { getConfig } from '../../config';
 
 const SIGN_IN_REDIRECT_URL = '/signin';
 const DEFAULT_URL_AFTER_SIGNIN = '/main';

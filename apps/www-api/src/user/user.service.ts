@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SignInInputDto } from '../auth/sign-in-input.dto';
-import { SignUpInputDto } from '../auth/sign-up-input.dto';
+import { SignInInput } from '../auth/sign-in.input';
+import { SignUpInput } from '../auth/sign-up.input';
 import { User } from './user.entity';
 
 @Injectable()
@@ -13,12 +13,12 @@ export class UserService {
     private userRepository: UserRepository,
   ) { }
 
-  signUp(signUpInputDto: SignUpInputDto): Promise<User> {
-    return this.userRepository.signUp(signUpInputDto);
+  signUp(signUpInput: SignUpInput): Promise<User> {
+    return this.userRepository.signUp(signUpInput);
   }
 
-  signIn(signInInputDto: SignInInputDto): Promise<string> {
-    return this.userRepository.validateUserPassword(signInInputDto);
+  signIn(signInInput: SignInInput): Promise<string> {
+    return this.userRepository.validateUserPassword(signInInput);
   }
 
   findOne(username: string): Promise<User> {

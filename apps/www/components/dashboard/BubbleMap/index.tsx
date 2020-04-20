@@ -18,8 +18,9 @@ class BubbleMap extends Component {
 
   render() {
     return (
+
       <div style={wrapperStyles}>
-        <ComposableMap
+        {/* <ComposableMap
           projectionConfig={{scale: 180}}
           width={980}
           height={450}
@@ -77,7 +78,7 @@ class BubbleMap extends Component {
               }
             </Markers>
           </ZoomableGroup>
-        </ComposableMap>
+        </ComposableMap> */}
       </div>
     )
   }

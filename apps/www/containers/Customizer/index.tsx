@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Drawer, Form, Radio} from "antd";
+import {Button, Drawer, Radio} from "antd";
 import {connect} from "react-redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import { onNavStyleChange, setThemeType} from "../../redux/actions/Setting";
@@ -169,4 +169,4 @@ const mapStateToProps = ({settings}) => {
 export default connect(mapStateToProps, {
   setThemeType,
   onNavStyleChange
-})(Form.create()(Customizer));
+})(Customizer);

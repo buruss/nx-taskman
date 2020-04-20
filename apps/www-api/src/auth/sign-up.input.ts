@@ -1,11 +1,10 @@
 import { IsString, MinLength, MaxLength, Matches } from "class-validator";
-import { Field, InputType } from 'type-graphql';
+import { InputType, } from '@nestjs/graphql';
 import { User } from '../user/user.entity';
 
 @InputType()
-export class SignUpInputDto {
+export class SignUpInput {
   @IsString() @MinLength(2) @MaxLength(20)
-  @Field()
   name: string;
 
   @IsString() @MinLength(8) @MaxLength(20)
@@ -13,12 +12,10 @@ export class SignUpInputDto {
     /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
     { message: 'password is too weak.' }
   )
-  @Field()
   pwd: string;
 
   @IsString() @MinLength(4) @MaxLength(20)
-  @Field({ nullable: true })
-  emaddr: string;
+  emaddr?: string;
 
   async toEntity(): Promise<User> {
     const user = new User();

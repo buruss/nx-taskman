@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import ME from '../../graphql/me.query';
+import ME from '../../graphql/me.graphql';
 import Router from 'next/router';
 import CircularProgress from '../../components/CircularProgress';
 import { withApollo } from '../../util/next_example_page';

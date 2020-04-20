@@ -48,7 +48,7 @@ class RecentActivity extends React.Component<Props, State> {
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       // height: window.innerHeight + 'px',
       // width: window.innerWidth + 'px',
@@ -58,10 +58,6 @@ class RecentActivity extends React.Component<Props, State> {
     // if (window.innerWidth < 575) {
     //   this.setState({limit: 1});
     // }
-
-  }
-
-  componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }

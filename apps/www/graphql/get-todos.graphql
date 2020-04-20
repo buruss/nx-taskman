@@ -1,11 +1,8 @@
-
-import gql from 'graphql-tag';
-
-export default gql`query {
+query getTodos($label: Float, $search: String, $paging: PaginationInput) {
   getTodos(input: {
-    $label: Float
-    $search: String
-    $paging: PaginationInputDto
+    label: $label,
+    search: $search,
+    paging: $paging
   }) {
     items {
       id
@@ -22,10 +19,11 @@ export default gql`query {
         id
       }
     }
-    itemCount
-    totalItems
-    pageCount
-    next
-    previous
+    paging {
+      itemCount
+      totalItems
+      page
+      pageCount
+    }
   }
-}`;
+}

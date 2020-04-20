@@ -14,5 +14,5 @@ const assignOnlyExistingProperties = (objDest, objSrc) => {
 export { sharedFunc, assignOnlyExistingProperties };
 export * from './crypt';
 export * from './decorators';
-export * from './pagination-input.dto';
-export * from './pagination-output.dto';
+export * from './pagination.output';
+export * from './pagination.input';

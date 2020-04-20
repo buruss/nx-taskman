@@ -1,11 +1,11 @@
 import { Controller, Post, Body, Get, UseGuards, UseInterceptors, ClassSerializerInterceptor, Res, } from '@nestjs/common';
-import { SignInInputDto } from './sign-in-input.dto';
+import { SignInInput } from './sign-in.input';
 import { AuthService } from './auth.service';
-import { SignUpInputDto } from './sign-up-input.dto';
+import { SignUpInput } from './sign-up.input';
 import { User } from '../user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './auth.decorator';
-import { AuthTokenDto } from './auth-token.dto';
+import { AuthTokenOutput } from './auth-token.output';
 import { Response } from 'express';
 import { getConfig } from '../config';
 
@@ -26,8 +26,8 @@ export class ApiAuthController {
   }
 
   @Post('/signup')
-  signUp(@Body() signUpInputDto: SignUpInputDto): Promise<User> {
-    return this.authService.signUp(signUpInputDto);
+  signUp(@Body() signUpInput: SignUpInput): Promise<User> {
+    return this.authService.signUp(signUpInput);
   }
 
   // 아직 nest.js에서 쿠키를 직접 지원하지 않기 때문에
@@ -36,10 +36,10 @@ export class ApiAuthController {
   // res.send()를 사용해야 함
   @Post('/signin')
   async signIn(
-    @Body() signInInputDto: SignInInputDto,
+    @Body() signInInput: SignInInput,
     @Res() res: Response,
   ) {
-    const token = await this.authService.signIn(signInInputDto);
+    const token = await this.authService.signIn(signInInput);
     // 쿠키에 토큰 설정
     res.cookie('token', token.token, { httpOnly: true, maxAge: getConfig().jwt.expiresIn * 1000, });
     res.send(token);

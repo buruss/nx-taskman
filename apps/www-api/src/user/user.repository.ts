@@ -1,15 +1,15 @@
 import { Repository, EntityRepository } from "typeorm";
 import { User } from "./user.entity";
 import { ConflictException, InternalServerErrorException, } from "@nestjs/common";
-import { SignInInputDto } from "../auth/sign-in-input.dto";
-import { SignUpInputDto } from '../auth/sign-up-input.dto';
+import { SignInInput } from "../auth/sign-in.input";
+import { SignUpInput } from '../auth/sign-up.input';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  async signUp(signUpInputDto: SignUpInputDto): Promise<User> {
+  async signUp(signUpInput: SignUpInput): Promise<User> {
 
-    const user = await signUpInputDto.toEntity();
+    const user = await signUpInput.toEntity();
     console.log(user);
 
     try {
@@ -23,8 +23,8 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async validateUserPassword(signInInputDto: SignInInputDto): Promise<string> {
-    const { name, pwd } = signInInputDto;
+  async validateUserPassword(signInInput: SignInInput): Promise<string> {
+    const { name, pwd } = signInInput;
 
     const user = await this.findOne({ username: name });
     if (user && await user.validatePassword(pwd)) {

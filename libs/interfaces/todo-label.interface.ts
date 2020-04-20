@@ -3,5 +3,5 @@ export interface ITodoLabel {
     id: number;
     handle: string;
     title: string;
-    color: string;
+    color?: string;
   }

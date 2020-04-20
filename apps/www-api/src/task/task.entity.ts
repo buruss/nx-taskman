@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID, } from 'type-graphql'
+import { Field, ObjectType, ID, HideField, } from '@nestjs/graphql'
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { TaskStatus } from "@nx-taskman/constants";
 import { User } from "../user/user.entity";
@@ -35,12 +35,15 @@ export class Task extends BaseEntity {
   status: TaskStatus;
 
   @Column()
+  @HideField()
   userId: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
+  @HideField()
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
+  @HideField()
   updatedAt: Date;
 
   // user는 존재하지 않는 필드임.

@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from "@nx-taskman/constants";
-import { CreateTaskInputDto } from './create-task-input.dto';
-import { GetTasksArgsDto } from './get-tasks-args.dto';
+import { CreateTaskInput } from './create-task.input';
+import { GetTasksArgs } from './get-tasks.args';
 import { TaskRepository } from './task.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { User } from '../user/user.entity';
-import { AddTaskDetailInputDto } from './add-task-detail-input.dto';
+import { AddTaskDetailInput } from './add-task-detail.input';
 import { TaskDetail } from './task-detail.entity';
 
 @Injectable()
@@ -19,18 +19,18 @@ export class TaskService {
   }
 
   getTasks(
-    filterDto: GetTasksArgsDto,
+    filterArgs: GetTasksArgs,
     user: User,
   ): Promise<Task[]> {
-    return this.taskRepository.getTasks(filterDto, user);
+    return this.taskRepository.getTasks(filterArgs, user);
   }
 
   // getAllTasks(): Task[] {
   //     return this.tasks;
   // }
 
-  // getTasksWithFilter(filterDto: GetTasksFilterDto): Task[] {
-  //     const {status, search} = filterDto;
+  // getTasksWithFilter(filterArgs: GetTasksFilterArgs): Task[] {
+  //     const {status, search} = filterArgs;
   //     return this.tasks.filter(task => {
   //         return (
   //             (
@@ -57,16 +57,16 @@ export class TaskService {
   }
 
   createTask(
-    createTaskDto: CreateTaskInputDto,
+    createTaskInput: CreateTaskInput,
     user: User,
   ): Promise<Task> {
-    return this.taskRepository.createTask(createTaskDto, user);
+    return this.taskRepository.createTask(createTaskInput, user);
   }
 
   addTaskDetail(
-    addTaskDetailInputDto: AddTaskDetailInputDto,
+    addTaskDetailInput: AddTaskDetailInput,
   ): Promise<TaskDetail> {
-    return this.taskRepository.addTaskDetail(addTaskDetailInputDto);
+    return this.taskRepository.addTaskDetail(addTaskDetailInput);
   }
 
   async deleteTask(id: number, user: User): Promise<boolean> {

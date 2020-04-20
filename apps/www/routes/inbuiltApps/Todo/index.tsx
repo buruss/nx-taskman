@@ -10,13 +10,12 @@ import ToDoDetail from '../../../components/todo/ToDoDetail';
 import AppModuleHeader from '../../../components/AppModuleHeader';
 import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
-import './index.css';
-import { useQuery } from '@apollo/react-hooks';
-import GET_TODO_INITIAL_DATA, { TodoInitialData } from '../../../graphql/get-todo-initial-data.query';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import GET_TODO_INITIAL_DATA from '../../../graphql/get-todo-initial-data.graphql';
+import GET_TODOS from '../../../graphql/get-todos.graphql';
 import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
 import { withApollo } from '../../../util/next_example_page';
-import { omit } from 'lodash';
-import { Pagination as Paging } from 'nestjs-typeorm-paginate';
+import { PagingInfo, IPaginatedResponse } from '@nx-taskman/logics';
 
 const ITEM_HEIGHT = 34;
 
@@ -45,8 +44,7 @@ interface State {
   addTodo?: boolean;
   selectedSectionId?;
   labels: ITodoLabel[];
-  paging: Omit<Paging<ITodoItem>, 'items'>;
-  currentPage: number;
+  paging: PagingInfo;
 }
 
 const defaultState: State = {
@@ -72,16 +70,23 @@ const defaultState: State = {
   todoConversation,
   conversation: null,
   labels: [],
-  paging: null,
-  currentPage: 1,
+  paging: {page: 1, itemCount: 10, totalItems: 0, pageCount: 0},
 };
+
+interface TodoInitialData {
+  getTodoInitialData: {
+    paginatedTodoItems: IPaginatedResponse<ITodoItem>; 
+    todoLabels: ITodoLabel[];
+  }
+}
 
 const ToDo: React.FC = () => {
 
   const [state, setState] = useState(defaultState);
   
   // todo 목록 1페이지 가져오기
-  const { data, loading, error } = useQuery<TodoInitialData>(GET_TODO_INITIAL_DATA, {
+  const { data, loading, error,} = useQuery<TodoInitialData>(GET_TODO_INITIAL_DATA, {
+    variables: {paging: {page: 1, itemCount: state.paging.itemCount}},
     onCompleted(data) {
       console.log('useQuery(GET_TODO_INITIAL_DATA) data = ', data);
       const {paginatedTodoItems, todoLabels} = data.getTodoInitialData;
@@ -89,14 +94,32 @@ const ToDo: React.FC = () => {
         ...state,
         todos: paginatedTodoItems.items,
         labels: todoLabels,
-        paging: omit(paginatedTodoItems, 'items'),
+        paging: paginatedTodoItems.paging,
       });
     },
     onError(error) {
       console.log('useQuery(GET_TODO_INITIAL_DATA) error = ', error);
     },
   });
-  
+
+  // 특정 페이지로 점프하기 위한 graphql 함수 준비
+  const [getTodos] = useLazyQuery(GET_TODOS, {
+    onCompleted(data) {
+      console.log('useQuery(GET_TODOs) data = ', data);
+      const {getTodos} = data;
+      setState({
+        ...state,
+        todos: getTodos.items,
+        paging: getTodos.paging,
+      });
+    },
+    onError(e) {
+      console.log('get todos error', e);
+    },
+    ssr: false,
+    fetchPolicy: 'no-cache', // 이 옵션이 없으면 처음 호출에 생성된 캐시 때문에 두 번쨰 이후부터는 호출되지 않는 문제가 발생함
+  });
+
 
   const onOptionMenuItemSelect = e => {
     handleRequestClose();
@@ -618,7 +641,7 @@ const ToDo: React.FC = () => {
     setState({...state, 
       drawerState: !state.drawerState
     });
-   };
+  };
 
   const updateSearch = evt => {
     setState({...state, 
@@ -626,6 +649,11 @@ const ToDo: React.FC = () => {
     });
     searchTodo(evt.target.value);
   };
+
+  // 특정 페이지로 점프하기
+  const handlePaging = (page: number) => {
+    getTodos({variables: {paging: {page, itemCount: state.paging.itemCount}}});
+  }
 
   const {
     selectedToDos,
@@ -635,7 +663,6 @@ const ToDo: React.FC = () => {
     alertMessage,
     showMessage,
     paging,
-    currentPage,
   } = state;
 
   return (
@@ -729,7 +756,7 @@ const ToDo: React.FC = () => {
               )}
           </div>
           <div className="gx-module-box-footer">
-            <Pagination current={currentPage} total={paging?.totalItems || 0}/>
+            <Pagination current={paging?.page || 1} total={paging?.totalItems || 0} onChange={handlePaging}/>
           </div>
         </div>
       </div>

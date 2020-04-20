@@ -7,9 +7,10 @@ import { HttpLink, createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import { setContext } from 'apollo-link-context';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import { getConfig } from '../config';
+import { AppContext } from 'next/app';
 
 export type AppApolloCache = any;
 
@@ -150,19 +151,19 @@ function initApolloClient(initialState: AppApolloCache, cookie = '') {
  * @param {Object} [config]
  * @param {Boolean} [config.ssr=true]
  */
-export function withApollo<PageProps extends object, InitialProps = PageProps>(
-  PageComponent: NextPage<PageProps, InitialProps>,
+export function withApollo/*<PageProps extends object, InitialProps = PageProps>*/(
+  PageComponent/*: NextPage<PageProps, InitialProps>*/,
   { ssr = true } = {},
 ) {
-  const WithApollo: NextPage<
+  const WithApollo/*: NextPage<
     ApolloProps & PageProps,
     ApolloInitialProps & InitialProps
-  > = ({ apolloClient, apolloState, ...pageProps }) => {
+  >*/ = ({ apolloClient, apolloState, ...pageProps }) => {
     const cookie = typeof window !== 'undefined' ? document?.cookie : null;
     const client = apolloClient || initApolloClient(apolloState, cookie);
     return (
       <ApolloProvider client={client}>
-        <PageComponent {...(pageProps as PageProps)} />
+        <PageComponent {...(pageProps/* as PageProps*/)} />
       </ApolloProvider>
     );
   };
@@ -180,7 +181,7 @@ export function withApollo<PageProps extends object, InitialProps = PageProps>(
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async (ctx) => {
       const { AppTree, req } = ctx;
 
       // Initialize ApolloClient, add it to the ctx object so
@@ -188,7 +189,7 @@ export function withApollo<PageProps extends object, InitialProps = PageProps>(
       const apolloClient = (ctx.apolloClient = initApolloClient({}, req?.headers?.cookie));
 
       // Run wrapped getInitialProps methods
-      let pageProps = {} as InitialProps;
+      let pageProps = {}/* as InitialProps*/;
       if (PageComponent.getInitialProps) {
         pageProps = await PageComponent.getInitialProps(ctx);
       }

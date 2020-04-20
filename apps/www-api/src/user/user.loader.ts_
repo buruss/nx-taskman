@@ -10,7 +10,8 @@ export class UserDataLoader implements NestDataLoader<number, User> {
 
   generateDataLoader(): DataLoader<number, User> {
     return new DataLoader<number, User>(async keys => {
-      const data = await this.userService.findByIds(keys);
+      const ids = keys.map(key => key);
+      const data = await this.userService.findByIds(ids);
       return keys.map(key => data.find(entity => entity.id === key)); // 키 배열과 일치, 없는 경우 undefined 반환
     });
   }

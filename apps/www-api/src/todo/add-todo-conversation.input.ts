@@ -1,25 +1,22 @@
 
 import { IsNotEmpty, MaxLength } from 'class-validator';
-import { Field, InputType } from 'type-graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class AddTodoConversationInputDto {
+export class AddTodoConversationInput {
 
   @IsNotEmpty()
-  @Field()
   todoId: string;
 
   @IsNotEmpty()
-  @Field()
   userId: number;
 
   @IsNotEmpty()
   @MaxLength(100)
-  @Field()
   message: string;
 
-  @IsNotEmpty()
   @Field()
+  @IsNotEmpty()
   sentAt: Date;
 
 }

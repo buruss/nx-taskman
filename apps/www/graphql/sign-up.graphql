@@ -1,6 +1,3 @@
-import gql from 'graphql-tag';
-
-export default gql`
 mutation signUp($name: String!, $pwd: String!, $emaddr: String!) {
   signUp(input: {
     name: $name
@@ -11,4 +8,4 @@ mutation signUp($name: String!, $pwd: String!, $emaddr: String!) {
     name
     emaddr
   }
-}`;
+}

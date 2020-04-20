@@ -1,19 +1,18 @@
-import { Args, Mutation, Resolver, Query, Context, GraphQLExecutionContext, } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { SignUpInputDto } from './sign-up-input.dto';
-import { SignInInputDto } from './sign-in-input.dto';
+import { SignUpInput } from './sign-up.input';
+import { SignInInput } from './sign-in.input';
 import { User } from '../user/user.entity';
 import { UseGuards, } from '@nestjs/common';
 import { GqlAuthGuard } from './graphql-auth.guard';
 import { GqlUser, ResGql } from './auth.decorator';
-import { AuthTokenDto } from './auth-token.dto';
-import { TaskService } from '../task/task.service';
+import { AuthTokenOutput } from './auth-token.output';
 import { Response } from 'express';
 import { getConfig } from '../config';
 
 @Resolver(User)
 export class AuthResolver {
-  constructor(private readonly authService: AuthService, private readonly taskService: TaskService) { }
+  constructor(private readonly authService: AuthService) { }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => User)
@@ -25,19 +24,19 @@ export class AuthResolver {
 
   @Mutation(() => User)
   signUp(
-    @Args('input') signUpInputDto: SignUpInputDto,
+    @Args('input') signUpInput: SignUpInput,
   ): Promise<User> {
-    return this.authService.signUp(signUpInputDto);
+    return this.authService.signUp(signUpInput);
   }
 
   // 아직 nest.js에서 쿠키를 직접 지원하지 않기 때문에
   // express response 객체를 이용하여 쿠키를 전송한다.
-  @Mutation(() => AuthTokenDto)
+  @Mutation(() => AuthTokenOutput)
   async signIn(
-    @Args('input') signInInputDto: SignInInputDto,
+    @Args('input') signInInput: SignInInput,
     @ResGql() res: Response,
-  ): Promise<AuthTokenDto> {
-    const token = await this.authService.signIn(signInInputDto);
+  ): Promise<AuthTokenOutput> {
+    const token = await this.authService.signIn(signInInput);
     // 쿠키에 토큰 설정
     res.cookie('token', token.token, { httpOnly: true, maxAge: getConfig().jwt.expiresIn * 1000, });
     return token;

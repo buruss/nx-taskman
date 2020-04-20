@@ -1,16 +1,16 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import { Button, Checkbox, Form, Input, message, } from 'antd';
 import Link from 'next/link';
-import SIGN_IN from '../../../graphql/sign-in.mutation';
+import SIGN_IN from '../../../graphql/sign-in.graphql';
 import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
-import { FormComponentProps } from 'antd/lib/form';
 import { useMutation } from '@apollo/react-hooks';
 import { withApollo } from '../../../util/next_example_page';
 import { login } from '../../../hoc/securedPage/withAuthAsync';
 import { SharedComponent } from '@nx-taskman/components';
+// import { FormComponentProps } from "antd/lib/form/Form";
 
-const SignIn: React.FC<FormComponentProps> = props => {
+const SignIn: React.FC<{}> = props => {
   
   const [signIn, { error, loading }] = useMutation(SIGN_IN, {
     onCompleted(data) {
@@ -21,16 +21,13 @@ const SignIn: React.FC<FormComponentProps> = props => {
     },
   });
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields((err, values) => {
-      if (!err) {
+  const handleSubmit = (values) => {
+    // props.form.validateFields((err, values) => {
+    //   if (!err) {
         signIn({variables: values});
-      }
-    });
+    //   }
+    // });
   };
-
-  const { getFieldDecorator } = props.form;
 
   return (
     <div className="gx-app-login-wrap">
@@ -59,38 +56,23 @@ const SignIn: React.FC<FormComponentProps> = props => {
           </div>
           <div className="gx-app-login-content gx-loader-pos-rel">
             <Form
-              onSubmit={handleSubmit}
+              onFinish={handleSubmit}
               className="gx-signin-form gx-form-row0"
+              initialValues={{remember: true}}
             >
-              <Form.Item>
-                {getFieldDecorator('name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'The input is not valid E-mail!',
-                    },
-                  ],
-                })(<Input placeholder="username" />)}
+              <Form.Item name="name" rules={[{ required: true }]}>
+                <Input placeholder="username" />
               </Form.Item>
-              <Form.Item>
-                {getFieldDecorator('pwd', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input your Password!',
-                    },
-                  ],
-                })(<Input type="password" placeholder="Password" />)}
+              <Form.Item name="pwd" rules={[{
+                required: true,
+                message: 'Please input your Password!',
+              }]}>
+                <Input type="password" placeholder="Password" />
               </Form.Item>
-              <Form.Item>
-                {getFieldDecorator('remember', {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                })(
-                  <Checkbox>
-                    <IntlMessages id="appModule.iAccept" />
-                  </Checkbox>,
-                )}
+              <Form.Item name="remember" valuePropName="checked">
+                <Checkbox>
+                  <IntlMessages id="appModule.iAccept" />
+                </Checkbox>
                 <span className="gx-signup-form-forgot gx-link">
                   <IntlMessages id="appModule.termAndCondition" />
                 </span>
@@ -101,7 +83,7 @@ const SignIn: React.FC<FormComponentProps> = props => {
                 </Button>
                 <span>
                   <IntlMessages id="app.userAuth.or" />
-                </span>{' '}
+                </span>
                 <Link href="/signup">
                   <a>
                     <IntlMessages id="app.userAuth.signUp" />
@@ -126,5 +108,5 @@ const SignIn: React.FC<FormComponentProps> = props => {
   );
 };
 
-export default withApollo(Form.create<FormComponentProps>()(SignIn));
+export default withApollo(SignIn);
 

@@ -1,14 +1,13 @@
 import { TaskStatus } from "@nx-taskman/constants";
 import { IsNotEmpty } from "class-validator";
-import { Field, ArgsType, } from 'type-graphql';
+import { ArgsType, Field, } from '@nestjs/graphql';
 
 @ArgsType()
-export class UpdateTaskStatusArgsDto {
+export class UpdateTaskStatusArgs {
   @IsNotEmpty()
-  @Field()
   tid: number;
 
+  @Field(type => TaskStatus)
   @IsNotEmpty()
-  @Field(type => TaskStatus) // enum 인 경우 type 명시 필수
   st: TaskStatus;
 }

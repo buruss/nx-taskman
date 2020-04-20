@@ -4,9 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskRepository } from './task.repository';
 import { ApiTaskController } from './task.controller';
 import { TaskResolver } from './task.resolver';
-import { DataLoaderInterceptor } from 'nestjs-dataloader'
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { UserDataLoader } from '../user/user.loader';
+// import { DataLoaderInterceptor } from 'nestjs-dataloader'
+// import { APP_INTERCEPTOR } from '@nestjs/core';
+// import { UserDataLoader } from '../user/user.loader';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 
@@ -22,11 +22,11 @@ import { AuthModule } from '../auth/auth.module';
   providers: [
     TaskService,
     TaskResolver,
-    UserDataLoader,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: DataLoaderInterceptor,
-    },
+  //   UserDataLoader,
+  //   {
+  //     provide: APP_INTERCEPTOR,
+  //     useClass: DataLoaderInterceptor,
+  //   },
   ],
   exports: [TaskService],
 })

@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ParseIntPipe, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskStatus } from "@nx-taskman/constants";
-import { CreateTaskInputDto } from './create-task-input.dto';
-import { GetTasksArgsDto } from './get-tasks-args.dto';
+import { CreateTaskInput } from './create-task.input';
+import { GetTasksArgs } from './get-tasks.args';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { Task } from './task.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,16 +21,16 @@ export class ApiTaskController {
 
   @Get()
   getTasks(
-    @Query() filterDto: GetTasksArgsDto,
+    @Query() filterArgs: GetTasksArgs,
     @GetUser() user: User,
   ): Promise<Task[]> {
-    this.logger.verbose(`User "${user.username}" retrieving all the tasks. Filter: ${JSON.stringify(filterDto)}`);
-    return this.taskService.getTasks(filterDto, user);
+    this.logger.verbose(`User "${user.username}" retrieving all the tasks. Filter: ${JSON.stringify(filterArgs)}`);
+    return this.taskService.getTasks(filterArgs, user);
   }
 
   @Get('/:tid')
   getTaskById(
-    @Param('tid', ParseIntPipe) id: number,
+    @Param('tid') id: number,
     @GetUser() user: User,
   ): Promise<Task> {
     return this.taskService.getTaskById(id, user);
@@ -39,16 +39,16 @@ export class ApiTaskController {
   @Post()
   @UsePipes()
   createTask(
-    @Body() createTaskDto: CreateTaskInputDto,
+    @Body() createTaskInput: CreateTaskInput,
     @GetUser() user: User,
   ) {
-    this.logger.verbose(`User "${user.username}" creating task. DTO: ${JSON.stringify(createTaskDto)}`);
-    return this.taskService.createTask(createTaskDto, user);
+    this.logger.verbose(`User "${user.username}" creating task. DTO: ${JSON.stringify(createTaskInput)}`);
+    return this.taskService.createTask(createTaskInput, user);
   }
 
   @Delete('/:tid')
   deleteTask(
-    @Param('tid', ParseIntPipe) id: number,
+    @Param('tid') id: number,
     @GetUser() user: User,
   ): Promise<boolean> {
     return this.taskService.deleteTask(id, user);
@@ -56,7 +56,7 @@ export class ApiTaskController {
 
   @Patch('/:tid/st')
   updateTaskStatus(
-    @Param('tid', ParseIntPipe) id: number,
+    @Param('tid') id: number,
     @Body('st', TaskStatusValidationPipe) status: TaskStatus,
     @GetUser() user: User,
   ): Promise<Task> {

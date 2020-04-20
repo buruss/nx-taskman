@@ -1,16 +1,16 @@
 
 import { IsNotEmpty } from 'class-validator';
-import { Field, InputType } from 'type-graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class PaginationInputDto {
+export class PaginationInput {
 
-  @IsNotEmpty()
   @Field()
+  @IsNotEmpty()
   itemCount: number;
 
-  @IsNotEmpty()
   @Field()
+  @IsNotEmpty()
   page: number;
 
 }

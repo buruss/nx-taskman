@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Dropdown, Icon, Layout, Menu, message, Popover } from 'antd';
+import { Button, Dropdown,  Layout, Menu, message, Popover } from 'antd';
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import { CaretDownFilled } from '@ant-design/icons';
 
 import CustomScrollbars from '../../../util/CustomScrollbars';
 import languageData from '../languageData';
@@ -116,7 +117,7 @@ class InsideHeader extends Component<Props> {
                       <div className="gx-d-flex">
                         <Dropdown overlay={menu}>
                           <Button>
-                            Category <Icon type="down" />
+                            Category <CaretDownFilled />
                           </Button>
                         </Dropdown>
                         <SearchBox

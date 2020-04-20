@@ -1,13 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete, Query, UsePipes, ParseIntPipe, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UsePipes, UseGuards, Logger, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { CreateTodoInputDto } from './create-todo-input.dto';
-import { GetTodosInputDto } from './get-todos-input.dto';
-import { TodoItem } from './todo-item.entity';
+import { CreateTodoInput } from './create-todo.input';
+import { GetTodosInput } from './get-todos.input';
+import { TodoItem, PaginatedTodoItems } from './todo-item.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../user/user.entity';
 import { GetUser } from '../auth/auth.decorator';
-import { IPaginatedResponse } from '@nx-taskman/logics';
-// import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('api/todos')
 @UseGuards(AuthGuard())
@@ -21,11 +19,11 @@ export class ApiTodoController {
 
   @Get()
   getTodos(
-    @Query() filterDto: GetTodosInputDto,
+    @Query() filterInput: GetTodosInput,
     @GetUser() user: User,
-  ): Promise<IPaginatedResponse<TodoItem>> {
-    this.logger.verbose(`User "${user.username}" retrieving all the todos. Filter: ${JSON.stringify(filterDto)}`);
-    return this.todoService.getTodos(filterDto, user);
+  ): Promise<PaginatedTodoItems> {
+    this.logger.verbose(`User "${user.username}" retrieving all the todos. Filter: ${JSON.stringify(filterInput)}`);
+    return this.todoService.getTodos(filterInput, user);
   }
 
   @Get('/:tid')
@@ -39,16 +37,16 @@ export class ApiTodoController {
   @Post()
   @UsePipes()
   createTodo(
-    @Body() createTodoDto: CreateTodoInputDto,
+    @Body() createTodoInput: CreateTodoInput,
     @GetUser() user: User,
   ) {
-    this.logger.verbose(`User "${user.username}" creating todo. DTO: ${JSON.stringify(createTodoDto)}`);
-    return this.todoService.createTodo(createTodoDto, user);
+    this.logger.verbose(`User "${user.username}" creating todo. DTO: ${JSON.stringify(createTodoInput)}`);
+    return this.todoService.createTodo(createTodoInput, user);
   }
 
   @Delete('/:id')
   deleteTodo(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id') id: string,
     @GetUser() user: User,
   ): Promise<boolean> {
     return this.todoService.deleteTodo(id, user);

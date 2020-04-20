@@ -1,41 +1,34 @@
 
 import { IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
-import { Field, InputType, Int } from 'type-graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { TodoItem } from './todo-item.entity';
 import { getRepository, In } from 'typeorm';
 import { TodoLabel } from './todo-label.entity';
 
 @InputType()
-export class CreateTodoInputDto {
+export class CreateTodoInput {
   @IsNotEmpty()
   @MaxLength(100)
-  @Field()
   title: string;
 
   @MaxLength(500)
   @IsOptional()
-  @Field({nullable: true})
   notes?: string;
 
-  @Field({nullable: true})
+  @Field()
   startDate?: Date;
 
-  @Field({nullable: true})
+  @Field()
   dueDate?: Date;
 
-  @Field({nullable: true})
   completed?: boolean;
 
-  @Field({nullable: true})
   starred?: boolean;
 
-  @Field({nullable: true})
   important?: boolean;
 
-  @Field({nullable: true})
   selected?: boolean;
 
-  @Field({nullable: true})
   deleted?: boolean;
 
   @Field(type => [Int], {nullable: true})

@@ -8,7 +8,7 @@ export class TaskStatusValidationPipe implements PipeTransform {
     TaskStatus.DONE,
   ];
 
-  transform(value: any) {
+  transform(value: string) {
     value = value.toUpperCase();
 
     if (!this.isStatusValid(value)) {
@@ -17,8 +17,7 @@ export class TaskStatusValidationPipe implements PipeTransform {
     return value;
   }
 
-  private isStatusValid(status: any) {
-    const idx = this.allowedStatuses.indexOf(status);
-    return idx !== -1;
+  private isStatusValid(status: string) {
+    return this.allowedStatuses.map(status => status.toString()).includes(status);
   }
 }

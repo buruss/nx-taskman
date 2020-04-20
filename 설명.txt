@@ -92,3 +92,19 @@ getDataFromTree 실패
     "Error while running `getDataFromTree` ApolloError: GraphQL error"
     next example 소스도, next-apollo npm도, next-with-apollo npm도 모두 실패함
     
+GraphQL 사용
+    .graphql 파일을 바로 import하여 사용하려면 아래 설정이 필요
+    tsconfig.json
+        {
+            "compilerOptions": {
+                "typeRoots": ["node_modules/@types", "@types"]
+            },
+            "files": ["@types/graphql.d.ts"],
+        }
+    next.config.js
+        config.module.rules.push({
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader',
+        });
+
