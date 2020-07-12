@@ -1,6 +1,6 @@
 import cookie from 'js-cookie';
 
-export const setCookie = (key: string, value: string | object) => {
+export const setCookie = (key: string, value: string | Record<string, unknown>) => {
   if (process.browser) {
     cookie.set(key, value, {
       expires: 1,

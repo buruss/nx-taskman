@@ -1,8 +1,12 @@
 import {compose} from 'redux';
 import {withAuthAsync} from './withAuthAsync';
-import WithLayout from './withLayout';
+import withLayout from './withLayout';
+import withLang from '../withLang';
+import { withApollo } from '../withApollo';
 
 export default compose(
+  withApollo,
   withAuthAsync,
-  WithLayout,
+  withLang,
+  withLayout,
 );

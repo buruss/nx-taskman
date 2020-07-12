@@ -5,12 +5,11 @@ import SIGN_IN from '../../../graphql/sign-in.graphql';
 import IntlMessages from '../../../util/IntlMessages';
 import CircularProgress from '../../../components/CircularProgress';
 import { useMutation } from '@apollo/react-hooks';
-import { withApollo } from '../../../util/next_example_page';
 import { login } from '../../../hoc/securedPage/withAuthAsync';
 import { SharedComponent } from '@nx-taskman/components';
 // import { FormComponentProps } from "antd/lib/form/Form";
 
-const SignIn: React.FC<{}> = props => {
+const SignIn: React.FC = () => {
   
   const [signIn, { error, loading }] = useMutation(SIGN_IN, {
     onCompleted(data) {
@@ -108,5 +107,5 @@ const SignIn: React.FC<{}> = props => {
   );
 };
 
-export default withApollo(SignIn);
+export default SignIn;
 

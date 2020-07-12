@@ -17,7 +17,7 @@ import IconWithTextCard from "../../components/dashboard/IconWithTextCard";
 import Widget from "../../components/Widget";
 import {recentActivity, taskList, trafficData} from "./data";
 
-const DashBoard = () => {
+const DashBoard = (): JSX.Element => {
   return (
     <>
       <Row>

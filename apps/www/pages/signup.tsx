@@ -1,7 +1,10 @@
 import React from 'react';
 import defaultPage from '../hoc/defaultPage';
-import asyncComponent from "../util/asyncComponent";
+import SignUp from '../routes/userAuth/SignUp';
+import { withApollo } from '../hoc/withApollo';
 
-const SignUp = asyncComponent(() => import('../routes/userAuth/SignUp'));
+// SSG를 위해 ssr 끔
+export default withApollo(defaultPage(SignUp), { ssr: false });
 
-export default defaultPage(() => <SignUp/>);
+// SSG 렌더링을 위해서 getStaticProps 선언이 필요함
+export const getStaticProps = async () => ({ props: {} });

@@ -8,7 +8,7 @@ const Todo = asyncComponent(() => import('../../routes/inbuiltApps/Todo'));
 export default securedPage(() => (
   <>
     <Head>
-      <title>Todo</title>
+      <title>Todo App</title>
     </Head>
     <>
       <Todo/>

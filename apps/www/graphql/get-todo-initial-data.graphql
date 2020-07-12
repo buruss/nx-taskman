@@ -1,33 +1,36 @@
 query getTodoInitialData($label: Float, $search: String, $paging: PaginationInput) {
-  getTodoInitialData(input: {
+  getTodos(input: {
     label: $label,
     search: $search,
     paging: $paging
   }) {
-    paginatedTodoItems {
-      items {
-        id
-        title
-        notes
-        labels {
-          id
-          handle
-          title
-        }
-      }
-      paging {
-        itemCount
-        page
-        pageCount
-        totalItems
-      }
-    }
-    todoLabels {
+    items {
       id
-      handle
       title
-      color
+      notes
+      startDate
+      dueDate
+      completed
+      starred
+      important
+      selected
+      deleted
+      labels {
+        id
+      }
     }
-  } 
+    paging {
+      itemCount
+      totalItems
+      page
+      pageCount
+    }
+  }
+  getTodoLabels {
+    id
+    handle
+    title
+    color
+  }
 }
 

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import {Layout, ConfigProvider} from "antd";
-import {IntlProvider} from 'react-intl';
+import {Layout} from "antd";
 import {connect} from "react-redux";
 
 import Sidebar from "../Sidebar/index";
@@ -26,7 +25,6 @@ import {
   THEME_TYPE_DARK
 } from "../../constants/ThemeSetting";
 import NoHeaderNotification from "../Topbar/NoHeaderNotification/index";
-import AppLocale from "../../lngProvider";
 import Customizer from "../Customizer";
 
 const {Content, Footer} = Layout;
@@ -101,36 +99,30 @@ class AppLayout extends Component<Props> {
   };
 
   render() {
-    const {width, themeType, layoutType, locale, navStyle, children} = this.props;
+    const {width, themeType, navStyle, children} = this.props;
     let bodyClass = "";
     if (themeType === THEME_TYPE_DARK) {
       bodyClass = "dark-theme"
     }
-    const currentAppLocale = AppLocale[locale.locale];
+
     return (
-      <ConfigProvider locale={currentAppLocale.antd}>
-        <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}>
-          <Layout className={`gx-app-layout ${bodyClass}`}>
-            {this.getSidebar(navStyle, width)}
-            <Layout>
-              {this.getNavStyles(navStyle)}
-              <Content className={`gx-layout-content ${this.getContainerClass(navStyle)}`}>
-                <div className="gx-main-content-wrapper">
-                  {children}
-                </div>
-                <Footer>
-                  <div className="gx-layout-footer-content">
-                    {footerText}
-                  </div>
-                </Footer>
-              </Content>
-            </Layout>
-            <Customizer/>
-          </Layout>
-        </IntlProvider>
-      </ConfigProvider>
+      <Layout className={`gx-app-layout ${bodyClass}`}>
+        {this.getSidebar(navStyle, width)}
+        <Layout>
+          {this.getNavStyles(navStyle)}
+          <Content className={`gx-layout-content ${this.getContainerClass(navStyle)}`}>
+            <div className="gx-main-content-wrapper">
+              {children}
+            </div>
+            <Footer>
+              <div className="gx-layout-footer-content">
+                {footerText}
+              </div>
+            </Footer>
+          </Content>
+        </Layout>
+        <Customizer/>
+      </Layout>
     );
   }
 }

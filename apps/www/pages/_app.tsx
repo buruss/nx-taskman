@@ -12,23 +12,27 @@ import "../styles/style.css"
 import '../styles/inbuildApps.css';
 
 import {Provider} from 'react-redux';
-import withRedux from 'next-redux-wrapper';
+// import withRedux from 'next-redux-wrapper';
+
 import "../firebaseConfig/index";
 import initStore from '../redux/store';
 
 interface Props {
-  Component, pageProps,store
+  Component, pageProps,
 }
 
 class MyApp extends App<Props> {
-  render() {
-    const { Component, pageProps, store } = this.props;
+
+  store = initStore();
+
+  render(): JSX.Element {
+    const { Component, pageProps, /* store */} = this.props;
     return (
       <>
         <Head>
           <title>Wieldy- Admin Dashboard</title>
         </Head>
-        <Provider store={store}>
+        <Provider store={this.store}>
           <Component {...pageProps} />
         </Provider>
       </>
@@ -36,4 +40,4 @@ class MyApp extends App<Props> {
   }
 }
 
-export default withRedux(initStore)(MyApp);
+export default MyApp;

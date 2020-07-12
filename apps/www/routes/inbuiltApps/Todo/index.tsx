@@ -14,7 +14,6 @@ import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import GET_TODO_INITIAL_DATA from '../../../graphql/get-todo-initial-data.graphql';
 import GET_TODOS from '../../../graphql/get-todos.graphql';
 import { ITodoItem, ITodoLabel } from '@nx-taskman/interfaces';
-import { withApollo } from '../../../util/next_example_page';
 import { PagingInfo, IPaginatedResponse } from '@nx-taskman/logics';
 
 const ITEM_HEIGHT = 34;
@@ -74,10 +73,8 @@ const defaultState: State = {
 };
 
 interface TodoInitialData {
-  getTodoInitialData: {
-    paginatedTodoItems: IPaginatedResponse<ITodoItem>; 
-    todoLabels: ITodoLabel[];
-  }
+  getTodos: IPaginatedResponse<ITodoItem>; 
+  getTodoLabels: ITodoLabel[];
 }
 
 const ToDo: React.FC = () => {
@@ -89,12 +86,12 @@ const ToDo: React.FC = () => {
     variables: {paging: {page: 1, itemCount: state.paging.itemCount}},
     onCompleted(data) {
       console.log('useQuery(GET_TODO_INITIAL_DATA) data = ', data);
-      const {paginatedTodoItems, todoLabels} = data.getTodoInitialData;
+      const {getTodos, getTodoLabels} = data;
       setState({
         ...state,
-        todos: paginatedTodoItems.items,
-        labels: todoLabels,
-        paging: paginatedTodoItems.paging,
+        todos: getTodos.items,
+        labels: getTodoLabels,
+        paging: getTodos.paging,
       });
     },
     onError(error) {
@@ -766,4 +763,4 @@ const ToDo: React.FC = () => {
   );
 };
 
-export default withApollo(ToDo);
+export default ToDo;

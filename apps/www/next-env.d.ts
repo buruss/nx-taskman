@@ -2,7 +2,7 @@
 /// <reference types="next/types/global" />
 
 import ApolloClient from 'apollo-client';
-import { AppApolloCache } from './util/next_example_page';
+import { AppApolloCache } from './hoc/withApollo';
 
 declare module 'next' {
   export interface NextPageContext {

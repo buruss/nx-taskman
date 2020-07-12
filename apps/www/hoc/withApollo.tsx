@@ -3,14 +3,12 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { HttpLink, createHttpLink } from 'apollo-link-http';
+import { HttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import { setContext } from 'apollo-link-context';
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
-import { NextPage, NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import { getConfig } from '../config';
-import { AppContext } from 'next/app';
 
 export type AppApolloCache = any;
 
@@ -184,6 +182,8 @@ export function withApollo/*<PageProps extends object, InitialProps = PageProps>
     WithApollo.getInitialProps = async (ctx) => {
       const { AppTree, req } = ctx;
 
+      console.log('WithApollo.getInitialProps');
+
       // Initialize ApolloClient, add it to the ctx object so
       // we can use it in `PageComponent.getInitialProp`.
       const apolloClient = (ctx.apolloClient = initApolloClient({}, req?.headers?.cookie));
@@ -205,7 +205,7 @@ export function withApollo/*<PageProps extends object, InitialProps = PageProps>
         // Only if ssr is enabled
         if (ssr) {
           try {
-            console.log('get data from tree. cookie -= ', req.headers.cookie);
+            console.log('get data from tree. cookie = ', req.headers.cookie);
             // Run all GraphQL queries
             const { getDataFromTree } = await import('@apollo/react-ssr');
             await getDataFromTree(

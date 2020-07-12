@@ -69,6 +69,7 @@
             "main": "apps/www-api/src/main.ts",
             "tsConfig": "apps/www-api/tsconfig.app.json",
             "assets": ["apps/www-api/src/assets"],
+            "주석": "아래 웹팩 설정은 graphql plugin 사용을 위해서 필요함",
             "webpackConfig": "./apps/www-api/webpack.config.js"
           },
           "configurations": {
@@ -123,7 +124,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/next:dev-server",
+          "builder": "@nrwl/next:server",
           "options": {
             "buildTarget": "www:build",
             "dev": true,
@@ -261,7 +262,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/next:dev-server",
+          "builder": "@nrwl/next:server",
           "options": {
             "buildTarget": "admin:build",
             "dev": true

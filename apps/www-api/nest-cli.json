@@ -5,6 +5,7 @@
   "compilerOptions": {
     "plugins": [
       {
+        "주석": "아래 플러그인 설정은 nx에 의해 무시되므로 webpack.config.js에 설정을 추가해 놓음. 아래 설정은 참고를 위해 남겨 놓았음",
         "name": "@nestjs/graphql/plugin",
         "options": {
           "typeFileNameSuffix": [".output.ts", ".input.ts", ".args.ts", ".entity.ts", ".model.ts"]

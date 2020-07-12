@@ -28,12 +28,12 @@ export class TodoItem extends BaseEntity implements ITodoItem {
   @Expose()
   userId: number;
 
-  @Field()
+  @Field() // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @Column({nullable: true, type: 'timestamptz' })
   @Expose()
   startDate?: Date;
 
-  @Field()
+  @Field() // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @Column({nullable: true, type: 'timestamptz' })
   @Expose()
   dueDate?: Date;
@@ -68,20 +68,20 @@ export class TodoItem extends BaseEntity implements ITodoItem {
   
   // user는 존재하지 않는 필드임.
   // TaskResolver에서 @ResolveProperty() user() 메서드를 사용하려면 필요함
-  @Field(type => User)
+  @Field(type => User) // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @ManyToOne(type => User, user => user.todos, { onDelete: 'CASCADE' })
   user: User;
 
   // 다대다 관계
-  @Field(type => [TodoLabel], {nullable: true})
+  @Field(type => [TodoLabel], {nullable: true}) // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @ManyToMany(type => TodoLabel, todoLabel => todoLabel.todoItems, {eager: true, cascade: true})
-  @JoinTable()
+  @JoinTable({name: 'todo_item_labels'})
   @Expose()
   labels?: TodoLabel[];
   
   // 존재하지 않는 필드임.
   // AuthResolver에서 @ResolveProperty() taskDetails() 메서드를 사용하려면 필요함
-  @Field(type => [TodoConversation], {nullable: true})
+  @Field(type => [TodoConversation], {nullable: true}) // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @OneToMany(type => TodoConversation, conv => conv.todo, { cascade: true })
   conversations?: TodoConversation[];
 }

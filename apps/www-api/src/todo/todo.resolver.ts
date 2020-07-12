@@ -13,7 +13,6 @@ import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { TodoConversation } from './todo-conversation.entity';
 import { AddTodoConversationInput } from './add-todo-conversation.input';
 import { TodoLabel } from './todo-label.entity';
-import { TodoInitialData, } from './todo-initial-data.output';
 
 @Resolver(() => TodoItem)
 @UseGuards(GqlAuthGuard)
@@ -41,17 +40,6 @@ export class TodoResolver {
   @Query(() => [TodoLabel])
   getTodoLabels(): Promise<TodoLabel[]> {
     return this.todoService.getTodoLabels();
-  }
-
-  @Query(() => TodoInitialData)
-  async getTodoInitialData(
-    @Args('input') filterInput: GetTodosInput,
-    @GqlUser() user: User,
-  ): Promise<TodoInitialData> {
-    const todoItemsPromise = this.todoService.getTodos(filterInput, user);
-    const todoLabelsPromise = this.todoService.getTodoLabels();
-    const data = await Promise.all([todoItemsPromise, todoLabelsPromise]);
-    return {paginatedTodoItems: data[0], todoLabels: data[1]};
   }
 
   @Mutation(() => TodoItem)

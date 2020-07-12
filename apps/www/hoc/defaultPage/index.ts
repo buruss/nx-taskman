@@ -1,6 +1,6 @@
 import {compose} from 'redux';
-import WithLang from '../withLang';
+import withLang from '../withLang';
 
 export default compose(
-  WithLang 
+  withLang 
 );

@@ -8,9 +8,8 @@ import { message } from "antd/lib";
 import CircularProgress from '../../../components/CircularProgress';
 import { useMutation } from '@apollo/react-hooks';
 // import { FormComponentProps } from 'antd/lib/form';
-import { withApollo } from '../../../util/next_example_page';
 
-const SignUp = props => {
+const SignUp: React.FC = () => {
 
   const [signUp, { error, loading, }] = useMutation(SIGN_UP, {
     onCompleted() {
@@ -97,4 +96,4 @@ const SignUp = props => {
   </div>;
 };
 
-export default withApollo(SignUp);
+export default SignUp;

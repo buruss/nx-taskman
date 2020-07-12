@@ -6,6 +6,7 @@ const config = getConfig().nextServer;
 console.log(`graphql cors origin = ${config.host}:${config.port}`);
 
 export const graphqlOptions: GqlModuleOptions = { // GraphQL 설정
+  // code first 방식으로 스키마 파일 자동 생성
   autoSchemaFile: path.resolve(__dirname, '../../schema.gql'),
   debug: process.env.NODE_ENV !== 'production',
   playground: {

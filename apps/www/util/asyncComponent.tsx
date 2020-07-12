@@ -2,10 +2,10 @@ import dynamic from 'next/dynamic';
 import CircularProgress from "../components/CircularProgress";
 import React from "react";
 
-export default function asyncComponent(importComponent) {
-
+export default (importComponent) => {
   return dynamic(importComponent,
     {
-      loading: () => <CircularProgress/>
+      loading: () => <CircularProgress/>,
+      ssr: true,
     });
-}
+};

@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import Router from 'next/router';
 // import nextCookie from 'next-cookies';
-import { withApollo } from '../../util/next_example_page';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import ME from '../../graphql/me.graphql';
 import SIGN_OUT from '../../graphql/sign-out.graphql';
@@ -11,7 +10,7 @@ import CircularProgress from '../../components/CircularProgress';
 const SIGN_IN_REDIRECT_URL = '/signin';
 const DEFAULT_URL_AFTER_SIGNIN = '/main';
 
-export const login = () => {
+export const login = (): void => {
   // , { domain: ".whos.now.sh", secure: true, httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year }
   // cookie.set('token', token,  { expires: 365 });
   Router.push(DEFAULT_URL_AFTER_SIGNIN)
@@ -62,7 +61,7 @@ export const withAuthAsync = WrappedComponent => {
         console.log('useQuery(ME) data = ', data);
       },
       onError(error) {
-        console.log('useQuery(ME) error = ', error);
+        console.log('useQuery(ME) error = ', error.message);
         Router.push('/signin');
       },
     });
@@ -96,5 +95,5 @@ export const withAuthAsync = WrappedComponent => {
   //   return { ...componentProps, token };
   // }
 
-  return withApollo(Wrapper);
+  return Wrapper;
 };
