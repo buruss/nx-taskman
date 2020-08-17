@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID, HideField, } from '@nestjs/graphql'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn, Index } from "typeorm";
 import { TaskStatus } from "@nx-taskman/constants";
 import { User } from "../user/user.entity";
 import { Exclude, Expose } from 'class-transformer';
@@ -49,7 +49,8 @@ export class Task extends BaseEntity {
   // user는 존재하지 않는 필드임.
   // TaskResolver에서 @ResolveProperty() user() 메서드를 사용하려면 필요함
   @Field(type => User)
-  @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE' })
+  @ManyToOne(type => User, user => user.tasks, { onDelete: 'CASCADE',  })
+  @Index() // PostgreSQL does NOT add indexes to foreign keys by default. This isn't an issue for the forward relation (user_id → user), but for the reverse relation (user → things by user_id) it can make the lookup very expensive. Always add indexes to your foreign keys.
   user: User;
 
   // 존재하지 않는 필드임.

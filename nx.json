@@ -17,19 +17,10 @@
     "www-api": {
       "tags": []
     },
-    "admin-api": {
-      "tags": []
-    },
     "www": {
       "tags": []
     },
     "www-e2e": {
-      "tags": []
-    },
-    "admin": {
-      "tags": []
-    },
-    "admin-e2e": {
       "tags": []
     }
   }

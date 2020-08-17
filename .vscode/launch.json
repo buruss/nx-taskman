@@ -8,8 +8,8 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Attach 57568",
-      "port": 57568,
+      "name": "Attach",
+      "port": 53168,
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -18,7 +18,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Next: Node",
+      "name": "NextJs",
       "runtimeExecutable": "nx",
       "runtimeArgs": [
         "serve",
@@ -30,6 +30,23 @@
         "webpack:///*": "${workspaceFolder}/*"
       },
       "port": 9229,
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "NestJs",
+      "runtimeExecutable": "nx",
+      "runtimeArgs": [
+        "serve",
+        "www-api",
+        "--inspect",
+        "--inspect-brk=127.0.0.1:9230"
+      ],
+      "sourceMapPathOverrides": {
+        "webpack:///*": "${workspaceFolder}/*"
+      },
+      "port": 9230,
       "console": "integratedTerminal"
     }
   ]

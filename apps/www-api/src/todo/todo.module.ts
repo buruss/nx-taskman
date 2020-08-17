@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, forwardRef, Logger } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoRepository } from './todo.repository';
@@ -19,6 +19,7 @@ import { AuthModule } from '../auth/auth.module';
   providers: [
     TodoService,
     TodoResolver,
+    Logger,
   ],
   exports: [TodoService],
 })

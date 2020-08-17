@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID, HideField, } from '@nestjs/graphql';
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne, Index } from "typeorm";
 import { Exclude, Expose } from 'class-transformer';
 import { ITodoItem } from '@nx-taskman/interfaces';
 import { TodoLabel } from './todo-label.entity';
@@ -70,6 +70,7 @@ export class TodoItem extends BaseEntity implements ITodoItem {
   // TaskResolver에서 @ResolveProperty() user() 메서드를 사용하려면 필요함
   @Field(type => User) // graphql plugin을 사용하는데도 불구하고 여전히 @Field가 필요한 경우가 종종 있음.
   @ManyToOne(type => User, user => user.todos, { onDelete: 'CASCADE' })
+  @Index() // PostgreSQL does NOT add indexes to foreign keys by default. This isn't an issue for the forward relation (user_id → user), but for the reverse relation (user → things by user_id) it can make the lookup very expensive. Always add indexes to your foreign keys.
   user: User;
 
   // 다대다 관계

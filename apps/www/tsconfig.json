@@ -12,7 +12,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "lib": ["esnext.intl", "es2017.intl", "es2018.intl", "dom"],
-    "typeRoots": ["node_modules/@types", "@types"]
+    "typeRoots": ["node_modules/@types", "@types"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "files": ["@types/graphql.d.ts"],
   "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.d.ts"]

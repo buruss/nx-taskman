@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, Logger, LoggerService } from '@nestjs/common';
 import { CreateTodoInput } from './create-todo.input';
 import { GetTodosInput } from './get-todos.input';
 import { TodoRepository } from './todo.repository';
@@ -12,8 +12,8 @@ import { TodoLabel } from './todo-label.entity';
 @Injectable()
 export class TodoService {
   constructor(
-    @InjectRepository(TodoRepository)
-    private todoRepository: TodoRepository,
+    @InjectRepository(TodoRepository) private todoRepository: TodoRepository,
+    @Inject(Logger) private readonly logger: LoggerService
   ) {
 
   }
@@ -63,6 +63,7 @@ export class TodoService {
     createTodoInput: CreateTodoInput,
     user: User,
   ): Promise<TodoItem> {
+    this.logger.debug('createTodoInput = ' + JSON.stringify(createTodoInput));
     return this.todoRepository.createTodo(createTodoInput, user);
   }
 
