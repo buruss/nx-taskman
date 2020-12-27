@@ -10,6 +10,7 @@ import { TodoLabel } from '../todo/todo-label.entity';
 
 const config = getConfig().db;
 
+console.log('config = ', config);
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: config.host,

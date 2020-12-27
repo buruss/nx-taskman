@@ -5,6 +5,7 @@
       "node",
       "jest"
     ],
+    "outDir": "../../dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },

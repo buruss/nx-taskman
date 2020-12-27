@@ -5,7 +5,7 @@ module.exports = {
   production: false,
   db: {
     ...cfg.db,
-    host: 'pgdev.c2zonom00f2n.ap-northeast-2.rds.amazonaws.com',
+    host: 'localhost',
     username: 'postgres',
     password: 'dhvltmzhfldk',
     synchronize: true

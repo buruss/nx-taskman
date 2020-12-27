@@ -1,14 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
+import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, HttpLink} from '@apollo/client';
 import fetch from 'isomorphic-unfetch';
-import { setContext } from 'apollo-link-context';
-import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
+import { setContext } from '@apollo/client/link/context';
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import nextCookie from 'next-cookies';
 import { getConfig } from '../config';
+import { sha256 } from 'crypto-hash';
 
 export type AppApolloCache = any;
 
@@ -66,7 +64,7 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, cookie = n
   };
 
   const {host, port} = getConfig().apiServer;
-  const link = createPersistedQueryLink().concat(
+  const link = createPersistedQueryLink({sha256}).concat(
     new HttpLink({
       uri: `${host}:${port}/graphql`, // Server URL (must be absolute)
       credentials: 'include', // 쿠키 전송을 위해 필요함
@@ -207,7 +205,7 @@ export function withApollo/*<PageProps extends object, InitialProps = PageProps>
           try {
             console.log('get data from tree. cookie = ', req.headers.cookie);
             // Run all GraphQL queries
-            const { getDataFromTree } = await import('@apollo/react-ssr');
+            const { getDataFromTree } = await import('@apollo/client/react/ssr');
             await getDataFromTree(
               <AppTree
                 pageProps={{
