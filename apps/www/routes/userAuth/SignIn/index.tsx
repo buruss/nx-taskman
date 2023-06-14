@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, message, } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import Link from 'next/link';
 import SIGN_IN from '../../../graphql/sign-in.graphql';
 import IntlMessages from '../../../util/IntlMessages';
@@ -10,7 +10,6 @@ import { SharedComponent } from '@nx-taskman/components';
 // import { FormComponentProps } from "antd/lib/form/Form";
 
 const SignIn: React.FC = () => {
-  
   const [signIn, { error, loading }] = useMutation(SIGN_IN, {
     onCompleted(data) {
       console.log('로그인 성공. token = ', data.signIn.token);
@@ -20,10 +19,10 @@ const SignIn: React.FC = () => {
     },
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     // props.form.validateFields((err, values) => {
     //   if (!err) {
-        signIn({variables: values});
+    signIn({ variables: values });
     //   }
     // });
   };
@@ -31,7 +30,7 @@ const SignIn: React.FC = () => {
   return (
     <div className="gx-app-login-wrap">
       <SharedComponent />
-      
+
       <div className="gx-app-login-container">
         <div className="gx-app-login-main-content">
           <div className="gx-app-logo-content">
@@ -57,15 +56,20 @@ const SignIn: React.FC = () => {
             <Form
               onFinish={handleSubmit}
               className="gx-signin-form gx-form-row0"
-              initialValues={{remember: true}}
+              initialValues={{ remember: true }}
             >
               <Form.Item name="name" rules={[{ required: true }]}>
                 <Input placeholder="username" />
               </Form.Item>
-              <Form.Item name="pwd" rules={[{
-                required: true,
-                message: 'Please input your Password!',
-              }]}>
+              <Form.Item
+                name="pwd"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your Password!',
+                  },
+                ]}
+              >
                 <Input type="password" placeholder="Password" />
               </Form.Item>
               <Form.Item name="remember" valuePropName="checked">
@@ -108,4 +112,3 @@ const SignIn: React.FC = () => {
 };
 
 export default SignIn;
-
